@@ -43,7 +43,7 @@ class RegisteredUserController extends Controller
         'lastName' => $request->lastName,
         'email' => $request->email,
         'mobileNumber' => $request->mobileNumber,
-        'role' => 'user', // Automatically set role to 'user'
+        'role' => 'business_owner', // Automatically set role to 'user'
         'password' => Hash::make($request->password),
         'isVerified' => false, // Default value
     ]);

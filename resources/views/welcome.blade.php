@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Place.It</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -106,6 +106,7 @@
             @elseif (Route::has('login') && !Auth::check())
                 <!-- Top center links -->
                 <div class="top-left links">
+                    <a href="{{ url('/') }}">place.it</a>
                     <a href="{{ url('/about') }}">About Us</a>
                     <a href="{{ url('/services') }}">Services</a>
                     <a href="{{ url('/contact') }}">Contact</a>
