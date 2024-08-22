@@ -5,6 +5,7 @@ use App\Http\Controllers\SpaceOwnerController;
 use App\Http\Controllers\BusinessOwnerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,12 @@ use App\Http\Middleware\RoleMiddleware;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('register/space', [RegisteredUserController::class, 'createSpaceOwner'])->name('space.register');
+Route::post('register/space', [RegisteredUserController::class, 'storeSpaceOwner'])->name('space.register.post');
+
+Route::get('register/business', [RegisteredUserController::class, 'createBusinessOwner'])->name('business.register');
+Route::post('register/business', [RegisteredUserController::class, 'storeBusinessOwner'])->name('business.register.post');
 
 // Redirect to the appropriate dashboard based on the user's role
 Route::get('/dashboard', function () {

@@ -16,43 +16,73 @@ use Illuminate\View\View;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Display the registration view for Space Owners.
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.space-register');
+    }
+
+    public function createSpaceOwner(): View
+    {
+        return view('auth.space-register');
     }
 
     /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Display the registration view for Business Owners.
      */
-    public function store(Request $request): RedirectResponse
-{
-    $request->validate([
-        'firstName' => ['required', 'string', 'max:255'],
-        'lastName' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'mobileNumber' => ['required', 'string', 'max:20'],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-    ]);
+    public function createBusinessOwner(): View
+    {
+        return view('auth.business-register');
+    }
 
-    $user = User::create([
-        'firstName' => $request->firstName,
-        'lastName' => $request->lastName,
-        'email' => $request->email,
-        'mobileNumber' => $request->mobileNumber,
-        'role' => 'business_owner', // Automatically set role to 'user'
-        'password' => Hash::make($request->password),
-        'isVerified' => false, // Default value
-    ]);
+    /**
+     * Handle an incoming registration request for Space Owners.
+     */
+    public function storeSpaceOwner(Request $request): RedirectResponse
+    {
+        $this->validateRegistration($request);
 
-    event(new Registered($user));
+        $user = User::create(array_merge(
+            $request->only('firstName', 'lastName', 'email', 'mobileNumber'),
+            ['role' => 'space_owner', 'password' => Hash::make($request->password), 'isVerified' => false]
+        ));
 
-    Auth::login($user);
+        event(new Registered($user));
+        Auth::login($user);
 
-    return redirect(RouteServiceProvider::HOME);
-}
+        return redirect(RouteServiceProvider::HOME);
+    }
 
+    /**
+     * Handle an incoming registration request for Business Owners.
+     */
+    public function storeBusinessOwner(Request $request): RedirectResponse
+    {
+        $this->validateRegistration($request);
+
+        $user = User::create(array_merge(
+            $request->only('firstName', 'lastName', 'email', 'mobileNumber'),
+            ['role' => 'business_owner', 'password' => Hash::make($request->password), 'isVerified' => false]
+        ));
+
+        event(new Registered($user));
+        Auth::login($user);
+
+        return redirect(RouteServiceProvider::HOME);
+    }
+
+    /**
+     * Validate the registration request.
+     */
+    protected function validateRegistration(Request $request): void
+    {
+        $request->validate([
+            'firstName' => ['required', 'string', 'max:255'],
+            'lastName' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'mobileNumber' => ['required', 'string', 'max:20'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+    }
 }
