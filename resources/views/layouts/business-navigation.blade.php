@@ -15,16 +15,16 @@
                     <x-nav-link :href="route('business.dashboard')" :active="request()->routeIs('business.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('business.myads')" :active="request()->routeIs('business.myads')">
                         {{ __('My Ads') }}
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')">
                         {{ __('Negotiations') }}
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('business.bh')" :active="request()->routeIs('business.bh')">
                         {{ __('Booking History') }}
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('business.feedback')" :active="request()->routeIs('business.feedback')">
                         {{ __('Feedback') }}
                     </x-nav-link>
                 </div>
@@ -77,19 +77,19 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('business.dashboard')" :active="request()->routeIs('business.dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('business.myads')" :active="request()->routeIs('business.myads')">
                 {{ __('My Ads') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')">
                 {{ __('Negotiations') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('business.bh')" :active="request()->routeIs('business.bh')">
                 {{ __('Booking History') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('business.feedback')" :active="request()->routeIs('business.feedback')">
                 {{ __('Feedback') }}
             </x-responsive-nav-link>
         </div>

@@ -51,6 +51,36 @@ Route::get('/business/dashboard', [BusinessOwnerController::class, 'index'])
     ->name('business.dashboard')
     ->middleware(['auth', 'verified', 'role:business_owner']);
 
+//Space Owner Navbars
+Route::get('/space/newspaces', [SpaceOwnerController::class, 'newspaces'])
+    ->name('space.newspaces')
+    ->middleware(['auth', 'verified', 'role:space_owner']);
+
+Route::get('/space/negotiations', [SpaceOwnerController::class, 'negotiations'])
+    ->name('space.negotiations')
+    ->middleware(['auth', 'verified', 'role:space_owner']);
+
+Route::get('/space/feedback', [SpaceOwnerController::class, 'feedback'])
+    ->name('space.feedback')
+    ->middleware(['auth', 'verified', 'role:space_owner']);
+
+//Business Owner Navbar
+Route::get('/business/myads', [BusinessOwnerController::class, 'myads'])
+    ->name('business.myads')
+    ->middleware(['auth', 'verified', 'role:business_owner']); 
+
+Route::get('/business/negotiations', [BusinessOwnerController::class, 'negotiations'])
+    ->name('business.negotiations')
+    ->middleware(['auth', 'verified', 'role:business_owner']);
+
+Route::get('/business/bh', [BusinessOwnerController::class, 'bh'])
+    ->name('business.bh')
+    ->middleware(['auth', 'verified', 'role:business_owner']);
+
+Route::get('/business/feedback', [BusinessOwnerController::class, 'feedback'])
+    ->name('business.feedback')
+    ->middleware(['auth', 'verified', 'role:business_owner']);
+
 // Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

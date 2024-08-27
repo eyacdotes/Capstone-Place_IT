@@ -15,16 +15,13 @@
                     <x-nav-link :href="route('space.dashboard')" :active="request()->routeIs('space.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link>
-                        {{ __('Your Spaces') }}
-                    </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('space.newspaces')" :active="request()->routeIs('space.newspaces')">
                         {{ __('Post New Spaces') }}
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('space.negotiations')" :active="request()->routeIs('space.negotiations')">
                         {{ __('Negotiations') }}
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('space.feedback')" :active="request()->routeIs('space.feedback')">
                         {{ __('Feedback') }}
                     </x-nav-link>
                 </div>
@@ -80,16 +77,13 @@
             <x-responsive-nav-link :href="route('space.dashboard')" :active="request()->routeIs('space.dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
-                {{ __('Your Spaces') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('space.newspaces')" :active="request()->routeIs('space.newspaces')">
                 {{ __('Post New Spaces') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('space.negotiations')" :active="request()->routeIs('space.negotiations')">
                 {{ __('Negotiations') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('space.feedback')" :active="request()->routeIs('space.feedback')">
                 {{ __('Feedback') }}
             </x-responsive-nav-link>
         </div>
