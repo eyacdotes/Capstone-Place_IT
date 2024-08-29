@@ -14,7 +14,7 @@ class BusinessOwnerController extends Controller
     public function index()
     {
         // Define the locations you want to filter
-        $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Toledo', 'Lapu-Lapu', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
+        $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Lapu-Lapu', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
         
         // Initialize an array to store the counts
         $listingsCount = [];
@@ -28,6 +28,7 @@ class BusinessOwnerController extends Controller
         // Return the count to the view
         return view('dashboard.business', compact('listingsCount'));
     }
+    
     public function myads()
     {
         return view('myads.business');
@@ -44,6 +45,7 @@ class BusinessOwnerController extends Controller
     {
         return view('feedback.business');
     }
+    
 
     // Add additional methods specific to business owners here
     // For example, methods to manage businesses, view reports, etc.
