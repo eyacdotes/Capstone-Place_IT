@@ -41,7 +41,6 @@
                                             <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words">{{ $listing->location }}</td>
                                             <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words">{{ $listing->description }}</td>
                                             <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">{{ $listing->dateCreated->format('Y-m-d') }}</td>
-<<<<<<< HEAD
                                             <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">
                                                 <span class="
                                                     {{ $listing->status === 'Vacant' ? 'text-green-600' : '' }}
@@ -51,9 +50,6 @@
                                                     {{ $listing->status }}
                                                 </span>
                                             </td>
-=======
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">{{ $listing->status }}</td>
->>>>>>> 21dcdc5dbadc94947859cc57c94c37ee28b7f7c3
                                         </tr>
                                     @endif
                                 @endforeach
