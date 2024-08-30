@@ -28,6 +28,7 @@ class CreateListingController extends Controller
             'title' => 'required|string|max:255',
             'location' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         $listing = new Listing([
@@ -38,10 +39,20 @@ class CreateListingController extends Controller
             'ownerID' => Auth::id(),
             'status' => 'Vacant',
             'approvedBy_userID' => 4,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
-        
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            // Generate a unique file name
+            $filename = time() . '-' . $image->getClientOriginalName();
+            // Save the file to public/images directory
+            $image->storeAs('public/images', $filename);
+
+            //save the file to storage/public/images php artisan storage:link
+            // Save the file path to the database 
+            $listing->image = $filename;
+        }
+
+        // Save the listing
         $listing->save();
         return redirect()->route('space.dashboard')->with('success', 'Listing created successfully.');
     }
