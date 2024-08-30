@@ -18,7 +18,8 @@
                     </div>
                 </div>
                 <div class="p-4">
-                    <div class="grid grid-cols-3 gap-4 border-gray-200">
+                    <!-- Responsive Grid for Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 border-gray-200">
                         @php
                             // Define the list of locations
                             $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Lapu-Lapu City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
@@ -41,7 +42,7 @@
                             @endphp
 
                             @if ($count > 0) <!-- Only display the card if there are available spaces -->
-                                <a href="#" class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
+                                <a href="{{ route('place.showByLocation', ['location' => $location]) }}" class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
                                     <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">{{ $location }}</h5>
                                     <p class="font-normal text-gray-700">({{ $count }}) Spaces Available</p>
                                     <p class="pt-2 font-normal text-gray-400">Click to view all available spaces</p>

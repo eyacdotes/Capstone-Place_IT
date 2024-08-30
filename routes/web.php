@@ -52,6 +52,14 @@ Route::get('/business/dashboard', [BusinessOwnerController::class, 'index'])
     ->name('business.dashboard')
     ->middleware(['auth', 'verified', 'role:business_owner']);
 
+// display modal places/location
+Route::get('/business/place/{location}', [BusinessOwnerController::class, 'showByLocation'])
+    ->name('place.showByLocation');
+
+// View details for a specific listing/spaces
+Route::get('/business/place/detail/{listingID}', [BusinessOwnerController::class, 'detail'])
+    ->name('place.detail');
+
 //Space Owner Navbars
 Route::get('/space/newspaces', [SpaceOwnerController::class, 'newspaces'])
     ->name('space.newspaces')

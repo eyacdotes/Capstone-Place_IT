@@ -19,6 +19,10 @@ class Listing extends Model
     const created_at = 'created_at';
     const UPDATED_AT = 'updated_at';
     
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'ownerID'); // Adjust the foreign key if necessary
+    }
     protected $fillable = [
         'title',
         'location',

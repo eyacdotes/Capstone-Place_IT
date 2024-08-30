@@ -25,8 +25,23 @@ class BusinessOwnerController extends Controller
             $listingsCount[$location] = Listing::where('location', 'LIKE', '%' . $location . '%')->count();
         }
 
-        // Return the count to the view
+         // Return the count to the view
         return view('dashboard.business', compact('listingsCount'));
+    }
+
+    public function showByLocation($location)
+    {
+        // Fetch all listings for the specific location
+        $listings = Listing::with('owner')->where('location', 'LIKE', '%' . $location . '%')->get();
+
+        // Pass the listings and the location to the view
+        return view('place.showByLocation', compact('listings', 'location'));
+    }
+
+    public function detail($listingID)
+    {
+        $listing = Listing::with('owner')->findOrFail($listingID);
+        return view('place.detail', compact('listing'));
     }
     
     public function myads()

@@ -55,7 +55,7 @@
                                 @endforeach
                                 @if (!$found)
                                     <tr>
-                                        <td colspan="5" class="text-center py-4 bg-gray-100">No Space Found</td>
+                                        <td colspan="6" class="text-center py-4 bg-gray-100">No Space Found</td>
                                     </tr>
                                 @endif
                             </tbody>

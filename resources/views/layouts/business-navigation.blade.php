@@ -15,9 +15,6 @@
                     <x-nav-link :href="route('business.dashboard')" :active="request()->routeIs('business.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('business.myads')" :active="request()->routeIs('business.myads')">
-                        {{ __('My Ads') }}
-                    </x-nav-link>
                     <x-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')">
                         {{ __('Negotiations') }}
                     </x-nav-link>
@@ -79,9 +76,6 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('business.dashboard')" :active="request()->routeIs('business.dashboard')">
                 {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('business.myads')" :active="request()->routeIs('business.myads')">
-                {{ __('My Ads') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')">
                 {{ __('Negotiations') }}

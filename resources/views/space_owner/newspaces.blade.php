@@ -12,24 +12,29 @@
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
                 <form method="POST" action="{{ route('space.new.store') }}" enctype="multipart/form-data">
                     @csrf
+                    <div >
+                        <p class="font-bold text-xl ">Space for rent</p>
+                        <span class="text-gray-500">Be as descriptive as posible</span>
+                    </div>
+                    <hr class="mb-4 bg-gray-800 h-0.5">
                     <div class="mb-4">
                         <label class="block text-gray-700">Title</label>
-                        <input type="text" name="title" class="w-full p-2 border rounded-md" required>
+                        <input type="text" name="title" class="w-full p-3 border rounded-md" placeholder="e.g Gate Space" required>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700">Location</label>
-                        <input type="text" name="location" class="w-full p-2 border rounded-md" required>
+                        <input type="text" name="location" class="w-full p-3 border rounded-md" placeholder="e.g Pardo Cebu City" required>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700">Description</label>
-                        <textarea name="description" class="w-full p-2 border rounded-md" required></textarea>
+                        <textarea name="description" class="w-full p-3 border rounded-md" placeholder="Short Description..." required></textarea>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700">Upload Image</label>
-                        <input type="file" name="image" class="w-full p-2 border rounded-md">
+                        <input type="file" name="image" class="w-full p-3 border rounded-md">
                     </div>
 
                     <div>

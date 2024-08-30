@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('listing', function (Blueprint $table) {
-            $table->id('listingID'); // Primary key
+            $table->id('listingID'); // Primary key 
             $table->string('title');
             $table->string('location');
             $table->text('description');
