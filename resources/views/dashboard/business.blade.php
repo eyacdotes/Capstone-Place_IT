@@ -21,7 +21,11 @@
                     <div class="grid grid-cols-3 gap-4 border-gray-200">
                         @php
                             // Define the list of locations
+<<<<<<< HEAD
                             $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Lapu-Lapu City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
+=======
+                            $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Lapu-Lapu', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
+>>>>>>> 21dcdc5dbadc94947859cc57c94c37ee28b7f7c3
                             
                             // Get the search input
                             $search = request('search');
