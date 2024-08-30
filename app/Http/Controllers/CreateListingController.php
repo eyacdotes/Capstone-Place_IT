@@ -31,6 +31,7 @@ class CreateListingController extends Controller
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
+        // Create the listing
         $listing = new Listing([
             'title' => $request->title,
             'location' => $request->location,
@@ -40,6 +41,7 @@ class CreateListingController extends Controller
             'status' => 'Vacant',
             'approvedBy_userID' => 4,
         ]);
+        // Handle image upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             // Generate a unique file name
@@ -54,6 +56,7 @@ class CreateListingController extends Controller
 
         // Save the listing
         $listing->save();
+
         return redirect()->route('space.dashboard')->with('success', 'Listing created successfully.');
     }
 }
