@@ -23,6 +23,7 @@ class Listing extends Model
         'title',
         'location',
         'description',
+        'image',
         'ownerID',
         'approvedBy_userID',
         'status'
