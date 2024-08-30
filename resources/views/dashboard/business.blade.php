@@ -21,7 +21,7 @@
                     <div class="grid grid-cols-3 gap-4 border-gray-200">
                         @php
                             // Define the list of locations
-                            $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Batangas', 'Manila', 'Davao', 'Baguio', 'Cavite', 'Laguna', 'Iloilo'];
+                            $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Lapu-Lapu City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
                             
                             // Get the search input
                             $search = request('search');
@@ -43,8 +43,8 @@
                             @if ($count > 0) <!-- Only display the card if there are available spaces -->
                                 <a href="#" class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
                                     <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">{{ $location }}</h5>
-                                    <p class="font-normal text-gray-700">{{ $count }} Space(s) Available</p>
-                                    <p class="pt-2 font-normal text-gray-200">Click to view all available spaces</p>
+                                    <p class="font-normal text-gray-700">({{ $count }}) Spaces Available</p>
+                                    <p class="pt-2 font-normal text-gray-400">Click to view all available spaces</p>
                                 </a>
                             @endif
                         @endforeach

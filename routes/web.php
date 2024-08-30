@@ -6,6 +6,7 @@ use App\Http\Controllers\BusinessOwnerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CreateListingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,11 @@ Route::get('/business/dashboard', [BusinessOwnerController::class, 'index'])
 Route::get('/space/newspaces', [SpaceOwnerController::class, 'newspaces'])
     ->name('space.newspaces')
     ->middleware(['auth', 'verified', 'role:space_owner']);
+
+//create new listing
+Route::middleware('auth')->group(function () {
+    Route::post('/space/dashboard', [CreateListingController::class, 'store'])->name('space.new.store');
+});    
 
 Route::get('/space/negotiations', [SpaceOwnerController::class, 'negotiations'])
     ->name('space.negotiations')

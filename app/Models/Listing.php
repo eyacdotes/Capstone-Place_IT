@@ -16,6 +16,7 @@ class Listing extends Model
     // Ensure that 'dateCreated' and other timestamps are managed properly
     public $timestamps = true;
     const CREATED_AT = 'dateCreated';
+    const created_at = 'created_at';
     const UPDATED_AT = 'updated_at';
     
     protected $fillable = [

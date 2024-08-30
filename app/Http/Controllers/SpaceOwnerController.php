@@ -22,17 +22,17 @@ class SpaceOwnerController extends Controller
     public function newspaces()
     {
         $listings = Listing::where('ownerID', Auth::id())->get();
-        return view('newspaces.space', compact('listings'));
+        return view('space_owner.newspaces', compact('listings'));
     }
     public function negotiations()
     {
         $listings = Listing::where('ownerID', Auth::id())->get();
-        return view('negotiations.space', compact('listings'));
+        return view('space_owner.negotiations', compact('listings'));
     }
     public function feedback()
     {
         $listings = Listing::where('ownerID', Auth::id())->get();
-        return view('feedback.space', compact('listings'));
+        return view('space_owner.feedback', compact('listings'));
     }
 
     // Add additional methods specific to space owners here

@@ -14,7 +14,7 @@ class BusinessOwnerController extends Controller
     public function index()
     {
         // Define the locations you want to filter
-        $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Naga City', 'Minglanilla City', 'Toledo', 'Lapu-Lapu', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
+        $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Lapu-Lapu City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
         
         // Initialize an array to store the counts
         $listingsCount = [];
