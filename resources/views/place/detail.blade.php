@@ -17,13 +17,15 @@
                         <p class="text-black-700"><strong>{{ $listing->owner->firstName . " " . $listing->owner->lastName }}</strong></p>
                     </div>
 
-                    <!-- Image with Modal -->
+                    <!-- Images with Modal -->
                     <div class="relative">
                         <div class="flex space-x-4">
-                            <!-- Clickable Image -->
-                            <img src="{{ asset('storage/images/' . $listing->image) }}" alt="Image" class="rounded-lg mb-4 cursor-pointer" 
-                                 style="width: 300px; height: 200px; object-fit: cover;" 
-                                 onclick="openModal('{{ asset('storage/images/' . $listing->image) }}')">
+                            @foreach($listing->images as $image)
+                                <!-- Clickable Image -->
+                                <img src="{{ asset('storage/images/' . $image->image_path) }}" alt="Image" class="rounded-lg mb-4 cursor-pointer" 
+                                    style="width: 300px; height: 200px; object-fit: cover;" 
+                                    onclick="openModal('{{ asset('storage/images/' . $image->image_path) }}')">
+                            @endforeach
                         </div>
                     </div>
 
@@ -55,36 +57,86 @@
 
                     <!-- Negotiate Button -->
                     <div class="mt-6 text-center">
-                        <a href="#" class="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700">Negotiate this Space</a>
+                        <button onclick="openNegotiationModal()" class="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700">Negotiate this Space</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
-<div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
-    <div class="relative max-w-full max-h-full">
-        <!-- Close Button with Circular Gray Background -->
-        <button onclick="closeModal()" 
-                class="absolute top-0 right-0 mt-2 mr-2 text-white text-xl z-10 
-                       bg-gray-700 bg-opacity-100 hover:bg-opacity-50  rounded-full h-10 w-10 flex items-center justify-center">
-            &times;
-        </button>
-        <!-- Modal Image -->
-        <img id="modalImage" src="" alt="Modal Image" class="rounded-lg" style="max-width: 90vw; max-height: 90vh; object-fit: contain;">
+    <!-- Negotiation Modal -->
+    <div id="negotiationModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+            <!-- Close Button -->
+            <button onclick="closeNegotiationModal()" 
+                    class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 text-xl z-10 
+                           bg-gray-300 hover:bg-gray-400 rounded-full h-8 w-8 flex items-center justify-center">
+                &times;
+            </button>
+
+            <h2 class="text-xl font-semibold mb-4">Negotiate This Space</h2>
+
+            <!-- Negotiation Form -->
+            <form action="{{ route('negotiation.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="listingID" value="{{ $listing->listingID }}">
+                <input type="hidden" name="receiverID" value="{{ $listing->owner->userID }}">
+
+                <!-- Message -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Message</label>
+                    <textarea name="message" class="w-full p-3 border rounded-md" rows="4" required>I want to negotiate this space!</textarea>
+                </div>
+
+                <!-- Offer Amount -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Offer Amount</label>
+                    <input type="number" name="offerAmount" class="w-full p-3 border rounded-md" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-full hover:bg-green-700">Send Offer</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-    function openModal(imageSrc) {
-        document.getElementById('modalImage').src = imageSrc;
-        document.getElementById('imageModal').classList.remove('hidden');
-    }
+    <!-- Modal Scripts -->
+    <script>
+        function openNegotiationModal() {
+            document.getElementById('negotiationModal').classList.remove('hidden');
+        }
 
-    function closeModal() {
-        document.getElementById('imageModal').classList.add('hidden');
-    }
-</script>
+        function closeNegotiationModal() {
+            document.getElementById('negotiationModal').classList.add('hidden');
+        }
+    </script>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+        <div class="relative max-w-full max-h-full">
+            <!-- Close Button with Circular Gray Background -->
+            <button onclick="closeModal()" 
+                    class="absolute top-0 right-0 mt-2 mr-2 text-white text-xl z-10 
+                           bg-gray-700 bg-opacity-100 hover:bg-opacity-50 rounded-full h-10 w-10 flex items-center justify-center">
+                &times;
+            </button>
+            <!-- Modal Image -->
+            <img id="modalImage" src="" alt="Modal Image" class="rounded-lg" style="max-width: 90vw; max-height: 90vh; object-fit: contain;">
+        </div>
+    </div>
+    
+
+    <script>
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+    </script>
 
 </x-app-layout>

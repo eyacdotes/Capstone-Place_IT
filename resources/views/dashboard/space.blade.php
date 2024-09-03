@@ -54,9 +54,12 @@
                                     @endif
                                 @endforeach
                                 @if (!$found)
-                                    <tr>
-                                        <td colspan="6" class="text-center py-4 bg-gray-100">No Space Found</td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="6" class="text-lg text-center py-4 bg-gray-100">
+                                        No Space Found 
+                                        <a href="{{ route('space.newspaces') }}" class="text-blue-500 hover:text-blue-700">Post a space</a>
+                                    </td>
+                                </tr>
                                 @endif
                             </tbody>
                         </table>

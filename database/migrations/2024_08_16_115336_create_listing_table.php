@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('location');
             $table->text('description');
-            $table->string('image');
             $table->timestamp('dateCreated')->useCurrent(); // Automatically sets the current timestamp
             $table->unsignedBigInteger('ownerID')->nullable(); // Foreign key referencing 'users'
             $table->foreign('ownerID')->references('userID')->on('users')->nullOnDelete();

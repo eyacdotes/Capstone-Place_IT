@@ -14,7 +14,7 @@
                     @csrf
                     <div >
                         <p class="font-bold text-xl ">Space for rent</p>
-                        <span class="text-gray-500">Be as descriptive as posible</span>
+                        <span class="text-gray-500">Be descriptive as possible</span>
                     </div>
                     <hr class="mb-4 bg-gray-800 h-0.5">
                     <div class="mb-4">
@@ -33,9 +33,12 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700">Upload Image</label>
-                        <input type="file" name="image" class="w-full p-3 border rounded-md">
+                        <label class="block text-gray-700">Upload Images</label>
+                        <input type="file" name="images[]" id="imageInput" class="w-full p-3 border rounded-md" multiple onchange="displayFileNames()">
+                        <div id="fileNames" class="mt-2 text-gray-600"></div>
                     </div>
+
+
 
                     <div>
                         <button type="submit" class="bg-orange-400 text-white py-2 px-4 rounded-md">Post Space</button>
@@ -44,4 +47,52 @@
             </div>
         </div>
     </div>
+    <script>
+    let selectedFiles = [];
+
+    function displayFileNames() {
+        const input = document.getElementById('imageInput');
+        const fileNamesDiv = document.getElementById('fileNames');
+        selectedFiles = Array.from(input.files); // Store the selected files
+
+        fileNamesDiv.innerHTML = ''; // Clear previous file names
+
+        if (selectedFiles.length > 0) {
+            const fileList = document.createElement('ul');
+            fileList.className = 'list-disc list-inside';
+
+            selectedFiles.forEach((file, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'flex justify-between items-center';
+
+                listItem.innerHTML = `
+                    <span>${file.name}</span>
+                    <button onclick="removeFile(${index})" class="text-red-500 ml-2 hover:text-red-700">
+                        Remove
+                    </button>
+                `;
+                
+                fileList.appendChild(listItem);
+            });
+
+            fileNamesDiv.appendChild(fileList);
+        } else {
+            fileNamesDiv.textContent = 'No files selected';
+        }
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1); // Remove the file from the array
+        updateFileInput(); // Update the file input to reflect the changes
+        displayFileNames(); // Re-display the file names
+    }
+
+    function updateFileInput() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        document.getElementById('imageInput').files = dataTransfer.files;
+    }
+</script>
+
+
 </x-app-layout>

@@ -70,25 +70,25 @@ Route::middleware('auth')->group(function () {
     Route::post('/space/dashboard', [CreateListingController::class, 'store'])->name('space.new.store');
 });    
 
-Route::get('/space/negotiations', [SpaceOwnerController::class, 'negotiations'])
-    ->name('space.negotiations')
-    ->middleware(['auth', 'verified', 'role:space_owner']);
+Route::get('/space/negotiations', [App\Http\Controllers\NegotiationController::class, 'index'])->name('space.negotiations');
+
+
+Route::get('space/negotiations/{negotiationID}', [App\Http\Controllers\NegotiationController::class, 'show'])->name('space.messagedetail');
 
 Route::get('/space/feedback', [SpaceOwnerController::class, 'feedback'])
     ->name('space.feedback')
     ->middleware(['auth', 'verified', 'role:space_owner']);
 
-//Business Owner Navbar
-Route::get('/business/myads', [BusinessOwnerController::class, 'myads'])
-    ->name('business.myads')
-    ->middleware(['auth', 'verified', 'role:business_owner']); 
+Route::post('space/negotiations/store', [App\Http\Controllers\NegotiationController::class, 'store'])->name('negotiation.store');
 
-Route::get('/business/negotiations', [BusinessOwnerController::class, 'negotiations'])
-    ->name('business.negotiations')
-    ->middleware(['auth', 'verified', 'role:business_owner']);
+Route::get('/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'getMessages'])->name('negotiation.reply');
 
-Route::get('/business/bh', [BusinessOwnerController::class, 'bh'])
-    ->name('business.bh')
+Route::post('space/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('negotiation.reply');
+
+Route::get('/business/negotiations', [App\Http\Controllers\BusinessNegotiationController::class, 'index'])->name('business.negotiations');
+
+Route::get('/business/bookinghistory', [BusinessOwnerController::class, 'bookinghistory'])
+    ->name('business.bookinghistory')
     ->middleware(['auth', 'verified', 'role:business_owner']);
 
 Route::get('/business/feedback', [BusinessOwnerController::class, 'feedback'])

@@ -12,27 +12,21 @@
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
                 <div>
                     <h3 class="text-lg font-bold mb-4">Active Negotiations</h3>
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="bg-orange-400 text-white">
-                                <th class="px-6 py-4">Space Title</th>
-                                <th class="px-6 py-4">Business Owner</th>
-                                <th class="px-6 py-4">Status</th>
-                                <th class="px-6 py-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Add logic to fetch and display negotiations -->
-                            <tr class="hover:bg-opacity-75">
-                                <td class="px-6 py-4 bg-gray-100">Example Space</td>
-                                <td class="px-6 py-4 bg-gray-100">John Doe</td>
-                                <td class="px-6 py-4 bg-gray-100">Pending</td>
-                                <td class="px-6 py-4 bg-gray-100">
-                                    <a href="#" class="text-blue-500 hover:underline">View Details</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        @forelse($negotiations as $negotiation)
+                        <a href="{{ route('space.messagedetail', ['negotiationID' => $negotiation->negotiationID]) }}" class="block max-w-7xl bg-gray-100 p-6 rounded-lg shadow-lg w-full sm:w-auto hover:bg-gray-200 transition duration-200">
+                            <h4 class="text-xl font-bold text-orange-600 mb-2">{{ $negotiation->listing->title }}</h4>
+                            <p class="text-gray-700 mb-4"><strong>Business Owner:</strong> {{ $negotiation->sender->firstName . ' ' . $negotiation->sender->lastName }}</p>
+                            <p class="text-gray-700 mb-4"><strong>Offer:</strong> {{ number_format($negotiation->offerAmount, 2) }}</p>
+                            <p class="text-gray-700 mb-4"><strong>Message:</strong> {{ $negotiation->message }}</p>
+                        </a>
+                        @empty
+                        <div class="text-center w-full">
+                            <p class="text-gray-700">No active negotiations found.</p>
+                        </div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
         </div>

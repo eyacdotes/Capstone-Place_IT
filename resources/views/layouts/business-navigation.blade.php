@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')">
                         {{ __('Negotiations') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('business.bh')" :active="request()->routeIs('business.bh')">
+                    <x-nav-link :href="route('business.bookinghistory')" :active="request()->routeIs('business.bookinghistory')">
                         {{ __('Booking History') }}
                     </x-nav-link>
                     <x-nav-link :href="route('business.feedback')" :active="request()->routeIs('business.feedback')">
@@ -80,7 +80,7 @@
             <x-responsive-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')">
                 {{ __('Negotiations') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('business.bh')" :active="request()->routeIs('business.bh')">
+            <x-responsive-nav-link :href="route('business.bookinghistory')" :active="request()->routeIs('business.bookinghistory')">
                 {{ __('Booking History') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('business.feedback')" :active="request()->routeIs('business.feedback')">

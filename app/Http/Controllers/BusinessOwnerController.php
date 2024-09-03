@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Listing;
+use app\Models\History;
+use Illuminate\Support\Facades\Auth;
 
 class BusinessOwnerController extends Controller
 {
@@ -43,18 +46,14 @@ class BusinessOwnerController extends Controller
         $listing = Listing::with('owner')->findOrFail($listingID);
         return view('place.detail', compact('listing'));
     }
-    
-    public function myads()
-    {
-        return view('myads.business');
-    }
     public function negotiations()
     {
         return view('negotiations.business');
     }
-    public function bh()
+    public function bookinghistory()
     {
-        return view('bh.business');
+        $bhistory = History::where('renterID', Auth::id())->get();
+        return view('business_owner.bookinghistory', compact('bhistory'));
     }
     public function feedback()
     {
