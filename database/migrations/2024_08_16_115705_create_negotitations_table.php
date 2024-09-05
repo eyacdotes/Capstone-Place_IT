@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('listingID'); // Foreign key referencing listings
             $table->unsignedBigInteger('senderID'); // Foreign key referencing users
             $table->unsignedBigInteger('receiverID'); // Foreign key referencing users
-            $table->text('message');
+            $table->string('negoStatus');
             $table->decimal('offerAmount', 10, 2); // Decimal for financial values
             $table->timestamp('timestamp')->useCurrent(); // Automatically set the current timestamp
             $table->timestamps(); // created_at and updated_at columns

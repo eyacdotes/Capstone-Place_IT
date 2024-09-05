@@ -70,22 +70,36 @@ Route::middleware('auth')->group(function () {
     Route::post('/space/dashboard', [CreateListingController::class, 'store'])->name('space.new.store');
 });    
 
+// SPACE NEGOTIATIONS
 Route::get('/space/negotiations', [App\Http\Controllers\NegotiationController::class, 'index'])->name('space.negotiations');
 
+Route::get('space/negotiations/{negotiationID}', [App\Http\Controllers\NegotiationController::class, 'show'])->name('negotiation.show');
 
-Route::get('space/negotiations/{negotiationID}', [App\Http\Controllers\NegotiationController::class, 'show'])->name('space.messagedetail');
-
+// SPACE FEEDBACK
 Route::get('/space/feedback', [SpaceOwnerController::class, 'feedback'])
     ->name('space.feedback')
     ->middleware(['auth', 'verified', 'role:space_owner']);
 
 Route::post('space/negotiations/store', [App\Http\Controllers\NegotiationController::class, 'store'])->name('negotiation.store');
 
+// SPACE OWNER NEGOTIATIONS
 Route::get('/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'getMessages'])->name('negotiation.reply');
 
 Route::post('space/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('negotiation.reply');
 
-Route::get('/business/negotiations', [App\Http\Controllers\BusinessNegotiationController::class, 'index'])->name('business.negotiations');
+// space owner update status
+Route::post('space/negotiations/{negotiationID}/status', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');
+
+//business owner agreement
+Route::post('business/negotiations/{negotiationID}/rent-agreement', [App\Http\Controllers\NegotiationController::class, 'rentAgree'])->name('negotiation.rentAgree');
+
+
+// BUSINESS OWNER NEGOTIATIONS
+Route::get('/business/negotiations', [App\Http\Controllers\NegotiationController::class, 'index'])->name('business.negotiations');
+
+Route::get('business/negotiations/{negotiationID}', [App\Http\Controllers\NegotiationController::class, 'show'])->name('negotiation.show');
+
+Route::post('business/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('negotiation.reply');
 
 Route::get('/business/bookinghistory', [BusinessOwnerController::class, 'bookinghistory'])
     ->name('business.bookinghistory')

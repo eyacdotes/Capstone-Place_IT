@@ -9,7 +9,9 @@ class Negotiation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['listingID', 'senderID', 'receiverID', 'message', 'offerAmount'];
+    protected $table = 'negotiations';
+    
+    protected $fillable = ['listingID', 'senderID', 'receiverID', 'offerAmount', 'negoStatus'];
     protected $primaryKey = 'negotiationID';
 
     public function listing() {
@@ -24,9 +26,11 @@ class Negotiation extends Model
         return $this->belongsTo(User::class, 'receiverID');
     }
 
-    // Correct relationship to the Message model
     public function replies() {
-        return $this->hasMany(Negotiation::class, 'listingID', 'listingID')
-            ->where('negotiationID', '<>', $this->negotiationID);  // Exclude the current negotiation itself
+        return $this->hasMany(Reply::class, 'negotiationID', 'negotiationID');
     }
+    public function rentalAgreement()
+{
+    return $this->hasOne(RentalAgreement::class, 'listingID', 'listingID');
+}
 }

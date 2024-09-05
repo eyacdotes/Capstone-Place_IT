@@ -1,12 +1,12 @@
-<!-- resources/views/space_owner/messagedetail.blade.php -->
-<title>Space Owner Negotiation Details</title>
+<!-- resources/views/business_owner/messagedetail.blade.php -->
+<title>Business Owner Negotiation Details</title>
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Negotiation Details') }}
         </h2>
     </x-slot>
-    
+
     <div class="w-full py-6 flex justify-center">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
             <div class="flex flex-col lg:flex-row h-auto lg:h-96">
@@ -37,28 +37,59 @@
                 </div>
 
                 <!-- Negotiation Details Section -->
-                <div class="w-full lg:w-1/3 p-4">
-                    <h4 class="text-lg font-semibold mb-4">Amount Offered</h4>
-                    <div class="bg-gray-100 p-4 rounded-lg mb-4">
-                        <p class="text-2xl font-bold">P{{ number_format($negotiation->offerAmount, 2) }}</p>
+                <div class="w-full lg:w-1/3 p-4 border-t lg:border-t-0 lg:border-l border-gray-300">
+                    <!-- Amount and Status Section -->
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h4 class="text-lg font-semibold">Amount Offered</h4>
+                            <input class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="P{{ number_format($negotiation->offerAmount, 2) }}"></input>
+                        </div>
+                        <div class="text-right mb-6">
+                        <h4 class="text-lg font-semibold pr-2">Status</h4>
+                        <span class=" 
+                                                    {{ $negotiation->negoStatus === 'Approve' ? 'text-xl font-bold text-green-600' : '' }}
+                                                    {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
+                                                    {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
+                                                    font-bold">
+                                                    {{ $negotiation->negoStatus }}
+                            </span>
+                        </div>
                     </div>
 
-                    <!-- Status Approval/Disapproval Dropdown for Space Owners -->
-                    <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
-                        @csrf
-                        <label for="status">Status:</label>
-                        <select class="break-all" name="status" id="status">
-                            <option value="Pending" {{ $negotiation->negoStatus == 'Pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="Approve" {{ $negotiation->negoStatus == 'Approve' ? 'selected' : '' }}>Approve</option>
-                            <option value="Disapprove" {{ $negotiation->negoStatus == 'Disapprove' ? 'selected' : '' }}>Disapprove</option>
-                        </select>
-                        <button class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">Submit</button>
+                    <!-- Form Section for Rental Term, Start Date, End Date -->
+                    <form action="{{ route('negotiation.rentAgree', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
+                    @csrf
+                        <input type="hidden" name="ownerID" value="{{ $negotiation->listing->ownerID }}">
+                        <input type="hidden" name="renterID" value="{{ $negotiation->senderID }}">
+                        <input type="hidden" name="listingID" value="{{ $negotiation->listingID }}">
+                        <!-- Rental Term -->
+                        <div class="flex flex-col">
+                            <label for="rentalTerm" class="block font-semibold text-gray-700">Rental Term:</label>
+                            <select class="p-2 border border-gray-300 rounded-lg" name="rentalTerm" id="rentalTerm">
+                                <option value="">Choose...</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
 
-                        @if(session('success'))
-                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-4 rounded relative mb-4">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+                        <!-- Start Date -->
+                        <div class="flex flex-col">
+                            <label for="startDate" class="block mb-2 font-semibold text-gray-700">Start Date:</label>
+                            <input type="date" name="startDate" id="startDate" class="p-2 border border-gray-300 rounded-lg" required>
+                        </div>
+
+                        <!-- End Date -->
+                        <div class="flex flex-col">
+                            <label for="endDate" class="block mb-2 font-semibold text-gray-700">End Date:</label>
+                            <input type="date" name="endDate" id="endDate" class="mb-2 p-2 border border-gray-300 rounded-lg" required>
+                        </div>
+
+                        <!-- Hidden Fields for offerAmount -->
+                        <input type="hidden" name="offerAmount" value="{{ $negotiation->offerAmount }}">
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
                     </form>
                 </div>
             </div>

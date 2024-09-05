@@ -15,11 +15,10 @@
 
                     <div class="grid grid-cols-1 gap-4">
                         @forelse($negotiations as $negotiation)
-                        <a href="{{ route('space.messagedetail', ['negotiationID' => $negotiation->negotiationID]) }}" class="block max-w-7xl bg-gray-100 p-6 rounded-lg shadow-lg w-full sm:w-auto hover:bg-gray-200 transition duration-200">
+                        <a href="{{ route('negotiation.show', ['negotiationID' => $negotiation->negotiationID]) }}" class="block max-w-7xl bg-gray-100 p-6 rounded-lg shadow-lg w-full sm:w-auto hover:bg-gray-200 transition duration-200">
                             <h4 class="text-xl font-bold text-orange-600 mb-2">{{ $negotiation->listing->title }}</h4>
                             <p class="text-gray-700 mb-4"><strong>Business Owner:</strong> {{ $negotiation->sender->firstName . ' ' . $negotiation->sender->lastName }}</p>
                             <p class="text-gray-700 mb-4"><strong>Offer:</strong> {{ number_format($negotiation->offerAmount, 2) }}</p>
-                            <p class="text-gray-700 mb-4"><strong>Message:</strong> {{ $negotiation->message }}</p>
                         </a>
                         @empty
                         <div class="text-center w-full">

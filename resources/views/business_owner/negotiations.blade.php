@@ -1,4 +1,3 @@
-<!-- resources/views/business/negotiation.blade.php -->
 <title>My Negotiations</title>
 <x-app-layout>
     <x-slot name="header">
@@ -17,19 +16,27 @@
                             <tr class="bg-orange-400 text-white">
                                 <th class="px-6 py-4">Space Title</th>
                                 <th class="px-6 py-4">Space Owner</th>
-                                <th class="px-6 py-4">Message</th>
                                 <th class="px-6 py-4">Offer Amount</th>
                                 <th class="px-6 py-4">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($negotiations as $negotiation)
-                            <tr class="hover:bg-opacity-75">
+                            <tr class="hover:bg-opacity-75 hover:border-orange-400 hover:shadow-lg cursor-pointer transition duration-200 ease-in-out"
+                                style="border: 1px solid transparent;" 
+                                onclick="window.location='{{ route('negotiation.show', ['negotiationID' => $negotiation->negotiationID]) }}'">
                                 <td class="px-6 py-4 bg-gray-100">{{ $negotiation->listing->title }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ $negotiation->receiver->firstName . ' ' . $negotiation->receiver->lastName }}</td>
-                                <td class="px-6 py-4 bg-gray-100">{{ $negotiation->message }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ number_format($negotiation->offerAmount, 2) }}</td>
-                                <td class="px-6 py-4 bg-gray-100">Pending</td>
+                                <td class="px-6 py-4 bg-gray-100">
+                                <span class="
+                                                    {{ $negotiation->negoStatus === 'Approve' ? 'text-green-600' : '' }}
+                                                    {{ $negotiation->negoStatus === 'Pending' ? 'text-blue-600' : '' }}
+                                                    {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-red-600' : '' }}
+                                                    font-bold">
+                                                    {{ $negotiation->negoStatus }}
+                                                </span>
+                                </td>
                             </tr>
                             @empty
                             <tr>

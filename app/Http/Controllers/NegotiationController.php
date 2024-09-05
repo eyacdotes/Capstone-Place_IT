@@ -4,32 +4,86 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Negotiation;
-use App\Models\Message;
+use App\Models\Reply;
+use App\Models\RentalAgreement;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Listing;
 
 class NegotiationController extends Controller
 {
     /**
-     * Show the list of negotiations for the space owner.
-     *
-     * @return \Illuminate\View\View
+     * Show the list of negotiations for the authenticated user (either space owner or business owner).
      */
     public function index()
     {
-        // Fetch negotiations where the current user is the receiver (space owner)
-        $negotiations = Negotiation::where('receiverID', Auth::id())
-                                   ->with('listing', 'sender')
+        // Fetch negotiations where the current user is either the sender (business owner) or receiver (space owner)
+        $negotiations = Negotiation::where('senderID', Auth::id())
+                                   ->orWhere('receiverID', Auth::id())
+                                   ->with('listing', 'sender', 'receiver')
                                    ->get();
 
-        return view('space_owner.negotiations', compact('negotiations'));
+        // Check role and return appropriate view
+        if (Auth::user()->role === 'business_owner') {
+            return view('business_owner.negotiations', compact('negotiations'));
+        } else {
+            return view('space_owner.negotiations', compact('negotiations'));
+        }
     }
+
     /**
-     * Store a new negotiation.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * Show the negotiation details with messages.
      */
+    public function show($negotiationID)
+    {
+        $negotiation = Negotiation::with('listing', 'sender', 'receiver', 'replies')->findOrFail($negotiationID);
+
+        // Conditionally return the correct view based on the user's role
+        if (Auth::user()->role === 'business_owner') {
+            return view('business_owner.messagedetail', compact('negotiation'));
+        } else if (Auth::user()->role === 'space_owner') {
+            return view('space_owner.messagedetail', compact('negotiation'));
+        }
+    }
+
+    /**
+     * Store a reply (message) for a negotiation.
+     */
+    public function reply(Request $request, $negotiationID)
+    {
+        $request->validate([
+            'message' => 'required|string|max:1000',
+        ]);
+
+        $negotiation = Negotiation::findOrFail($negotiationID);
+
+        // Ensure only the sender (business owner) or receiver (space owner) can reply
+        if (Auth::id() != $negotiation->senderID && Auth::id() != $negotiation->receiverID) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Create a reply (message)
+        Reply::create([
+            'negotiationID' => $negotiationID,
+            'senderID' => Auth::id(),
+            'message' => $request->input('message'),
+        ]);
+
+        // Conditionally redirect based on the user's role
+        if (Auth::user()->role === 'business_owner') {
+            return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID]);
+        } else if (Auth::user()->role === 'space_owner') {
+            return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID]);
+        }
+
+}
+
+    /**
+     * Get all messages for a negotiation (for API or dynamic loading purposes).
+     */
+    public function getMessages($negotiationID)
+    {
+        $replies = Reply::where('negotiationID', $negotiationID)->get();
+        return response()->json($replies);
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -43,48 +97,64 @@ class NegotiationController extends Controller
             'listingID' => $request->listingID,
             'senderID' => Auth::id(),
             'receiverID' => $request->receiverID,
-            'message' => $request->message,
+            'message' => $request->message, 
+            'negoStatus' => 'Pending',
             'offerAmount' => $request->offerAmount,
         ]);
         return redirect()->route('business.negotiations')->with('success', 'Your offer has been sent successfully.');
-        
     }
-    /**
-         * Store a new negotiation.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\RedirectResponse
-         */
-        public function reply(Request $request, $negotiationId)
-        {
-            $request->validate([
-                'message' => 'required|string|max:1000',
-            ]);
-    
-            $originalNegotiation = Negotiation::findOrFail($negotiationId);
-    
-            // Create a new entry in the negotiations table as a reply
-            Negotiation::create([
-                'listingID' => $originalNegotiation->listingID,
-                'senderID' => Auth::id(),
-                'receiverID' => $originalNegotiation->receiverID == Auth::id() ? $originalNegotiation->senderID : $originalNegotiation->receiverID,
-                'message' => $request->input('message'),
-                'offerAmount' => $originalNegotiation->offerAmount, // Offer amount remains the same as the original negotiation
-            ]);
-    
-            return redirect()->route('space.messagedetail', ['negotiationID' => $negotiationId]);
+
+    public function updateStatus (Request $request, $negotiationID) {
+        // Validate the status field
+        $request->validate([
+            'status' => 'required|in:Pending,Approve,Disapprove',
+        ]);
+
+        // Find the negotiation by ID
+        $negotiation = Negotiation::findOrFail($negotiationID);
+
+        // Ensure the current user is the receiver (space owner)
+        if (Auth::id() != $negotiation->receiverID) {
+            abort(403, 'Unauthorized');
         }
 
-        public function show($negotiationID)
-        {
-            $negotiation = Negotiation::with('listing', 'sender', 'receiver', 'replies')->findOrFail($negotiationID);
-            return view('space_owner.messagedetail', compact('negotiation'));
-        }
+        // Update the status
+        $negotiation->negoStatus = $request->input('status');
+        $negotiation->save();
 
-        public function getMessages($id)
+        // Redirect back with a success message
+        return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID])
+                        ->with('success', 'Negotiation status updated successfully.');
+    }
+
+    public function rentAgree(Request $request, $negotiationID)
     {
-        $negotiation = Negotiation::with('replies')->findOrFail($id);
 
-        return response()->json($negotiation->replies);
+    // Validate the input fields
+    $request->validate([
+        'ownerID' => 'required|exists:users,userID',
+        'renterID' => 'required|exists:users,userID',
+        'listingID' => 'required|exists:listing,listingID',
+        'rentalTerm' => 'required|in:weekly,monthly,yearly',
+        'offerAmount' => 'required|numeric',
+        'startDate' => 'required|date',
+        'endDate' => 'required|date|after_or_equal:startDate', // Ensure end date is after start date
+    ]);
+
+    // Create a new rental agreement and insert into the database
+    RentalAgreement::create([
+        'ownerID' => $request->input('ownerID'),
+        'renterID' => $request->input('renterID'),
+        'listingID' => $request->input('listingID'),
+        'rentalTerm' => $request->input('rentalTerm'),
+        'dateCreated' => now(),
+        'offerAmount' => $request->input('offerAmount'),
+        'dateStart' => $request->input('startDate'),
+        'dateEnd' => $request->input('endDate'),
+        'status' => 'Agree', // Set status to 'Agree' by default
+    ]);
+
+    // Redirect to the business owner dashboard after successful insert
+    return redirect()->route('business.dashboard')->with('success', 'Rental agreement created successfully.');
     }
 }
