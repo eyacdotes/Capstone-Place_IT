@@ -7,7 +7,8 @@
     </x-slot>
 
     <div class="w-full py-6 flex justify-center">
-        <div class="w-full sm:w-auto mx-auto sm:px-6 lg:px-8">
+        <!-- Modify the container width to be wider -->
+        <div class="w-full lg:w-3/4 mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="flex-1 p-6 bg-white">
                     <h5>Sort by date</h5>
@@ -15,67 +16,69 @@
                         <input type="date" name="date" class="border rounded-md p-2" value="{{ request('date') }}">
                         <button type="submit" class="bg-orange-400 text-white py-2 px-4 rounded-md">Filter</button>
                     </form>
-                    <div class="overflow-x-auto mt-4">
-                        <table class="w-full max-w-7xl text-sm text-left border-collapse rounded-lg">
-                            <thead class="bg-orange-400">
-                                <tr>
-                                    <th class="px-6 py-4 text-white">Title</th>
-                                    <th class="px-6 py-4 text-white">Location</th>
-                                    <th class="px-6 py-4 text-white">Description</th>
-                                    <th class="px-6 py-4 text-white">Date Posted</th>
-                                    <th class="px-6 py-4 text-white">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+
+                    <div class="mt-4 space-y-4">
+                        @php
+                            $found = false;
+                        @endphp
+                        @foreach ($listings as $listing)
+                            @if (!request('date') || $listing->dateCreated->format('Y-m-d') == request('date'))
                                 @php
-                                    $found = false;
+                                    $found = true;
                                 @endphp
-                                @foreach ($listings as $listing)
-                                    @if (!request('date') || $listing->dateCreated->format('Y-m-d') == request('date'))
-                                        @php
-                                            $found = true;
-                                        @endphp
-                                        <tr class="bg-white hover:bg-opacity-50">
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
-                                                {{ $listing->title }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
-                                                {{ $listing->location }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
-                                                {{ $listing->description }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25' : '' }}">
-                                                {{ $listing->dateCreated->format('Y-m-d') }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">
-                                                <span class="
-                                                    {{ $listing->status === 'Pending' ? 'text-gray-600' : '' }}
-                                                    {{ $listing->status === 'Disapproved' ? 'text-red-600' : '' }}
-                                                    {{ $listing->status === 'Vacant' ? 'text-green-600' : '' }}
-                                                    {{ $listing->status === 'Occupied' ? 'text-blue-600' : '' }}
-                                                    {{ $listing->status === 'Deactivated' || $listing->status === 'Another Term' ? 'text-red-600' : '' }}
-                                                    font-bold">
-                                                    {{ $listing->status }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                                @if (!$found)
-                                <tr>
-                                    <td colspan="6" class="text-lg text-center py-4 bg-gray-100">
-                                        No Space Found 
-                                        <a href="{{ route('space.newspaces') }}" class="text-blue-500 hover:text-blue-700">Post a space</a>
-                                    </td>
-                                </tr>
-                                @endif
-                            </tbody>
-                        </table>
+                                <!-- Card Section (wider card) -->
+                                <div class="bg-neutral-200 text-white rounded-lg shadow-lg flex p-4 items-start flex-col space-y-4 w-full">
+                                    <!-- Image and Details Section -->
+                                    <div class="flex items-start space-x-6 w-full">
+                                        <!-- Listing Image Section -->
+                                        <div class="w-40 h-40">
+                                            @if($listing->images->count() > 0)
+                                                <!-- Display the first image for the listing -->
+                                                <img src="{{ asset('storage/images/' . $listing->images->first()->image_path) }}" alt="{{ $listing->title }}" class="object-cover rounded-md w-full h-full">
+                                            @else
+                                                <!-- Display a placeholder image if no images are available -->
+                                                <img src="{{ asset('images/no-image.png') }}" alt="No Image" class="object-cover rounded-md w-full h-full">
+                                            @endif
+                                        </div>
+
+                                        <!-- Listing Details Section (expanded width) -->
+                                        <div class="flex-grow">
+                                            <h3 class="text-xl font-bold text-black">{{ $listing->title }}</h3>
+                                            <p class="text-sm text-gray-800">{{ $listing->location }}</p>
+                                            <p class="text-sm text-gray-800 mt-1">{{ $listing->description }}</p>
+                                            <p class="text-sm text-gray-800 mt-1">Listed on {{ $listing->dateCreated->format('Y-m-d') }}</p>
+
+                                            <!-- Display Status with dynamic color based on status -->
+                                            <p class="mt-2 font-semibold text-sm 
+                                                {{ $listing->status === 'Vacant' ? 'text-green-500' : '' }}
+                                                {{ $listing->status === 'Pending' ? 'text-gray-400' : '' }}
+                                                {{ $listing->status === 'Disapproved' ? 'text-red-500' : '' }}">
+                                                {{ $listing->status }}
+                                            </p>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    <hr class="border-gray-500 w-full border-1 my-6">
+
+                                    <!-- Edit and Delete Button Section (placed below details) -->
+                                    <div class="flex space-x-2 w-full justify-end">
+                                        <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-blue-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-blue-700 text-center">
+                                            Edit
+                                        </a>
+                                        <button class="bg-red-600 text-white px-4 w-40 py-2 rounded-lg hover:bg-red-700 text-center">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                        @if (!$found)
+                        <div class="text-lg text-center py-4 bg-gray-100 rounded-md">
+                            No Space Found 
+                            <a href="{{ route('space.newspaces') }}" class="text-blue-500 hover:text-blue-700">Post a space</a>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

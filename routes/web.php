@@ -100,6 +100,13 @@ Route::get('/space/newspaces', [SpaceOwnerController::class, 'newspaces'])
 Route::middleware('auth')->group(function () {
     Route::post('/space/dashboard', [CreateListingController::class, 'store'])->name('space.new.store');
 });    
+//edit and update listing
+Route::get('/spaces/{listingID}/edit', [SpaceOwnerController::class, 'edit'])->name('space_owner.edit');
+Route::post('/spaces/{listingID}/edit', [SpaceOwnerController::class, 'update'])->name('space_owner.update');
+
+//delete image and edit
+Route::delete('/spaces/image/{listingImageID}', [SpaceOwnerController::class, 'deleteImage'])->name('space_owner.delete_image');
+Route::post('/spaces/{listingID}/add_image', [SpaceOwnerController::class, 'addImage'])->name('space_owner.add_image');
 
 // SPACE NEGOTIATIONS
 Route::get('/space/negotiations', [App\Http\Controllers\NegotiationController::class, 'index'])->name('space.negotiations');
