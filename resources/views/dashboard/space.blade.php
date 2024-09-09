@@ -73,12 +73,16 @@
                                 </div>
                             @endif
                         @endforeach
-                        @if (!$found)
-                        <div class="text-lg text-center py-4 bg-gray-100 rounded-md">
-                            No Space Found 
-                            <a href="{{ route('space.newspaces') }}" class="text-blue-500 hover:text-blue-700">Post a space</a>
-                        </div>
-                        @endif
+                                @if (!$found)
+                                <tr>
+                                    <td colspan="6" class="text-lg text-center py-4 bg-gray-100">
+                                        No Space Found 
+                                        <a href="{{ route('space.newspaces') }}" class="text-blue-500 hover:text-blue-700">Post a space</a>
+                                    </td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
