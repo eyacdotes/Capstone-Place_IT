@@ -39,7 +39,7 @@ class CreateListingController extends Controller
             'description' => $request->description,
             'dateCreated' => now(),
             'ownerID' => Auth::id(),
-            'status' => 'Vacant',
+            'status' => 'Pending',
             'approvedBy_userID' => 4,
         ]);
 

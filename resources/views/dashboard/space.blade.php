@@ -1,4 +1,3 @@
-<!-- resources/views/space.blade.php -->
 <title>Space Owner Dashboard</title>
 <x-app-layout>
     <x-slot name="header">
@@ -36,13 +35,27 @@
                                         @php
                                             $found = true;
                                         @endphp
-                                        <tr class="bg-white hover:bg-opacity-75">
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words">{{ $listing->title }}</td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words">{{ $listing->location }}</td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words">{{ $listing->description }}</td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">{{ $listing->dateCreated->format('Y-m-d') }}</td>
+                                        <tr class="bg-white hover:bg-opacity-50">
+                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
+                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
+                                                {{ $listing->title }}
+                                            </td>
+                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
+                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
+                                                {{ $listing->location }}
+                                            </td>
+                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
+                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
+                                                {{ $listing->description }}
+                                            </td>
+                                            <td class="px-6 py-4 bg-gray-100 
+                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25' : '' }}">
+                                                {{ $listing->dateCreated->format('Y-m-d') }}
+                                            </td>
                                             <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">
                                                 <span class="
+                                                    {{ $listing->status === 'Pending' ? 'text-gray-600' : '' }}
+                                                    {{ $listing->status === 'Disapproved' ? 'text-red-600' : '' }}
                                                     {{ $listing->status === 'Vacant' ? 'text-green-600' : '' }}
                                                     {{ $listing->status === 'Occupied' ? 'text-blue-600' : '' }}
                                                     {{ $listing->status === 'Deactivated' || $listing->status === 'Another Term' ? 'text-red-600' : '' }}

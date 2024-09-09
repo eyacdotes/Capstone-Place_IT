@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CreateListingController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,10 @@ Route::get('/dashboard', function () {
         return redirect()->route('space.dashboard');
     } elseif ($user->role === 'business_owner') {
         return redirect()->route('business.dashboard');
-    } else {
+    } elseif ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+     else {
         abort(403, 'Unauthorized');
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -51,6 +55,33 @@ Route::get('/space/dashboard', [SpaceOwnerController::class, 'index'])
 Route::get('/business/dashboard', [BusinessOwnerController::class, 'index'])
     ->name('business.dashboard')
     ->middleware(['auth', 'verified', 'role:business_owner']);
+
+// Admin Dashboard Route
+Route::get('/admin/dashboard', [AdminController::class, 'index'])
+    ->name('admin.dashboard')
+    ->middleware(['auth', 'verified', 'role:admin']);
+
+// Admin Navbars 
+Route::get('/admin/usermanagement', [AdminController::class, 'users'])
+    ->name('admin.usermanagement')
+    ->middleware(['auth', 'verified', 'role:admin']);
+
+
+// Admin LISTINGS
+Route::get('/admin/listingmanagement', [AdminController::class, 'listing'])
+    ->name('admin.listingmanagement')
+    ->middleware(['auth', 'verified', 'role:admin']);
+
+Route::post('/admin/listingmanagement/approve-listing/{listingID}', [AdminController::class, 'approveListing'])->name('admin.approveListing');
+Route::post('/admin/listingmanagement/disapprove-listing/{listingID}', [AdminController::class, 'disapproveListing'])->name('admin.disapproveListing');
+
+Route::get('/admin/listingmanagement/view/{listingID}', [AdminController::class, 'viewListing'])->name('admin.viewListing');
+
+
+
+Route::get('/admin/reports', [AdminController::class, 'reports'])
+    ->name('admin.reports')
+    ->middleware(['auth', 'verified', 'role:admin']);
 
 // display modal places/location
 Route::get('/business/place/{location}', [BusinessOwnerController::class, 'showByLocation'])

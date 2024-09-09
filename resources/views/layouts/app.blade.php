@@ -22,6 +22,8 @@
             @include('layouts.space-navigation')
         @elseif (auth()->check() && auth()->user()->role === 'business_owner')
             @include('layouts.business-navigation')
+        @elseif (auth()->check() && auth()->user()->role === 'admin')
+            @include('layouts.admin-navigation')
         @else
             @include('layouts.navigation') <!-- Default navigation if role is not defined -->
         @endif
