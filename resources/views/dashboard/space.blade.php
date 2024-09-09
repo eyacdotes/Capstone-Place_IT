@@ -73,50 +73,6 @@
                                 </div>
                             @endif
                         @endforeach
-                        @if (!$found)
-                        <div class="text-lg text-center py-4 bg-gray-100 rounded-md">
-                            No Space Found 
-                            <a href="{{ route('space.newspaces') }}" class="text-blue-500 hover:text-blue-700">Post a space</a>
-                        </div>
-                        @endif
-
-                                @foreach ($listings as $listing)
-                                    @if (!request('date') || $listing->dateCreated->format('Y-m-d') == request('date'))
-                                        @php
-                                            $found = true;
-                                        @endphp
-                                        <tr class="bg-white hover:bg-opacity-50">
-                                            <!-- Apply line-through for Disapproved listings -->
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
-                                                {{ $listing->title }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
-                                                {{ $listing->location }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
-                                                {{ $listing->description }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 
-                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
-                                                {{ $listing->dateCreated->format('Y-m-d') }}
-                                            </td>
-                                            <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">
-                                                <span class="
-                                                    {{ $listing->status === 'Pending' ? 'text-gray-600' : '' }}
-                                                    {{ $listing->status === 'Disapproved' ? 'text-red-600' : '' }}
-                                                    {{ $listing->status === 'Vacant' ? 'text-green-600' : '' }}
-                                                    {{ $listing->status === 'Occupied' ? 'text-blue-600' : '' }}
-                                                    {{ $listing->status === 'Deactivated' || $listing->status === 'Another Term' ? 'text-red-600' : '' }}
-                                                    font-bold">
-                                                    {{ $listing->status }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
                                 @if (!$found)
                                 <tr>
                                     <td colspan="6" class="text-lg text-center py-4 bg-gray-100">
