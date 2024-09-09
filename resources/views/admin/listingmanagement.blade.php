@@ -99,7 +99,7 @@
                     @endif
 
                     <!-- Modal -->
-                    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                         <div class="bg-white rounded-lg w-1/2 p-8">
                             <h3 class="text-xl font-bold mb-4">Listing Details</h3>
                             <div id="modal-content">

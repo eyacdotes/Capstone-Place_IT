@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="w-full py-6 flex justify-center">
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl" >
             <div class="flex flex-col lg:flex-row h-auto lg:h-96">
                 <!-- Chat Section -->
                 <div class="w-full lg:w-2/3 p-4 border-b lg:border-b-0 lg:border-r border-gray-300">
@@ -104,61 +104,41 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/app.js') }}"></script>
     <script>
-        function fetchMessages() {
-            $.ajax({
-                url: '{{ route("negotiation.reply", ["negotiationID" => $negotiation->negotiationID]) }}',
-                method: 'GET',
-                success: function(data) {
-                    updateChat(data);
-                    scrollToBottom(); // Keep the chat box scrolled to the bottom
+        function chatApp() {
+            return {
+                messages: [],
+                newMessage: '',
+                fetchMessages() {
+                    axios.get('{{ route("negotiation.reply", ["negotiationID" => $negotiation->negotiationID]) }}')
+                        .then(response => {
+                            this.messages = response.data;
+                            this.scrollToBottom();
+                        });
+                },
+                sendMessage() {
+                    if (this.newMessage.trim() === '') return;
+
+                    axios.post('{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}', {
+                        message: this.newMessage,
+                        _token: '{{ csrf_token() }}'
+                    })
+                    .then(response => {
+                        this.fetchMessages();
+                        this.newMessage = ''; // Clear the input field
+                    });
+                },
+                scrollToBottom() {
+                    this.$nextTick(() => {
+                        this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
+                    });
+                },
+                init() {
+                    this.fetchMessages();
+                    setInterval(this.fetchMessages.bind(this), 5000); // Fetch messages every 5 seconds
                 }
-            });
+            }
         }
-
-        function updateChat(messages) {
-            let chatBox = $('.chat-box');
-            chatBox.empty();
-
-            messages.forEach(function(message) {
-                let messageHtml = `
-                    <div class="flex ${message.senderID == {{ Auth::id() }} ? 'justify-end' : 'justify-start'}">
-                        <div class="p-4 rounded-lg shadow-lg ${message.senderID == {{ Auth::id() }} ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
-                            <p class="text-sm">${message.message}</p>
-                            <small class="text-xs">${new Date(message.created_at).toLocaleTimeString()}</small>
-                        </div>
-                    </div>
-                `;
-                chatBox.append(messageHtml);
-            });
-        }
-
-        function scrollToBottom() {
-            let chatBox = $('.chat-box');
-            chatBox.animate({ scrollTop: chatBox.prop("scrollHeight") }, 300);
-        }
-
-        scrollToBottom();
-
-        // Fetch messages every 5 seconds
-        setInterval(fetchMessages, 5000);
-
-        // Handle form submission
-        $('form').on('submit', function(e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: $(this).attr('action'),
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    fetchMessages();
-                    $('input[name="message"]').val(''); // Clear the input field
-                    scrollToBottom();
-                }
-            });
-        });
     </script>
 
 </x-app-layout>
