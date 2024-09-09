@@ -12,16 +12,16 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('business.dashboard')" :active="request()->routeIs('business.dashboard')">
+                    <x-nav-link :href="route('business.dashboard')" :active="request()->routeIs('business.dashboard')" class="ajax-link">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')">
+                    <x-nav-link :href="route('business.negotiations')" :active="request()->routeIs('business.negotiations')" class="ajax-link">
                         {{ __('Negotiations') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('business.bookinghistory')" :active="request()->routeIs('business.bookinghistory')">
+                    <x-nav-link :href="route('business.bookinghistory')" :active="request()->routeIs('business.bookinghistory')" class="ajax-link">
                         {{ __('Booking History') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('business.feedback')" :active="request()->routeIs('business.feedback')">
+                    <x-nav-link :href="route('business.feedback')" :active="request()->routeIs('business.feedback')" class="ajax-link">
                         {{ __('Feedback') }}
                     </x-nav-link>
                 </div>
