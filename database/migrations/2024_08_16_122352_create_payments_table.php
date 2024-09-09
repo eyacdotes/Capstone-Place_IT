@@ -19,6 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('renterID');
             $table->decimal('amount', 10, 2);
             $table->timestamp('date')->useCurrent();
+            $table->string('proof'); // Path to the proof of payment
+            $table->string('details')->nullable();
+            
             $table->foreign('rentalAgreementID')->references('rentalAgreementID')->on('rental_agreements')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('renterID')->references('userID')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });

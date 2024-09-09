@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RentalAgreement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Listing;
 use App\Models\ListingImages;
+use App\Models\Reviews;
 
 class SpaceOwnerController extends Controller
 {
@@ -30,12 +32,15 @@ class SpaceOwnerController extends Controller
         $listings = Listing::where('ownerID', Auth::id())->get();
         return view('space_owner.negotiations', compact('listings'));
     }
-    public function feedback()
+    public function reviews()
     {
-        $listings = Listing::where('ownerID', Auth::id())->get();
-        return view('space_owner.feedback', compact('listings'));
+        // Fetch feedbacks from the reviews table, with related space title and renter details
+        $feedbacks = Reviews::with(['rentalAgreement.space', 'renter'])
+                    ->latest() // Order by the latest feedback
+                    ->get();
+
+        return view('space_owner.reviews', compact('feedbacks'));
     }
-// app/Http/Controllers/SpaceController.php
 
 public function edit($listingID)
 {
@@ -102,5 +107,4 @@ public function addImage(Request $request, $listingID)
 
     return redirect()->back()->with('success', 'Image added successfully.');
 }
-
 }

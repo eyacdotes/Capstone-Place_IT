@@ -19,7 +19,7 @@
                     <x-nav-link :href="route('space.negotiations')"  class="ajax-link" :active="request()->routeIs('space.negotiations')">
                         {{ __('Negotiations') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('space.feedback')"  class="ajax-link" :active="request()->routeIs('space.feedback')">
+                    <x-nav-link :href="route('space.reviews')"  class="ajax-link" :active="request()->routeIs('space.reviews')">
                         {{ __('Feedback') }}
                     </x-nav-link>
                 </div>
@@ -81,7 +81,7 @@
             <x-responsive-nav-link :href="route('space.negotiations')" :active="request()->routeIs('space.negotiations')">
                 {{ __('Negotiations') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('space.feedback')" :active="request()->routeIs('space.feedback')">
+            <x-responsive-nav-link :href="route('space.reviews')" :active="request()->routeIs('space.reviews')">
                 {{ __('Feedback') }}
             </x-responsive-nav-link>
         </div>
