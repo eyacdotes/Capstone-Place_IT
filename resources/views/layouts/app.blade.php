@@ -34,7 +34,7 @@
             </header>
         @endif
 
-        <main>
+        <main id="content-area">>
             {{ $slot }}
         </main>
     </div>
