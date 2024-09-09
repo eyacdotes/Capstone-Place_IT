@@ -5,23 +5,21 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('space.dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('space.dashboard')" :active="request()->routeIs('space.dashboard')">
+                    <x-nav-link :href="route('space.dashboard')"  class="ajax-link" :active="request()->routeIs('space.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('space.newspaces')" :active="request()->routeIs('space.newspaces')">
+                    <x-nav-link :href="route('space.newspaces')"  class="ajax-link" :active="request()->routeIs('space.newspaces')">
                         {{ __('Post New Spaces') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('space.negotiations')" :active="request()->routeIs('space.negotiations')">
+                    <x-nav-link :href="route('space.negotiations')"  class="ajax-link" :active="request()->routeIs('space.negotiations')">
                         {{ __('Negotiations') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('space.feedback')" :active="request()->routeIs('space.feedback')">
+                    <x-nav-link :href="route('space.feedback')"  class="ajax-link" :active="request()->routeIs('space.feedback')">
                         {{ __('Feedback') }}
                     </x-nav-link>
                 </div>

@@ -57,4 +57,8 @@
             togglePassword.textContent = type === 'password' ? 'Show' : 'Hide';
         });
     </script>
+<<<<<<< HEAD
 </x-guest-layout>
+=======
+</x-guest-layout>
+>>>>>>> 6829dcffc039eaefe43240294df207027ef74475
