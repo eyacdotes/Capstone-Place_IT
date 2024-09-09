@@ -20,10 +20,10 @@
                     <h4 class="text-lg font-semibold">How was your experience?</h4>
                     <p class="text-sm text-gray-600">How do you feel about the system?</p>
                     <div class="flex justify-center mt-4 space-x-4">
-                        <img src="{{ asset('storage/emoji1.png') }}" alt="Happy" class="w-10">
-                        <img src="{{ asset('storage/emoji2.png') }}" alt="Neutral" class="w-10">
-                        <img src="{{ asset('storage/emoji3.png') }}" alt="Sad" class="w-10">
-                        <img src="{{ asset('storage/emoji4.png') }}" alt="Angry" class="w-10">
+                        <img src="{{ asset('storage/images/smile.png') }}" alt="Happy" class="w-10">
+                        <img src="{{ asset('storage/images/neutral.png') }}" alt="Neutral" class="w-10">
+                        <img src="{{ asset('storage//images/sad.png') }}" alt="Sad" class="w-10">
+                        <img src="{{ asset('storage/images/angry.png') }}" alt="Angry" class="w-10">
                     </div>
                 </div>
 
