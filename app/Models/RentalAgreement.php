@@ -36,4 +36,8 @@ class RentalAgreement extends Model
     public function renter() {
         return $this->belongsTo(User::class, 'renterID');
     }
+    public function space()
+    {
+        return $this->belongsTo(Listing::class, 'listingID');
+    }
 }

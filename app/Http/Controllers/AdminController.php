@@ -80,8 +80,9 @@ class AdminController extends Controller
     return response()->json($listing);
     }
 
-    public function reports() {
-
+    public function payment() {
+        $userCount = User::where('role', '!=', 'admin')->count();
+        return view('admin.payment', compact('userCount'));
     }
     
 }

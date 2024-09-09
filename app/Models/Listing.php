@@ -18,7 +18,6 @@ class Listing extends Model
     const CREATED_AT = 'dateCreated';
     const created_at = 'created_at';
     const UPDATED_AT = 'updated_at';
-    //<input class="text-2xl font-bold" value="{{ number_format($negotiation->offerAmount, 2) }}">
     public function owner()
     {
         return $this->belongsTo(User::class, 'ownerID'); // Adjust the foreign key if necessary
@@ -34,5 +33,9 @@ class Listing extends Model
     ];
     public function images() {
         return $this->hasMany(ListingImages::class, 'imageID', 'listingID');
+    }
+    public function rentalAgreements()
+    {
+        return $this->hasMany(RentalAgreement::class, 'spaceID');
     }
 }
