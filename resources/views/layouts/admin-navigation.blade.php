@@ -21,8 +21,8 @@
                     <x-nav-link :href="route('admin.listingmanagement')" :active="request()->routeIs('admin.listingmanagement')">
                         {{ __('Listing Management') }}
                     </x-nav-link>
-                    <x-nav-link>
-                        {{ __('Reports') }}
+                    <x-nav-link :href="route('admin.payment')" :active="request()->routeIs('admin.payment')">
+                        {{ __('Payment') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -83,8 +83,8 @@
             <x-responsive-nav-link :href="route('admin.listingmanagement')" :active="request()->routeIs('admin.listingmanagement')">
                 {{ __('Listing Management') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link>
-                {{ __('Reports') }}
+            <x-responsive-nav-link :href="route('admin.payment')" :active="request()->routeIs('admin.payment')">
+                {{ __('Payment') }}
             </x-responsive-nav-link>
         </div>
 

@@ -36,20 +36,21 @@
                                             $found = true;
                                         @endphp
                                         <tr class="bg-white hover:bg-opacity-50">
+                                            <!-- Apply line-through for Disapproved listings -->
                                             <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
+                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
                                                 {{ $listing->title }}
                                             </td>
                                             <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
+                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
                                                 {{ $listing->location }}
                                             </td>
                                             <td class="px-6 py-4 bg-gray-100 whitespace-normal break-words 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25 line-through' : '' }}">
+                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
                                                 {{ $listing->description }}
                                             </td>
                                             <td class="px-6 py-4 bg-gray-100 
-                                                {{ $listing->status === 'Disapproved' ? 'blur-sm opacity-25' : '' }}">
+                                                {{ $listing->status === 'Disapproved' ? 'line-through text-red-600' : '' }}">
                                                 {{ $listing->dateCreated->format('Y-m-d') }}
                                             </td>
                                             <td class="px-6 py-4 bg-gray-100 whitespace-nowrap">

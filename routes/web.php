@@ -79,8 +79,8 @@ Route::get('/admin/listingmanagement/view/{listingID}', [AdminController::class,
 
 
 
-Route::get('/admin/reports', [AdminController::class, 'reports'])
-    ->name('admin.reports')
+Route::get('/admin/payment', [AdminController::class, 'payment'])
+    ->name('admin.payment')
     ->middleware(['auth', 'verified', 'role:admin']);
 
 // display modal places/location
@@ -107,9 +107,11 @@ Route::get('/space/negotiations', [App\Http\Controllers\NegotiationController::c
 Route::get('space/negotiations/{negotiationID}', [App\Http\Controllers\NegotiationController::class, 'show'])->name('negotiation.show');
 
 // SPACE FEEDBACK
-Route::get('/space/feedback', [SpaceOwnerController::class, 'feedback'])
-    ->name('space.feedback')
+Route::get('/space/reviews', [SpaceOwnerController::class, 'reviews'])
+    ->name('space.reviews')
     ->middleware(['auth', 'verified', 'role:space_owner']);
+
+Route::post('/space/reviews.submit', [SpaceOwnerController::class, 'submiit'])->name('space.submit');
 
 Route::post('space/negotiations/store', [App\Http\Controllers\NegotiationController::class, 'store'])->name('negotiation.store');
 
@@ -132,6 +134,11 @@ Route::get('business/negotiations/{negotiationID}', [App\Http\Controllers\Negoti
 
 Route::post('business/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('negotiation.reply');
 
+Route::get('/business/negotiations/payment/{negotiationID}', [BusinessOwnerController::class, 'proceedToPayment'])->name('business.proceedToPayment');
+Route::post('/business/negotiations/payment/{negotiationID}', [BusinessOwnerController::class, 'storeProofOfPayment'])->name('businessOwner.storeProofOfPayment');
+
+
+
 Route::get('/business/bookinghistory', [BusinessOwnerController::class, 'bookinghistory'])
     ->name('business.bookinghistory')
     ->middleware(['auth', 'verified', 'role:business_owner']);
@@ -139,6 +146,9 @@ Route::get('/business/bookinghistory', [BusinessOwnerController::class, 'booking
 Route::get('/business/feedback', [BusinessOwnerController::class, 'feedback'])
     ->name('business.feedback')
     ->middleware(['auth', 'verified', 'role:business_owner']);
+
+Route::post('/business/reviews/submit', [BusinessOwnerController::class, 'submit'])
+    ->name('business.submit');
 
 // Profile routes
 Route::middleware('auth')->group(function () {

@@ -15,7 +15,9 @@
                     <table class="w-full border-collapse">
                         <thead>
                             <tr class="bg-blue-400 text-white">
-                                <th class="px-6 py-4">Payment ID</th>
+                                <th class="px-6 py-4">Space Title</th>
+                                <th class="px-6 py-4">Owner</th>
+                                <th class="px-6 py-4">Rental Term</th>
                                 <th class="px-6 py-4">Amount</th>
                                 <th class="px-6 py-4">Date</th>
                             </tr>
@@ -23,13 +25,15 @@
                         <tbody>
                             @forelse($bhistory as $history)
                             <tr class="hover:bg-opacity-75">
-                                <td class="px-6 py-4 bg-gray-100">{{ $history->paymentID }}</td>
-                                <td class="px-6 py-4 bg-gray-100">{{ number_format($history->amount, 2) }}</td>
+                                <td class="px-6 py-4 bg-gray-100">{{ $history->rentalAgreement->space->title ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 bg-gray-100">{{ $history->rentalAgreement->owner->firstName ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 bg-gray-100">{{ $history->rentalAgreement->rentalTerm ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 bg-gray-100">{{ number_format($history->rentalAgreement->offerAmount, 2) }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ $history->date }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="3" class="px-6 py-4 text-center bg-gray-100">No booking history found.</td>
+                                <td colspan="5" class="px-6 py-4 text-center bg-gray-100">No booking history found.</td>
                             </tr>
                             @endforelse
                         </tbody>

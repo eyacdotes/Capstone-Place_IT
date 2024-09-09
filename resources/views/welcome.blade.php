@@ -28,9 +28,9 @@
 
         <!-- Navigation Links -->
         <div class="hidden md:flex md:flex-grow justify-center space-y-4 md:space-y-0 md:space-x-8 mt-4 md:mt-0" id="menu">
-            <a href="#top" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block">HOME</a>
-            <a href="#about-us" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block">ABOUT US</a>
-            <a href="#contacts" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block">CONTACT US</a>
+            <a href="#top" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block font-bold">HOME</a>
+            <a href="#about-us" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block font-bold">ABOUT US</a>
+            <a href="#contacts" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block font-bold">CONTACT US</a>
 
             <!-- Mobile Login and Get Started Buttons -->
             <div class="block md:hidden space-y-4">
@@ -82,8 +82,8 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Top Row - 3 Team Members -->
             <div class="text-center">
-                <img src="{{ asset('storage/images/eyac.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
-                <h3 class="text-xl font-bold">LEMARC EYAC</h3>
+                <img src="{{ asset('storage/images/perod.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
                 <p class="text-orange-600 mb-2">SOFTWARE ENGINEER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
                     <a href="https://www.facebook.com/JahIsGood"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
@@ -106,8 +106,8 @@
             </div>
 
             <div class="text-center">
-                <img src="{{ asset('storage/images/eyac.jpg') }}" alt="Team Member 3" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
-                <h3 class="text-xl font-bold">LEMARC EYAC</h3>
+                <img src="{{ asset('storage/images/cinco.jpg') }}" alt="Team Member 3" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <h3 class="text-xl font-bold">JOHN BENEDICT CINCO</h3>
                 <p class="text-orange-600 mb-2">QUALITY ASSURANCE</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
                 <a href="#"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
@@ -121,8 +121,8 @@
         <!-- Bottom Row - 2 Team Members -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             <div class="text-center">
-                <img src="{{ asset('storage/images/eyac.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
-                <h3 class="text-xl font-bold">LEMARC EYAC</h3>
+                <img src="{{ asset('storage/images/carsido.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <h3 class="text-xl font-bold">FRANCES DIANA N. CARSIDO</h3>
                 <p class="text-orange-600 mb-2">DATABASE MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
                 <a href="#"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
@@ -134,7 +134,7 @@
 
             <div class="text-center">
                 <img src="{{ asset('storage/images/eyac.jpg') }}" alt="Team Member 5" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
-                <h3 class="text-xl font-bold">LEMARC EYAC</h3>
+                <h3 class="text-xl font-bold">SHYRELLE SHINE L. MANAGAYTAY</h3>
                 <p class="text-orange-600 mb-2">UI/UX DESIGNER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
                     <a href="#"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>

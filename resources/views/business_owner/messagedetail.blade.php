@@ -1,4 +1,3 @@
-<!-- resources/views/business_owner/messagedetail.blade.php -->
 <title>Business Owner Negotiation Details</title>
 <x-app-layout>
     <x-slot name="header">
@@ -45,52 +44,61 @@
                             <input class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="P{{ number_format($negotiation->offerAmount, 2) }}"></input>
                         </div>
                         <div class="text-right mb-6">
-                        <h4 class="text-lg font-semibold pr-2">Status</h4>
-                        <span class=" 
-                                                    {{ $negotiation->negoStatus === 'Approve' ? 'text-xl font-bold text-green-600' : '' }}
-                                                    {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
-                                                    {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
-                                                    font-bold">
-                                                    {{ $negotiation->negoStatus }}
+                            <h4 class="text-lg font-semibold pr-2">Status</h4>
+                            <span class=" 
+                                {{ $negotiation->negoStatus === 'Approve' ? 'text-xl font-bold text-green-600' : '' }}
+                                {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
+                                {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
+                                font-bold">
+                                {{ $negotiation->negoStatus }}
                             </span>
                         </div>
                     </div>
 
-                    <!-- Form Section for Rental Term, Start Date, End Date -->
-                    <form action="{{ route('negotiation.rentAgree', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
-                    @csrf
-                        <input type="hidden" name="ownerID" value="{{ $negotiation->listing->ownerID }}">
-                        <input type="hidden" name="renterID" value="{{ $negotiation->senderID }}">
-                        <input type="hidden" name="listingID" value="{{ $negotiation->listingID }}">
-                        <!-- Rental Term -->
-                        <div class="flex flex-col">
-                            <label for="rentalTerm" class="block font-semibold text-gray-700">Rental Term:</label>
-                            <select class="p-2 border border-gray-300 rounded-lg" name="rentalTerm" id="rentalTerm">
-                                <option value="">Choose...</option>
-                                <option value="weekly">Weekly</option>
-                                <option value="monthly">Monthly</option>
-                                <option value="yearly">Yearly</option>
-                            </select>
-                        </div>
+                    <!-- Conditional Display of Form or Proceed to Payment Button -->
+                    @if($negotiation->negoStatus !== 'Approve')
+                        <!-- Form Section for Rental Term, Start Date, End Date -->
+                        <form action="{{ route('negotiation.rentAgree', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="ownerID" value="{{ $negotiation->listing->ownerID }}">
+                            <input type="hidden" name="renterID" value="{{ $negotiation->senderID }}">
+                            <input type="hidden" name="listingID" value="{{ $negotiation->listingID }}">
+                            
+                            <!-- Rental Term -->
+                            <div class="flex flex-col">
+                                <label for="rentalTerm" class="block font-semibold text-gray-700">Rental Term:</label>
+                                <select class="p-2 border border-gray-300 rounded-lg" name="rentalTerm" id="rentalTerm">
+                                    <option value="">Choose...</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="yearly">Yearly</option>
+                                </select>
+                            </div>
 
-                        <!-- Start Date -->
-                        <div class="flex flex-col">
-                            <label for="startDate" class="block mb-2 font-semibold text-gray-700">Start Date:</label>
-                            <input type="date" name="startDate" id="startDate" class="p-2 border border-gray-300 rounded-lg" required>
-                        </div>
+                            <!-- Start Date -->
+                            <div class="flex flex-col">
+                                <label for="startDate" class="block mb-2 font-semibold text-gray-700">Start Date:</label>
+                                <input type="date" name="startDate" id="startDate" class="p-2 border border-gray-300 rounded-lg" required>
+                            </div>
 
-                        <!-- End Date -->
-                        <div class="flex flex-col">
-                            <label for="endDate" class="block mb-2 font-semibold text-gray-700">End Date:</label>
-                            <input type="date" name="endDate" id="endDate" class="mb-2 p-2 border border-gray-300 rounded-lg" required>
-                        </div>
+                            <!-- End Date -->
+                            <div class="flex flex-col">
+                                <label for="endDate" class="block mb-2 font-semibold text-gray-700">End Date:</label>
+                                <input type="date" name="endDate" id="endDate" class="mb-2 p-2 border border-gray-300 rounded-lg" required>
+                            </div>
 
-                        <!-- Hidden Fields for offerAmount -->
-                        <input type="hidden" name="offerAmount" value="{{ $negotiation->offerAmount }}">
+                            <!-- Hidden Fields for offerAmount -->
+                            <input type="hidden" name="offerAmount" value="{{ $negotiation->offerAmount }}">
 
-                        <!-- Submit Button -->
-                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
-                    </form>
+                            <!-- Submit Button -->
+                            <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
+                        </form>
+                    @else
+                        <!-- Proceed to Payment Button -->
+                        <a href="{{ route('business.proceedToPayment', ['negotiationID' => $negotiation->negotiationID]) }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center block">
+                            Proceed to Payment
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
