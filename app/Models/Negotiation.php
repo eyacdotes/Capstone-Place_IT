@@ -30,7 +30,7 @@ class Negotiation extends Model
         return $this->hasMany(Reply::class, 'negotiationID', 'negotiationID');
     }
     public function rentalAgreement()
-{
-    return $this->hasOne(RentalAgreement::class, 'listingID', 'listingID');
-}
+    {
+        return $this->hasOne(RentalAgreement::class, 'listingID', 'listingID');
+    }
 }

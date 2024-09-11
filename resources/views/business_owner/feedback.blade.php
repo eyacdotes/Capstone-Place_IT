@@ -17,39 +17,37 @@
 
                 <!-- Feedback Experience Section -->
                 <form action="{{ route('business.submit') }}" method="POST" class="mt-6">
-                @csrf
-                <div class="text-center">
-                    <h4 class="text-lg font-semibold">How was your experience?</h4>
-                    <p class="text-sm text-gray-600">How do you feel about this transaction?</p>
-                    <div class="flex justify-center mt-4 space-x-4">
-                        <label>
-                            <input type="radio" name="rate" value="5" class="hidden rate-input" required>
-                            <span class="text-4xl cursor-pointer rate-emoji" data-value="5">😀</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rate" value="3" class="hidden rate-input" required>
-                            <span class="text-4xl cursor-pointer rate-emoji" data-value="3">😐</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rate" value="2" class="hidden rate-input" required>
-                            <span class="text-4xl cursor-pointer rate-emoji" data-value="2">😞</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rate" value="1" class="hidden rate-input" required>
-                            <span class="text-4xl cursor-pointer rate-emoji" data-value="1">😡</span>
-                        </label>
+                    @csrf
+                    <div class="text-center">
+                        <h4 class="text-lg font-semibold">How was your experience?</h4>
+                        <p class="text-sm text-gray-600">How do you feel about this transaction?</p>
+                        <div class="flex justify-center mt-4 space-x-4">
+                            <label>
+                                <input type="radio" name="rate" value="5" class="hidden rate-input" required>
+                                <span class="text-4xl cursor-pointer rate-emoji" data-value="5">😀</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="rate" value="3" class="hidden rate-input" required>
+                                <span class="text-4xl cursor-pointer rate-emoji" data-value="3">😐</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="rate" value="2" class="hidden rate-input" required>
+                                <span class="text-4xl cursor-pointer rate-emoji" data-value="2">😞</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="rate" value="1" class="hidden rate-input" required>
+                                <span class="text-4xl cursor-pointer rate-emoji" data-value="1">😡</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <div class="text-center mb-4">
-                    <h4 class="text-lg font-bold">Leave Feedback for the Space Owner</h4>
-                    <p class="text-sm text-gray-600">Summarize your experience</p>
-                </div>
+                    <div class="text-center mb-4">
+                        <h4 class="text-lg font-bold">Leave Feedback for the Space Owner</h4>
+                        <p class="text-sm text-gray-600">Summarize your experience</p>
+                    </div>
 
-                <!-- Feedback Form -->
-                
-                    <!-- Hidden Fields for IDs -->
+                    <!-- Feedback Form -->
                     <input type="hidden" name="renterID" value="{{ auth()->id() }}">
-                    <input type="hidden" name="rentalAgreementID" value="{{ $rentalAgreementID }}">
+                    <input type="hidden" name="rentalAgreementID" value="{{ $rentalAgreement->rentalAgreementID }}">
 
                     <!-- Feedback Textarea -->
                     <div class="mb-4">

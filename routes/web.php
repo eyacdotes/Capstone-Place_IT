@@ -154,7 +154,11 @@ Route::get('/business/feedback', [BusinessOwnerController::class, 'feedback'])
     ->name('business.feedback')
     ->middleware(['auth', 'verified', 'role:business_owner']);
 
-Route::post('/business/reviews/submit', [BusinessOwnerController::class, 'submit'])
+Route::get('/business/feedback/{rentalAgreementID}', [BusinessOwnerController::class, 'loso'])
+    ->name('business.loso')
+    ->middleware(['auth', 'verified', 'role:business_owner']);
+
+Route::post('/business/feedback/submit', [BusinessOwnerController::class, 'submit'])
     ->name('business.submit');
 
 // Profile routes

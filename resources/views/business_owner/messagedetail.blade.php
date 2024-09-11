@@ -7,31 +7,38 @@
     </x-slot>
 
     <div class="w-full py-6 flex justify-center">
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl" >
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
             <div class="flex flex-col lg:flex-row h-auto lg:h-96">
                 <!-- Chat Section -->
                 <div class="w-full lg:w-2/3 p-4 border-b lg:border-b-0 lg:border-r border-gray-300">
                     <div class="h-full flex flex-col justify-between">
                         <!-- Messages Section -->
-                        <div class="space-y-4 overflow-y-auto flex-1 chat-box">
-                            @foreach($negotiation->replies as $reply)
-                                <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
-                                    <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
+                        <div class="space-y-4 overflow-y-auto flex-1 chat-box" x-data="chatApp()" x-init="init()" x-ref="chatBox">
+                        @foreach($negotiation->replies as $reply)
+                            <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
+                                <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
+                                    @if (preg_match('/\.(jpeg|jpg|png|gif)$/i', $reply->message))
+                                        <!-- Display the image if the message field contains an image name -->
+                                        <img src="{{ asset('storage/negotiation_images/' . $reply->message) }}" alt="Image" class="max-w-xs rounded-lg cursor-pointer" onclick="openModal('{{ asset('storage/negotiation_images/' . $reply->message) }}')">
+                                    @else
+                                        <!-- Display the text message if not an image -->
                                         <p class="text-sm">{{ $reply->message }}</p>
-                                        <small class="text-xs">{{ $reply->created_at->format('h:i A') }}</small>
-                                    </div>
+                                    @endif
+                                    <small class="text-xs">{{ $reply->created_at->format('h:i A') }}</small>
                                 </div>
-                            @endforeach
+                            </div>
+                        @endforeach
                         </div>
 
                         <!-- Message Input -->
-                        <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
+                        <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="flex items-center mt-4">
-                                <input type="text" name="message" class="w-full p-2 border rounded-lg" placeholder="Type your message..." required>
-                                <button type="submit" class="bg-blue-600 w-24 text-white p-2 ml-2 rounded-lg hover:bg-blue-700">Send</button>
+                            <div class="flex items-center mt-4 space-x-2">
+                                <input type="file" name="aImage" class="flex-shrink-0 w-52">
+                                <input type="text" name="message" class="flex-grow p-2 border rounded-lg" placeholder="Type your message...">
+                                <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700">Send</button>
                             </div>
-                        </form>                             
+                        </form>
                     </div>
                 </div>
 
@@ -139,6 +146,29 @@
                 }
             }
         }
+
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
     </script>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+        <div class="relative max-w-full max-h-full">
+            <!-- Close Button with Circular Gray Background -->
+            <button onclick="closeModal()" 
+                    class="absolute top-0 right-0 mt-2 mr-2 text-white text-xl z-10 
+                           bg-gray-700 bg-opacity-100 hover:bg-opacity-50 rounded-full h-10 w-10 flex items-center justify-center">
+                &times;
+            </button>
+            <!-- Modal Image -->
+            <img id="modalImage" src="" alt="Modal Image" class="rounded-lg" style="max-width: 90vw; max-height: 90vh; object-fit: contain;">
+        </div>
+    </div>
 
 </x-app-layout>

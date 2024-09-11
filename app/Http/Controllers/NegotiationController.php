@@ -49,32 +49,39 @@ class NegotiationController extends Controller
      */
     public function reply(Request $request, $negotiationID)
     {
-        $request->validate([
-            'message' => 'required|string|max:1000',
-        ]);
+    $request->validate([
+        'message' => 'nullable|string|max:1000',
+        'aImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the rules as needed
+    ]);
 
-        $negotiation = Negotiation::findOrFail($negotiationID);
+    $negotiation = Negotiation::findOrFail($negotiationID);
 
-        // Ensure only the sender (business owner) or receiver (space owner) can reply
-        if (Auth::id() != $negotiation->senderID && Auth::id() != $negotiation->receiverID) {
-            abort(403, 'Unauthorized');
-        }
+    // Ensure only the sender (business owner) or receiver (space owner) can reply
+    if (Auth::id() != $negotiation->senderID && Auth::id() != $negotiation->receiverID) {
+        abort(403, 'Unauthorized');
+    }
 
-        // Create a reply (message)
-        Reply::create([
-            'negotiationID' => $negotiationID,
-            'senderID' => Auth::id(),
-            'message' => $request->input('message'),
-        ]);
+    // Handle the image upload
+    $imageName = null;
+    if ($request->hasFile('aImage')) {
+        $image = $request->file('aImage');
+        $imageName = $image->getClientOriginalName(); // Get the original name of the uploaded file
+        $image->storeAs('negotiation_images', $imageName, 'public'); // Store the file with its original name
+    }
 
-        // Conditionally redirect based on the user's role
-        if (Auth::user()->role === 'business_owner') {
-            return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID]);
-        } else if (Auth::user()->role === 'space_owner') {
-            return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID]);
-        }
+    // Prepare the reply data
+    $replyData = [
+        'negotiationID' => $negotiationID,
+        'senderID' => Auth::id(),
+        'message' => $imageName ?? $request->input('message'), // Save the image name or the message text
+    ];
 
-}
+    // Create a reply
+    Reply::create($replyData);
+
+    // Conditionally redirect based on the user's role
+    return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID]);
+    }
 
     /**
      * Get all messages for a negotiation (for API or dynamic loading purposes).
