@@ -123,9 +123,12 @@ Route::post('/space/reviews.submit', [SpaceOwnerController::class, 'submiit'])->
 Route::post('space/negotiations/store', [App\Http\Controllers\NegotiationController::class, 'store'])->name('negotiation.store');
 
 // SPACE OWNER NEGOTIATIONS
-Route::get('/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'getMessages'])->name('negotiation.reply');
+// For fetching messages
+Route::get('/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'getMessages'])->name('negotiation.getMessages');
 
+// For posting replies
 Route::post('space/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('negotiation.reply');
+
 
 // space owner update status
 Route::post('space/negotiations/{negotiationID}/status', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');

@@ -14,7 +14,7 @@
                 <div class="w-full lg:w-2/3 p-4 border-b lg:border-b-0 lg:border-r border-gray-300">
                     <div class="h-full flex flex-col justify-between">
                         <!-- Messages Section -->
-                        <div class="space-y-4 overflow-y-auto flex-1 chat-box" x-data="chatApp()">
+                        <div class="space-y-4 overflow-y-auto flex-1 chat-box">
                         @foreach($negotiation->replies as $reply)
                             <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
                                 <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
@@ -32,13 +32,26 @@
                         </div>
 
                         <!-- Message Input -->
-                        <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
                             @csrf
-                            <div class="flex items-center mt-4 space-x-2">
-                                <input type="file" name="aImage" class="flex-shrink-0 w-52">
-                                <input type="text" name="message" class="flex-grow p-2 border rounded-lg" placeholder="Type your message...">
-                                <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700">Send</button>
-                            </div>
+                            <div class="flex items-center space-x-2 bg-gray-100 p-2 rounded-lg ">
+                                <!-- Hidden file input -->
+                                <label for="aImage" class="cursor-pointer flex items-center justify-center bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300">
+                                    <!-- File attachment icon -->
+                                    <i class="fas fa-paperclip"></i>
+                                </label>
+                                <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
+
+                                <!-- File name display -->
+                                <span id="fileName" class="text-gray-600 text-sm"></span>
+
+                                <!-- Message input -->
+                                <input type="text" name="message" class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" placeholder="Type your message...">
+
+                                <!-- Send button -->
+                                <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center">
+                                    Send
+                                </button>
                         </form>
                     </div>
                 </div>
@@ -67,70 +80,93 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
-        function fetchMessages() {
-            $.ajax({
-                url: '{{ route("negotiation.reply", ["negotiationID" => $negotiation->negotiationID]) }}',
-                method: 'GET',
-                success: function(data) {
-                    updateChat(data);
-                    scrollToBottom(); // Keep the chat box scrolled to the bottom
-                }
-            });
-        }
+    let userScrolledUp = false; // Track if the user has scrolled up
 
-        function updateChat(messages) {
-            let chatBox = $('.chat-box');
-            chatBox.empty();
+    function fetchMessages() {
+        $.ajax({
+            url: '{{ route("negotiation.getMessages", ["negotiationID" => $negotiation->negotiationID]) }}',
+            method: 'GET',
+            success: function(data) {
+                updateChat(data);
+                scrollToBottom(); // Automatically scroll to the bottom after updating the chat, if user hasn't scrolled up
+            }
+        });
+    }
 
-            messages.forEach(function(message) {
-                let messageHtml = '';
+    function updateChat(messages) {
+        let chatBox = $('.chat-box');
+        chatBox.empty();
 
-                if (/\.(jpeg|jpg|png|gif)$/i.test(message.message)) {
-                    // If the message is an image
-                    messageHtml = `
-                        <div class="flex ${message.senderID == {{ Auth::id() }} ? 'justify-end' : 'justify-start'}">
-                            <div class="p-4 rounded-lg shadow-lg ${message.senderID == {{ Auth::id() }} ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
-                                <img src="{{ asset('storage/negotiation_images/') }}/${message.message}" alt="Image" class="max-w-xs rounded-lg cursor-pointer" onclick="openModal('{{ asset('storage/negotiation_images/') }}/${message.message}')">
-                                <small class="text-xs">${new Date(message.created_at).toLocaleTimeString()}</small>
-                            </div>
+        messages.forEach(function(message) {
+            let messageHtml = '';
+
+            if (/\.(jpeg|jpg|png|gif)$/i.test(message.message)) {
+                // If the message is an image
+                messageHtml = `
+                    <div class="flex ${message.senderID == {{ Auth::id() }} ? 'justify-end' : 'justify-start'}">
+                        <div class="p-4 rounded-lg shadow-lg ${message.senderID == {{ Auth::id() }} ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
+                            <img src="{{ asset('storage/negotiation_images/') }}/${message.message}" alt="Image" class="max-w-xs rounded-lg cursor-pointer" onclick="openModal('{{ asset('storage/negotiation_images/') }}/${message.message}')">
+                            <small class="text-xs">${new Date(message.created_at).toLocaleTimeString()}</small>
                         </div>
-                    `;
-                } else {
-                    messageHtml = `
-                        <div class="flex ${message.senderID == {{ Auth::id() }} ? 'justify-end' : 'justify-start'}">
-                            <div class="p-4 rounded-lg shadow-lg ${message.senderID == {{ Auth::id() }} ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
-                                <p class="text-sm">${message.message}</p>
-                                <small class="text-xs">${new Date(message.created_at).toLocaleTimeString()}</small>
-                            </div>
+                    </div>
+                `;
+            } else {
+                messageHtml = `
+                    <div class="flex ${message.senderID == {{ Auth::id() }} ? 'justify-end' : 'justify-start'}">
+                        <div class="p-4 rounded-lg shadow-lg ${message.senderID == {{ Auth::id() }} ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
+                            <p class="text-sm">${message.message}</p>
+                            <small class="text-xs">${new Date(message.created_at).toLocaleTimeString()}</small>
                         </div>
-                    `;
-                }
+                    </div>
+                `;
+            }
 
-                chatBox.append(messageHtml);
-            });
+            chatBox.append(messageHtml);
+        });
+
+        scrollToBottom(); // Scroll to the bottom if user has not scrolled up
+    }
+
+    function scrollToBottom() {
+        let chatBox = $('.chat-box');
+
+        // Only scroll to the bottom if user hasn't scrolled up
+        if (!userScrolledUp) {
+            chatBox.scrollTop(chatBox.prop("scrollHeight"));
         }
+    }
 
-        function scrollToBottom() {
-            let chatBox = $('.chat-box');
-            chatBox.animate({ scrollTop: chatBox.prop("scrollHeight") }, 300);
+    // Detect if user scrolls up in the chat box
+    $('.chat-box').on('scroll', function() {
+        let chatBox = $(this);
+
+        // If user is near the bottom (within 50px), we consider it as not scrolled up
+        if (chatBox.scrollTop() + chatBox.innerHeight() >= chatBox.prop('scrollHeight') - 50) {
+            userScrolledUp = false; // User is near the bottom
+        } else {
+            userScrolledUp = true; // User has scrolled up
         }
+    });
 
-        function openModal(imageSrc) {
-            document.getElementById('modalImage').src = imageSrc;
-            document.getElementById('imageModal').classList.remove('hidden');
-        }
+    function openModal(imageSrc) {
+        document.getElementById('modalImage').src = imageSrc;
+        document.getElementById('imageModal').classList.remove('hidden');
+    }
 
-        function closeModal() {
-            document.getElementById('imageModal').classList.add('hidden');
-        }
+    function closeModal() {
+        document.getElementById('imageModal').classList.add('hidden');
+    }
 
-        scrollToBottom();
+    $(document).ready(function() {
+        scrollToBottom(); // Immediately scroll to the bottom when the page is ready
+    });
 
-        // Fetch messages every 5 seconds
-        setInterval(fetchMessages, 5000);
-    </script>
+    // Fetch messages every 5 seconds
+    setInterval(fetchMessages, 1000);
+</script>
+
 
     <!-- Image Modal -->
     <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
