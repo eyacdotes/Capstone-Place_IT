@@ -84,11 +84,11 @@
             <div class="text-center">
                 <img src="{{ asset('storage/images/perod.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
-                <p class="text-orange-600 mb-2">SOFTWARE ENGINEER</p>
+                <p class="text-orange-600 mb-2 font-semibold">SOFTWARE ENGINEER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
                     <a href="https://www.facebook.com/JahIsGood"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.instagram.com/jahsspear/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
+                    <a href="404 | Not Found"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="#"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
@@ -96,23 +96,23 @@
             <div class="text-center">
                 <img src="{{ asset('storage/images/eyac.jpg') }}" alt="Team Member 2" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">LEMARC EYAC</h3>
-                <p class="text-orange-600 mb-2">PROJECT MANAGER</p>
+                <p class="text-orange-600 mb-2 font-semibold">PROJECT MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
-                <a href="#"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.facebook.com/lemarc.eyac"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.instagram.com/eyaczoldyck/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
+                    <a href="404 | Not Found"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.linkedin.com/in/eyac-lemarc-099935327/"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
 
             <div class="text-center">
                 <img src="{{ asset('storage/images/cinco.jpg') }}" alt="Team Member 3" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">JOHN BENEDICT CINCO</h3>
-                <p class="text-orange-600 mb-2">QUALITY ASSURANCE</p>
+                <p class="text-orange-600 mb-2 font-semibold">QUALITY ASSURANCE</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
-                <a href="#"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.facebook.com/jboycinco62"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.instagram.com/jboy_cinco/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
+                    <a href="404 | Not Found"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="#"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
@@ -123,24 +123,24 @@
             <div class="text-center">
                 <img src="{{ asset('storage/images/carsido.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">FRANCES DIANA N. CARSIDO</h3>
-                <p class="text-orange-600 mb-2">DATABASE MANAGER</p>
+                <p class="text-orange-600 mb-2 font-semibold">DATABASE MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
-                <a href="#"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
+                    <a href="https://www.facebook.com/yani.mcphee"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.instagram.com/yani.mcphee/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
                     <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="404 | Not Found"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
 
             <div class="text-center">
-                <img src="{{ asset('storage/images/eyac.jpg') }}" alt="Team Member 5" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('storage/images/managaytay.jpg') }}" alt="Team Member 5" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">SHYRELLE SHINE L. MANAGAYTAY</h3>
-                <p class="text-orange-600 mb-2">UI/UX DESIGNER</p>
+                <p class="text-orange-600 mb-2 font-semibold">UI/UX DESIGNER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
-                    <a href="#"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.facebook.com/shyrelle.managaytay"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.instagram.com/__s12u/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="404 | Not Found"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
         </div>
@@ -153,7 +153,7 @@
     <div class="container mx-auto text-center">
         <!-- Title -->
         <h2 class="text-3xl font-bold text-red-600 mb-4">Contact Us</h2>
-        <p class="text-gray-500 mb-8">Feel free to get in touch with us for any queries or assistance.</p>
+        <p class="text-gray-500 mb-8 font-medium">Feel free to get in touch with us for any queries or assistance.</p>
 
         <!-- Contact Info Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -161,21 +161,21 @@
             <div class="flex flex-col items-center">
             <img src="{{ asset('storage/images/location.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
                 <h3 class="text-xl font-bold mb-2">ADDRESS</h3>
-                <p class="text-gray-600">27 13 Lowe Haven</p>
+                <p class="text-gray-600 font-medium">Alaska Duljo Cebu City</p>
             </div>
 
             <!-- Phone -->
             <div class="flex flex-col items-center">
             <img src="{{ asset('storage/images/phone-call.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
                 <h3 class="text-xl font-bold mb-2">PHONE</h3>
-                <p class="text-gray-600">+63 9324 345 203</p>
+                <p class="text-gray-600 font-medium">+63 922 777 7777</p>
             </div>
 
             <!-- Email -->
             <div class="flex flex-col items-center">
             <img src="{{ asset('storage/images/email.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
                 <h3 class="text-xl font-bold mb-2">EMAIL</h3>
-                <p class="text-gray-600">business@info.com</p>
+                <p class="text-gray-600 font-medium">place_it@gmail.com</p>
             </div>
         </div>
     </div>

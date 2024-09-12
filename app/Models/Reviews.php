@@ -13,7 +13,11 @@ class Reviews extends Model
     
     protected $fillable = ['renterID', 'rentalAgreementID', 'rate', 'comment'];
 
+
     // Define the relationship to RentalAgreement
+    public function agree() {
+        return $this->belongsTo(Reviews::class, 'rentalAgreementID');
+    }
     public function rentalAgreement()
     {
         return $this->belongsTo(RentalAgreement::class, 'rentalAgreementID');

@@ -89,18 +89,36 @@ class BusinessOwnerController extends Controller
         
         return view('business_owner.bookinghistory', compact('bhistory'));
     }
+    
+
+
     /**
-     * Show the form for submitting feedback.
+     * Display rental agreements for feedback.
      *
      * @return \Illuminate\View\View
      */
-    public function feedback()
+    public function feedback($rentalAgreementID = null)
     {
-        // Retrieve any necessary data for the view
-        $rentalAgreementID = 1; 
-        return view('business_owner.feedback', compact('rentalAgreementID'));
+        $ownerID = Auth::id(); // Get the authenticated user's ID
+
+        // Fetch rental agreements where the user is either the owner or the renter
+        $rentalAgreements = RentalAgreement::where('ownerID', $ownerID)
+            ->orWhere('renterID', $ownerID)
+            ->get();
+
+        if ($rentalAgreementID) {
+            $selectedAgreement = RentalAgreement::findOrFail($rentalAgreementID);
+            return view('business_owner.dashboard', compact('rentalAgreements', 'selectedAgreement'));
+        }
+
+        // Pass the rental agreements to the view
+        return view('business_owner.view_feedback', compact('rentalAgreements'));
     }
 
+    public function loso($negotiationID) {
+        $rentalAgreement = RentalAgreement::findOrFail($negotiationID);
+        return view('business_owner.feedback', compact('rentalAgreement'));
+    }
     /**
      * Store the submitted feedback.
      *

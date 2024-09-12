@@ -25,6 +25,9 @@ class RentalAgreement extends Model
     'status',
     ];
 
+    public function rentalAgreement() {
+        return $this->belongsTo(RentalAgreement::class, 'rentalAgreementID');
+    }
     public function listing() {
         return $this->belongsTo(Listing::class, 'listingID');
     }
@@ -32,7 +35,9 @@ class RentalAgreement extends Model
     public function owner() {
         return $this->belongsTo(User::class, 'ownerID');
     }
-
+    public function reviews() {
+        return $this->belongsTo(User::class, 'renterID');
+    }
     public function renter() {
         return $this->belongsTo(User::class, 'renterID');
     }
