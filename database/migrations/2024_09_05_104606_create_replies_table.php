@@ -12,7 +12,7 @@ class CreateRepliesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('negotiationID')->unsigned();
             $table->unsignedBigInteger('senderID')->unsigned();
-            $table->text('message');
+            $table->string('message');
             $table->timestamps();
 
             // Foreign keys

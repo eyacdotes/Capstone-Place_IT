@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NegotiationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpaceOwnerController;
 use App\Http\Controllers\BusinessOwnerController;
@@ -133,6 +134,13 @@ Route::post('space/negotiations/{negotiationID}/reply', [App\Http\Controllers\Ne
 // space owner update status
 Route::post('space/negotiations/{negotiationID}/status', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');
 
+Route::post('business/negotiations/{negotiationID}/billingStore', [NegotiationController::class, 'storeDB'])->name('billing.store');
+
+Route::get('/space/payment', [NegotiationController::class, 'showPaymentDetails'])
+    ->name('space.business_details')
+    ->middleware(['auth', 'verified', 'role:space_owner']);
+
+
 //business owner agreement
 Route::post('business/negotiations/{negotiationID}/rent-agreement', [App\Http\Controllers\NegotiationController::class, 'rentAgree'])->name('negotiation.rentAgree');
 
@@ -141,6 +149,9 @@ Route::post('business/negotiations/{negotiationID}/rent-agreement', [App\Http\Co
 Route::get('/business/negotiations', [App\Http\Controllers\NegotiationController::class, 'index'])->name('business.negotiations');
 
 Route::get('business/negotiations/{negotiationID}', [App\Http\Controllers\NegotiationController::class, 'show'])->name('negotiation.show');
+
+Route::put('/business/negotiations/{negotiationID}/updateOfferAmount', [NegotiationController::class, 'updateOfferAmount'])->name('business.updateOfferAmount')->middleware(['auth', 'verified', 'role:business_owner']);
+
 
 Route::post('business/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('negotiation.reply');
 
@@ -157,8 +168,8 @@ Route::get('/business/feedback', [BusinessOwnerController::class, 'feedback'])
     ->name('business.feedback')
     ->middleware(['auth', 'verified', 'role:business_owner']);
 
-Route::get('/business/feedback/{rentalAgreementID}', [BusinessOwnerController::class, 'loso'])
-    ->name('business.loso')
+Route::get('/business/feedback/{rentalAgreementID}', [BusinessOwnerController::class, 'action'])
+    ->name('business.action')
     ->middleware(['auth', 'verified', 'role:business_owner']);
 
 Route::post('/business/feedback/submit', [BusinessOwnerController::class, 'submit'])

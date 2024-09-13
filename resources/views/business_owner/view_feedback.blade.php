@@ -37,7 +37,7 @@
                                     <td class="border px-4 py-2">{{ $agreement->dateEnd }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->status }}</td>
                                     <td class="border px-4 py-2">
-                                        <a href="{{ route('business.loso', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="text-blue-500">
+                                        <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="text-blue-500">
                                             Give Feedback
                                         </a>
                                     </td>

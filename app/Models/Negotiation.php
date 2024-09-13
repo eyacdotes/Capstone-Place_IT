@@ -33,4 +33,7 @@ class Negotiation extends Model
     {
         return $this->hasOne(RentalAgreement::class, 'listingID', 'listingID');
     }
+    public function bill() {
+        return $this->hasOne(BillingDetail::class, 'rental_agreement_id', 'rentalAgreementID');
+    }
 }

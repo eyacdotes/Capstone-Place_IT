@@ -86,25 +86,25 @@ public function deleteImage($listingImageID)
     return redirect()->back()->with('success', 'Image removed successfully.');
 }
 
-public function addImage(Request $request, $listingID)
-{
-    $request->validate([
-        'new_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+    public function addImage(Request $request, $listingID)
+    {
+        $request->validate([
+            'new_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Handle file upload
-    $file = $request->file('new_image');
-    $imagePath = time() . '_' . $file->getClientOriginalName();  // Unique filename
+        // Handle file upload
+        $file = $request->file('new_image');
+        $imagePath = time() . '_' . $file->getClientOriginalName();  // Unique filename
 
-    // Move the file to the public directory (public/storage/images/)
-    $file->move(public_path('storage/images'), $imagePath);
+        // Move the file to the public directory (public/storage/images/)
+        $file->move(public_path('storage/images'), $imagePath);
 
-    // Save the image record in the database
-    ListingImages::create([
-        'imageID' => $listingID, // Assuming you have a listing_id in your table
-        'image_path' => $imagePath,  // Store the filename in the database
-    ]);
+        // Save the image record in the database
+        ListingImages::create([
+            'imageID' => $listingID, // Assuming you have a listing_id in your table
+            'image_path' => $imagePath,  // Store the filename in the database
+        ]);
 
-    return redirect()->back()->with('success', 'Image added successfully.');
-}
+        return redirect()->back()->with('success', 'Image added successfully.');
+    }
 }

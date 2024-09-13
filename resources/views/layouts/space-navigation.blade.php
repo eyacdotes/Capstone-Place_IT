@@ -22,6 +22,9 @@
                     <x-nav-link :href="route('space.reviews')"  class="ajax-link" :active="request()->routeIs('space.reviews')">
                         {{ __('Feedback') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('space.business_details')"  class="ajax-link" :active="request()->routeIs('space.business_details')">
+                        {{ __('Payment') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -84,7 +87,11 @@
             <x-responsive-nav-link :href="route('space.reviews')" :active="request()->routeIs('space.reviews')">
                 {{ __('Feedback') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('space.business_details')" :active="request()->routeIs('space.business_details')">
+                {{ __('Feedback') }}
+            </x-responsive-nav-link>
         </div>
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

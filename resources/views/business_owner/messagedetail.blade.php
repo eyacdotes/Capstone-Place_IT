@@ -8,12 +8,12 @@
 
     <div class="w-full py-6 flex justify-center">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
-            <div class="flex flex-col lg:flex-row h-auto lg:h-96">
+            <div class="flex flex-col lg:flex-row h-[500px]">
                 <!-- Chat Section -->
                 <div class="w-full lg:w-2/3 p-4 border-b lg:border-b-0 lg:border-r border-gray-300">
                     <div class="h-full flex flex-col justify-between">
                         <!-- Messages Section -->
-                        <div class="space-y-4 overflow-y-auto flex-1 chat-box">
+                        <div class="space-y-4 overflow-y-auto flex-1 chat-box h-[500px]">
                         @foreach($negotiation->replies as $reply)
                             <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
                                 <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
@@ -51,6 +51,7 @@
                                 <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center">
                                     Send
                                 </button>
+                            </div>
                         </form>
 
                         <!-- Include Font Awesome for the paperclip icon -->
@@ -59,14 +60,22 @@
                     </div>
                 </div>
 
-                <!-- Negotiation Details Section -->
-                <div class="w-full lg:w-1/3 p-4 border-t lg:border-t-0 lg:border-l border-gray-300">
+                <!-- Negotiation Details and Form Section -->
+                <div class="w-full lg:w-1/2 p-4 border-t lg:border-t-0 lg:border-l border-gray-300">
                     <!-- Amount and Status Section -->
                     <div class="flex justify-between items-center mb-4">
+                    <form action="{{ route('business.updateOfferAmount', $negotiation->negotiationID) }}" method="POST">
+                        @csrf
+                        @method('PUT')
                         <div>
                             <h4 class="text-lg font-semibold">Amount Offered</h4>
-                            <input class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="P{{ number_format($negotiation->offerAmount, 2) }}"></input>
+                            <input type="text" name="offerAmount" class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="{{ number_format($negotiation->offerAmount, 2) }}" step="0.01" required>
                         </div>
+
+                        <button type="submit" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Update Offer
+                        </button>
+                    </form>
                         <div class="text-right mb-6">
                             <h4 class="text-lg font-semibold pr-2">Status</h4>
                             <span class=" 
@@ -87,7 +96,7 @@
                             <input type="hidden" name="ownerID" value="{{ $negotiation->listing->ownerID }}">
                             <input type="hidden" name="renterID" value="{{ $negotiation->senderID }}">
                             <input type="hidden" name="listingID" value="{{ $negotiation->listingID }}">
-                            
+
                             <!-- Rental Term -->
                             <div class="flex flex-col">
                                 <label for="rentalTerm" class="block font-semibold text-gray-700">Rental Term:</label>
@@ -100,13 +109,13 @@
                             </div>
 
                             <!-- Start Date -->
-                            <div class="flex flex-col">
+                            <div class="flex flex-col mt-2">
                                 <label for="startDate" class="block mb-2 font-semibold text-gray-700">Start Date:</label>
                                 <input type="date" name="startDate" id="startDate" class="p-2 border border-gray-300 rounded-lg" required>
                             </div>
 
                             <!-- End Date -->
-                            <div class="flex flex-col">
+                            <div class="flex flex-col mt-2">
                                 <label for="endDate" class="block mb-2 font-semibold text-gray-700">End Date:</label>
                                 <input type="date" name="endDate" id="endDate" class="mb-2 p-2 border border-gray-300 rounded-lg" required>
                             </div>
@@ -210,7 +219,7 @@
         scrollToBottom(); // Immediately scroll to the bottom when the page is ready
     });
 
-    // Fetch messages every 5 seconds
+    // Fetch messages every 1 second
     setInterval(fetchMessages, 1000);
 
     function showFileName() {
@@ -241,5 +250,4 @@
             <img id="modalImage" src="" alt="Modal Image" class="rounded-lg" style="max-width: 90vw; max-height: 90vh; object-fit: contain;">
         </div>
     </div>
-
 </x-app-layout>

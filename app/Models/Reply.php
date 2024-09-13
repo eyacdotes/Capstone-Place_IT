@@ -11,7 +11,7 @@ class Reply extends Model
     protected $table = 'replies';
     
     protected $primaryKey = 'id';
-    protected $fillable = ['negotiationID', 'senderID', 'message'];
+    protected $fillable = ['negotiationID', 'senderID', 'message', 'image_chat'];
 
     public function negotiation() {
         return $this->belongsTo(Negotiation::class, 'negotiationID');

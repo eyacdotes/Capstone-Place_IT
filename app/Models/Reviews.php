@@ -22,9 +22,18 @@ class Reviews extends Model
     {
         return $this->belongsTo(RentalAgreement::class, 'rentalAgreementID');
     }
+    public function listing() {
+        return $this->belongsTo(Listing::class, 'listingID');
+    }
 
     public function renter()
     {
         return $this->belongsTo(User::class, 'renterID');
+    }
+    public function ratings() {
+        return $this->belongsTo(RentalAgreement::class, 'rentalAgreementID');
+    }
+    public function reviews() {
+        return $this->belongsTo(Reviews::class, 'renterID');
     }
 }

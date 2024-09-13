@@ -49,9 +49,10 @@ class BusinessOwnerController extends Controller
         // Validate the request input
         $validated = $request->validate([
             'proof' => 'required|mimes:jpg,jpeg,png,pdf|max:2048', // Allow images or PDFs up to 2MB
-            'details' => 'nullable|string|max:255'
+            'details' => 'nullable|string|max:255',
         ]);
-
+        
+        $negotiation = Negotiation::findOrFail($negotiationID);
         // Store the proof of payment file
         if ($request->hasFile('proof')) {
             $proofPath = $request->file('proof')->store('payments', 'public'); // Save in storage/app/public/payments
@@ -61,7 +62,7 @@ class BusinessOwnerController extends Controller
         Payment::create([
             'rentalAgreementID' => $negotiationID, // This can be linked to your rental agreement/negotiation ID
             'renterID' => Auth::id(),
-            'amount' => $request->amount ?? 0, // Assuming amount is already saved elsewhere
+            'amount' => $negotiation->offerAmount,// Assuming amount is already saved elsewhere
             'date' => now(),
             'proof' => $proofPath, // Save the proof path
             'details' => $request->details ?? ''
@@ -74,9 +75,12 @@ class BusinessOwnerController extends Controller
 
     public function detail($listingID)
     {
-        $listing = Listing::with('owner')->findOrFail($listingID);
-        return view('place.detail', compact('listing'));
+    $listing = Listing::with(['owner', 'rentalAgreements.reviews'])->findOrFail($listingID);
+    $ratings = $listing->rentalAgreements->flatMap->reviews; // Get all reviews related to the listing
+    $averageRating = $ratings->avg('rate');
+    return view('place.detail', compact('listing','averageRating'));
     }
+
     public function negotiations()
     {
         return view('negotiations.business');
@@ -115,7 +119,7 @@ class BusinessOwnerController extends Controller
         return view('business_owner.view_feedback', compact('rentalAgreements'));
     }
 
-    public function loso($negotiationID) {
+    public function action($negotiationID) {
         $rentalAgreement = RentalAgreement::findOrFail($negotiationID);
         return view('business_owner.feedback', compact('rentalAgreement'));
     }

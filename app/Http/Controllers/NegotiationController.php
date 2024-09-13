@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Negotiation;
 use App\Models\Reply;
 use App\Models\RentalAgreement;
+use App\Models\BillingDetail;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 
 class NegotiationController extends Controller
@@ -42,6 +44,18 @@ class NegotiationController extends Controller
         } else if (Auth::user()->role === 'space_owner') {
             return view('space_owner.messagedetail', compact('negotiation'));
         }
+    }
+    public function updateOfferAmount(Request $request, $id)
+    {
+    $request->validate([
+        'offerAmount' => 'required|numeric|min:0',
+    ]);
+
+    $negotiation = Negotiation::findOrFail($id);
+    $negotiation->offerAmount = $request->input('offerAmount');
+    $negotiation->save();
+
+    return redirect()->back()->with('success', 'Offer amount updated successfully.');
     }
 
     /**
@@ -110,28 +124,47 @@ class NegotiationController extends Controller
         ]);
         return redirect()->route('business.negotiations')->with('success', 'Your offer has been sent successfully.');
     }
+    public function storeDB(Request $request, $negotiationID)
+    {
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'gcashNumber' => 'required|unique:billing_details,gcash_number|max:255',
+        'myCheckbox' => 'required'
+    ]);
 
-    public function updateStatus (Request $request, $negotiationID) {
-        // Validate the status field
-        $request->validate([
-            'status' => 'required|in:Pending,Approve,Disapprove',
-        ]);
+    // Create a new billing detail
+    BillingDetail::create([
+        'user_id' => Auth::id(),
+        'rental_agreement_id' => $negotiationID,  
+        'gcash_number' => $validatedData['gcashNumber'],
+    ]);
 
-        // Find the negotiation by ID
-        $negotiation = Negotiation::findOrFail($negotiationID);
+    // Redirect or send back a response after successful creation
+    return redirect()->back()->with('success', 'Billing details have been saved successfully.');
+    }
 
-        // Ensure the current user is the receiver (space owner)
-        if (Auth::id() != $negotiation->receiverID) {
-            abort(403, 'Unauthorized');
-        }
+    public function updateStatus(Request $request, $negotiationID)
+    {
+    // Validate the status field
+    $request->validate([
+        'status' => 'required|in:Pending,Approve,Disapprove',
+    ]);
 
-        // Update the status
-        $negotiation->negoStatus = $request->input('status');
-        $negotiation->save();
+    // Find the negotiation by ID
+    $negotiation = Negotiation::findOrFail($negotiationID);
 
-        // Redirect back with a success message
-        return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID])
-                        ->with('success', 'Negotiation status updated successfully.');
+    // Ensure the current user is either the receiver (space owner) or the sender (business owner)
+    if (Auth::id() != $negotiation->receiverID && !Auth::user()->hasRole('business_owner')) {
+        abort(403, 'Unauthorized');
+    }
+
+    // Update the status
+    $negotiation->negoStatus = $request->input('status');
+    $negotiation->save();
+
+    // Redirect back with a success message
+    return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID])
+                    ->with('success', 'Negotiation status updated successfully.');
     }
 
     public function rentAgree(Request $request, $negotiationID)
@@ -163,5 +196,20 @@ class NegotiationController extends Controller
 
     // Redirect to the business owner dashboard after successful insert
     return redirect()->route('business.dashboard')->with('success', 'Rental agreement created successfully.');
+    }
+    public function showPaymentDetails(Request $request)
+    {
+    // Fetch negotiations where the authenticated user is involved (either as sender or receiver)
+    $negotiations = Negotiation::where('senderID', Auth::id())
+                                ->orWhere('receiverID', Auth::id())
+                                ->with('listing', 'sender', 'receiver','bill')
+                                ->get();
+    
+    // Assuming the sender is the Business Owner
+    $businessOwner = $negotiations->first()->sender; // You can adjust based on your role logic
+    $listing = $negotiations->first()->listing;
+    $billingDetails = BillingDetail::where('user_id', Auth::id())->first();
+
+    return view('space_owner.payment_details', compact('negotiations', 'businessOwner','listing','billingDetails'));
     }
 }

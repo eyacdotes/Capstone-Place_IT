@@ -18,7 +18,7 @@ class Listing extends Model
     const CREATED_AT = 'dateCreated';
     const created_at = 'created_at';
     const UPDATED_AT = 'updated_at';
-    public function owner()
+    public function owner() 
     {
         return $this->belongsTo(User::class, 'ownerID'); // Adjust the foreign key if necessary
     }
@@ -36,6 +36,20 @@ class Listing extends Model
     }
     public function rentalAgreements()
     {
-        return $this->hasMany(RentalAgreement::class, 'spaceID');
+        return $this->hasMany(RentalAgreement::class, 'listingID');
+    }
+    public function rating() {
+        return $this->hasMany(Reviews::class, 'renterID');
+    }
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+            Reviews::class,
+            RentalAgreement::class,
+            'listingID', // Foreign key on RentalAgreement table
+            'rentalAgreementID', // Foreign key on Reviews table
+            'listingID', // Local key on Listing table
+            'rentalAgreementID' // Local key on RentalAgreement table
+    );
     }
 }

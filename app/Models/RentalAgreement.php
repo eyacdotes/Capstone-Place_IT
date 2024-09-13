@@ -25,9 +25,6 @@ class RentalAgreement extends Model
     'status',
     ];
 
-    public function rentalAgreement() {
-        return $this->belongsTo(RentalAgreement::class, 'rentalAgreementID');
-    }
     public function listing() {
         return $this->belongsTo(Listing::class, 'listingID');
     }
@@ -35,8 +32,9 @@ class RentalAgreement extends Model
     public function owner() {
         return $this->belongsTo(User::class, 'ownerID');
     }
-    public function reviews() {
-        return $this->belongsTo(User::class, 'renterID');
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class, 'rentalAgreementID', 'rentalAgreementID');
     }
     public function renter() {
         return $this->belongsTo(User::class, 'renterID');
@@ -44,5 +42,8 @@ class RentalAgreement extends Model
     public function space()
     {
         return $this->belongsTo(Listing::class, 'listingID');
+    }
+    public function billingDetails() {
+        return $this->hasMany(BillingDetail::class, 'rental_agreement_id', 'rentalAgreementID');
     }
 }
