@@ -51,6 +51,10 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Billing ID</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $billingDetails->billingDetailID }}</td>
+                        </tr>
+                        <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GCash Number</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $billingDetails->gcash_number }}</td>
                         </tr>

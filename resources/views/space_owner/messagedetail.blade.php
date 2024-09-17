@@ -7,97 +7,104 @@
     </x-slot>
 
     <div class="w-full py-6 flex justify-center">
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl h-[500px] flex">
-            <!-- Chat Section -->
-            <div class="flex-shrink-0 w-full lg:w-2/3 border-r border-gray-300 flex flex-col">
-                <div class="flex-1 overflow-y-auto p-4 chat-box">
-                    <!-- Messages Section -->
-                    <div class="space-y-4 chat-box">
-                        @foreach($negotiation->replies as $reply)
-                            <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
-                                <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
-                                    @if (preg_match('/\.(jpeg|jpg|png|gif)$/i', $reply->message))
-                                        <!-- Display the image if the message field contains an image name -->
-                                        <img src="{{ asset('storage/negotiation_images/' . $reply->message) }}" alt="Image" class="max-w-xs rounded-lg cursor-pointer" onclick="openModal('{{ asset('storage/negotiation_images/' . $reply->message) }}')">
-                                    @else
-                                        <!-- Display the text message if not an image -->
-                                        <p class="text-sm">{{ $reply->message }}</p>
-                                    @endif
-                                    <small class="text-xs">{{ $reply->created_at->format('h:i A') }}</small>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
+            <div class="flex flex-col lg:flex-row h-[500px]">
+                <!-- Chat Section -->
+                <div class="w-full lg:w-2/3 p-4 border-b lg:border-b-0 lg:border-r border-gray-300">
+                    <div class="h-full flex flex-col justify-between">
+                        <!-- Messages Section -->
+                        <div class="space-y-4 overflow-y-auto flex-1 chat-box h-[calc(100%_-_80px)]">
+                            @foreach($negotiation->replies as $reply)
+                                <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }} ">
+                                    <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
+                                        @if (preg_match('/\.(jpeg|jpg|png|gif)$/i', $reply->message))
+                                            <!-- Display the image if the message field contains an image name -->
+                                            <img src="{{ asset('storage/negotiation_images/' . $reply->message) }}" alt="Image" class="max-w-xs rounded-lg cursor-pointer" onclick="openModal('{{ asset('storage/negotiation_images/' . $reply->message) }}')">
+                                        @else
+                                            <!-- Display the text message if not an image -->
+                                            <p class="text-sm">{{ $reply->message }}</p>
+                                        @endif
+                                        <small class="text-xs">{{ $reply->created_at->format('h:i A') }}</small>
+                                    </div>
                                 </div>
+                            @endforeach         
+                        </div>
+
+                        <!-- Message Input -->
+                        <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                            @csrf
+                            <div class="flex items-center space-x-2 bg-gray-100 p-2 rounded-lg ">
+                                <!-- Hidden file input -->
+                                <label for="aImage" class="cursor-pointer flex items-center justify-center bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300">
+                                    <!-- File attachment icon -->
+                                    <i class="fas fa-paperclip"></i>
+                                </label>
+                                <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
+
+                                <!-- File name display -->
+                                <span id="fileName" class="text-gray-600 text-sm"></span>
+
+                                <!-- Message input -->
+                                <input type="text" name="message" class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" placeholder="Type your message...">
+
+                                <!-- Send button -->
+                                <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center">
+                                    Send
+                                </button>
                             </div>
-                        @endforeach
+                        </form>
                     </div>
                 </div>
 
-                <!-- Message Input -->
-                <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data" class="p-4 bg-gray-100 border-t">
-                    @csrf
-                    <div class="flex items-center space-x-2">
-                        <!-- Hidden file input -->
-                        <label for="aImage" class="cursor-pointer flex items-center justify-center bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300">
-                            <!-- File attachment icon -->
-                            <i class="fas fa-paperclip"></i>
-                        </label>
-                        <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
-
-                        <!-- File name display -->
-                        <span id="fileName" class="text-gray-600 text-sm"></span>
-
-                        <!-- Message input -->
-                        <input type="text" name="message" class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" placeholder="Type your message...">
-
-                        <!-- Send button -->
-                        <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center">
-                            Send
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Negotiation Details Section -->
-            <div class="w-full lg:w-1/3 p-4 overflow-y-auto">
-                <!-- Amount and Status Section -->
-                <div class="flex flex-col h-full justify-between">
-                    <div class="mb-4">
-                        <div class="flex items-center mb-2">
-                            <div class="mr-4">
-                                <h4 class="text-lg font-semibold">Amount Offered</h4>
-                                <input class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="P{{ number_format($negotiation->offerAmount, 2) }}" readonly>
-                            </div>
-                            <div>
-                                <h4 class="text-lg font-semibold">Status</h4>
-                                <span class="
-                                    {{ $negotiation->negoStatus === 'Approve' ? 'text-xl font-bold text-green-600' : '' }}
-                                    {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
-                                    {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
-                                    font-bold">
-                                    {{ $negotiation->negoStatus }}
-                                </span>
-                            </div>
-                        </div>
-                        @if($negotiation->negoStatus !== 'Approve')
-                            <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
-                                @csrf
-                                <div class="mb-4">
-                                    <label for="status" class="block text-lg font-semibold">Update Status:</label>
-                                    <select name="status" id="status" class="form-select mt-1 block w-full">
-                                        <option value="Pending" {{ $negotiation->negoStatus === 'Pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="Approve" {{ $negotiation->negoStatus === 'Approve' ? 'selected' : '' }}>Approve</option>
-                                        <option value="Disapprove" {{ $negotiation->negoStatus === 'Disapprove' ? 'selected' : '' }}>Disapprove</option>
-                                    </select>
+                <!-- Negotiation Details Section -->
+                <div class="w-full lg:w-1/3 p-4 overflow-y-auto">
+                    <!-- Amount and Status Section -->
+                    <div class="flex flex-col h-full justify-between">
+                        <div class="mb-4">
+                            <div class="flex items-center mb-2">
+                                <div class="mr-4">
+                                    <h4 class="text-lg font-semibold">Amount Offered</h4>
+                                    <input class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="P{{ number_format($negotiation->offerAmount, 2) }}" readonly>
                                 </div>
-                                <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
-                            </form>
-                        @else
-                            <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
-                                Click here to send details
-                            </button>
-                        @endif
+                                <div>
+                                    <h4 class="text-lg font-semibold">Status</h4>
+                                    <span class="
+                                        {{ $negotiation->negoStatus === 'Approve' ? 'text-xl font-bold text-green-600' : '' }}
+                                        {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
+                                        {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
+                                        font-bold">
+                                        {{ $negotiation->negoStatus }}
+                                    </span>
+                                </div>
+                            </div>
+                            @if($negotiation->negoStatus !== 'Approve')
+                                <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
+                                    @csrf
+                                    <div class="mb-4">
+                                        <label for="status" class="block text-lg font-semibold">Update Status:</label>
+                                        <select name="status" id="status" class="form-select mt-1 block w-full">
+                                            <option value="Pending" {{ $negotiation->negoStatus === 'Pending' ? 'selected' : '' }}>Pending</option>
+                                            <option value="Approve" {{ $negotiation->negoStatus === 'Approve' ? 'selected' : '' }}>Approve</option>
+                                            <option value="Disapprove" {{ $negotiation->negoStatus === 'Disapprove' ? 'selected' : '' }}>Disapprove</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
+                                </form>
+                            @else
+                                <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
+                                    Click here to send details
+                                </button>
+                            @endif
+                        </div>
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                         @csrf
                         <div id="detailsModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden">
-                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative">
+                            <button onclick="closeDetailsModal()" 
+                                    class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 text-xl z-10 
+                                        hover:bg-gray-200 rounded-full h-8 w-8 flex items-center justify-center">
+                                &times;
+                            </button>
                                 <h3 class="text-lg font-semibold mb-4">Send Details</h3>
                                 <div class="mb-4">
                                     <label for="amountSent" class="block text-sm font-semibold">Amount Sent:</label>
@@ -132,11 +139,8 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
     let userScrolledUp = false; // Track if the user has scrolled up
 
@@ -213,6 +217,10 @@
 
     function closeModal() {
         document.getElementById('imageModal').classList.add('hidden');
+    }
+    
+    function closeDetailsModal() {
+    document.getElementById('detailsModal').classList.add('hidden');
     }
 
     $(document).ready(function() {

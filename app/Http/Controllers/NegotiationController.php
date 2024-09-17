@@ -140,7 +140,7 @@ class NegotiationController extends Controller
     ]);
 
     // Redirect or send back a response after successful creation
-    return redirect()->back()->with('success', 'Billing details have been saved successfully.');
+    return redirect()->route('space.business_details')->with('success', 'Billing details have been saved successfully.');
     }
 
     public function updateStatus(Request $request, $negotiationID)
