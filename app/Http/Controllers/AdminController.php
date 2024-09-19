@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Listing;
 use App\Models\ListingImages;
 use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,6 +53,7 @@ class AdminController extends Controller
         if ($listing) {
             $listing->status = 'Vacant';
             $listing->save();
+            $this->notifySpaceOwner($listing);
         }
         // Redirect back to the listing management page with success message
         return redirect()->route('admin.listingmanagement')->with('status', 'Listing approved successfully!');
@@ -84,5 +86,18 @@ class AdminController extends Controller
         $userCount = User::where('role', '!=', 'admin')->count();
         return view('admin.payment', compact('userCount'));
     }
-    
+
+    protected function notifySpaceOwner(Listing $listing)
+{
+    $spaceOwner = User::find($listing->ownerID);  // Assuming ownerID is the space owner's user ID
+
+    if ($spaceOwner) {
+        Notification::create([
+            'userID' => $spaceOwner->userID,  // The space owner's user ID
+            'description' => 'Your listing was approved: <strong>' . $listing->title . '</strong>', // Use <strong> for bold
+            'notificationType' => 'listing_approval',
+        ]);
+    }
+}
+
 }

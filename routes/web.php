@@ -9,6 +9,7 @@ use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CreateListingController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,11 @@ Route::get('/admin/listingmanagement/view/{listingID}', [AdminController::class,
 Route::get('/admin/payment', [AdminController::class, 'payment'])
     ->name('admin.payment')
     ->middleware(['auth', 'verified', 'role:admin']);
+
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+        Route::get('/admin/notifications/create', [NotificationController::class, 'create'])->name('admin.notifications.create');
+        Route::post('/admin/notifications', [NotificationController::class, 'store'])->name('admin.notifications.store');
+});
 
 // display modal places/location
 Route::get('/business/place/{location}', [BusinessOwnerController::class, 'showByLocation'])
@@ -174,6 +180,12 @@ Route::get('/business/feedback/{rentalAgreementID}', [BusinessOwnerController::c
 
 Route::post('/business/feedback/submit', [BusinessOwnerController::class, 'submit'])
     ->name('business.submit');
+
+//NOTIFICATIONS 
+Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
+
+Route::get('/space/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
+
 
 // Profile routes
 Route::middleware('auth')->group(function () {

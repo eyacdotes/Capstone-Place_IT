@@ -31,7 +31,20 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <div class="relative">
                     <i class="fa-regular fa-bell text-gray-500 hover:text-gray-700 cursor-pointer"></i>
-                    <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>
+                    <!-- Red dot label (initially hidden) -->
+                    <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
+                    <!-- Notification Dropdown (initially hidden) -->
+                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                        <!-- Create Notification button -->
+                        <div class="border-b-2 border-gray-200 px-4 py-2">
+                            <button id="create-notification-btn" class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                                Create Notification
+                            </button>
+                        </div>
+                        <div id="notification-list">
+                            <p class="px-4 py-2 text-gray-800">No new notifications.</p>
+                        </div>
+                    </div>
                 </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -109,3 +122,104 @@
         </div>
     </div>
 </nav>
+<!-- Modal Background -->
+<div id="notification-modal" class="fixed z-50 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 hidden">
+    <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all w-full max-w-md sm:w-auto sm:max-w-sm">
+        <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Create New Notification</h3>
+            <form id="notification-form" action="{{ route('admin.notifications.store') }}" method="POST">
+                @csrf
+                <div class="mt-2">
+                    <label for="message" class="block text-sm font-medium text-gray-700">Notification Message</label>
+                    <textarea id="message" name="message" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" required></textarea>
+                </div>
+                <div class="mt-4">
+                    <label for="type" class="block text-sm font-medium text-gray-700">Notification Type</label>
+                    <select type="text" id="type" name="type" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="e.g. General, Alert" required>
+                        <option value="null">Choose..</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="listing">Listing</option>
+                        <option value="payment">Payment</option>
+                        <option value="negotiations">Negotiations</option>
+                        <option value="feedback">Feedback</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <button id="submit-notification" type="submit" form="notification-form" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                Send Notification
+            </button>
+            <button id="close-modal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const notificationIcon = document.querySelector('.fa-bell');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const notificationDot = document.getElementById('notification-dot');
+    const notificationList = document.getElementById('notification-list');
+
+    // Fetch notifications via AJAX
+    fetch('/notifications')  // Adjust the URL based on your route
+        .then(response => response.json())
+        .then(notifications => {
+            // If there are notifications, show the red dot and display notifications in the dropdown
+            if (notifications.length > 0) {
+                notificationDot.style.display = 'inline-block'; // Show the red dot
+                notificationList.innerHTML = ''; // Clear the "No new notifications" text
+
+                // Append each notification to the list
+                notifications.forEach(notification => {
+                    const notificationLink = document.createElement('a');
+                    notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+                    notificationLink.href = getNotificationUrl(notification);
+
+                    const notificationMessage = document.createElement('div');
+                    notificationMessage.textContent = notification.description;
+
+                    const notificationDate = document.createElement('span');
+                    notificationDate.classList.add('text-gray-500', 'text-sm');
+                    notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+
+                    notificationLink.appendChild(notificationMessage);
+                    notificationLink.appendChild(notificationDate);
+
+                    notificationList.appendChild(notificationLink);
+                });
+            } else {
+                notificationDot.style.display = 'none'; // Hide the red dot if no notifications
+                notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching notifications:', error);
+        });
+
+    // Toggle the visibility of the dropdown when the notification icon is clicked
+    notificationIcon.addEventListener('click', function () {
+        notificationDropdown.classList.toggle('hidden');
+    });
+
+    // Optional: Hide the dropdown if clicked outside
+    document.addEventListener('click', function (event) {
+        if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Function to generate the notification URL based on type
+    function getNotificationUrl(notification) {
+        if (notification.notificationType === 'listing_approval') {
+            return '/admin/listingmanagement'; // Adjust to the correct URL where the admin manages listings
+        }
+        return '#';
+    }
+});
+</script>

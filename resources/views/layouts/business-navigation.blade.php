@@ -31,7 +31,14 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <div class="relative">
                     <i class="fa-regular fa-bell text-gray-500 hover:text-gray-700 cursor-pointer"></i>
-                    <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>
+                    <!-- Red dot label (initially hidden) -->
+                    <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
+                    <!-- Notification Dropdown (initially hidden) -->
+                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                        <div id="notification-list">
+                            <p class="px-4 py-2 text-gray-800">No new notifications.</p>
+                        </div>
+                    </div>
                 </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -109,3 +116,48 @@
         </div>
     </div>
 </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const notificationIcon = document.querySelector('.fa-bell');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const notificationDot = document.getElementById('notification-dot');
+    const notificationList = document.getElementById('notification-list');
+
+    // Fetch notifications via AJAX
+    fetch('/notifications')  // Adjust the URL based on your route
+        .then(response => response.json())
+        .then(notifications => {
+            // If there are notifications, show the red dot and display notifications in the dropdown
+            if (notifications.length > 0) {
+                notificationDot.style.display = 'inline-block'; // Show the red dot
+                notificationList.innerHTML = ''; // Clear the "No new notifications" text
+
+                // Append each notification to the list
+                notifications.forEach(notification => {
+                    const notificationItem = document.createElement('div');
+                    notificationItem.classList.add('px-4', 'py-2', 'text-gray-800');
+                    notificationItem.textContent = notification.description; // assuming 'description' is the field
+                    notificationList.appendChild(notificationItem);
+                });
+            } else {
+                notificationDot.style.display = 'none'; // Hide the red dot if no notifications
+                notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+            }
+        })                      
+        .catch(error => {
+            console.error('Error fetching notifications:', error);
+        });
+
+    // Toggle the visibility of the dropdown when the notification icon is clicked
+    notificationIcon.addEventListener('click', function () {
+        notificationDropdown.classList.toggle('hidden');
+    });
+
+    // Optional: Hide the dropdown if clicked outside
+    document.addEventListener('click', function (event) {
+        if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+});
+</script>
