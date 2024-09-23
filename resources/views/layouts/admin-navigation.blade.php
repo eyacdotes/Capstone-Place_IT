@@ -34,7 +34,7 @@
                     <!-- Red dot label (initially hidden) -->
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
                     <!-- Notification Dropdown (initially hidden) -->
-                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
                         <!-- Create Notification button -->
                         <div class="border-b-2 border-gray-200 px-4 py-2">
                             <button id="create-notification-btn" class="text-blue-500 hover:text-blue-700 cursor-pointer">
@@ -161,65 +161,115 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const notificationIcon = document.querySelector('.fa-bell');
-    const notificationDropdown = document.getElementById('notification-dropdown');
-    const notificationDot = document.getElementById('notification-dot');
-    const notificationList = document.getElementById('notification-list');
+        const notificationIcon = document.querySelector('.fa-bell');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        const notificationDot = document.getElementById('notification-dot');
+        const notificationList = document.getElementById('notification-list');
 
-    // Fetch notifications via AJAX
-    fetch('/notifications')  // Adjust the URL based on your route
-        .then(response => response.json())
-        .then(notifications => {
-            // If there are notifications, show the red dot and display notifications in the dropdown
-            if (notifications.length > 0) {
-                notificationDot.style.display = 'inline-block'; // Show the red dot
-                notificationList.innerHTML = ''; // Clear the "No new notifications" text
+        // Fetch notifications via AJAX
+        fetch('/notifications')  // Adjust the URL based on your route
+            .then(response => response.json())
+            .then(notifications => {
+                // Filter for unread notifications (those with read_at === null)
+                const unreadNotifications = notifications.filter(notification => notification.read_at === null);
 
-                // Append each notification to the list
-                notifications.forEach(notification => {
-                    const notificationLink = document.createElement('a');
-                    notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
-                    notificationLink.href = getNotificationUrl(notification);
+                // Show or hide red dot based on unread notifications
+                if (unreadNotifications.length > 0) {
+                    notificationDot.style.display = 'inline-block';  // Show the red dot
+                } else {
+                    notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
+                }
 
-                    const notificationMessage = document.createElement('div');
-                    notificationMessage.textContent = notification.description;
+                if (notifications.length > 0) {
+                    notificationList.innerHTML = '';  // Clear any placeholder text
 
-                    const notificationDate = document.createElement('span');
-                    notificationDate.classList.add('text-gray-500', 'text-sm');
-                    notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+                    // Append each notification to the list
+                    notifications.forEach(notification => {
+                        const notificationLink = document.createElement('a');
+                        notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+                        notificationLink.href = getNotificationUrl(notification);  // Set the notification URL
+                        notificationLink.setAttribute('data-id', notification.notificationID);  // Add a data-id attribute for AJAX
 
-                    notificationLink.appendChild(notificationMessage);
-                    notificationLink.appendChild(notificationDate);
+                        // Event listener for marking notification as read and redirecting
+                        notificationLink.addEventListener('click', function (event) {
+                            event.preventDefault();  // Prevent default to handle mark-as-read first
 
-                    notificationList.appendChild(notificationLink);
-                });
-            } else {
-                notificationDot.style.display = 'none'; // Hide the red dot if no notifications
-                notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching notifications:', error);
+                            const url = this.href;  // Capture the target URL
+                            const notificationId = this.getAttribute('data-id');  // Get notification ID
+
+                            // Mark as read
+                            markAsRead(notificationId, url);  // Pass the URL for redirect after marking
+                        });
+                        
+
+                        const notificationMessage = document.createElement('div');
+                        if (notification.type === 'listing_approval') {
+                            notificationMessage.innerHTML = 'A new listing needs approval: <strong>' + notification.data +'</strong>';
+                        } else if (notification.type === 'payment') {
+                            notificationMessage.textContent = 'You received a payment';
+                        } else {
+                            notificationMessage.textContent = notification.description;  // Default message
+                        }
+
+                        const notificationDate = document.createElement('span');
+                        notificationDate.classList.add('text-gray-500', 'text-sm');
+                        notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+
+                        notificationLink.appendChild(notificationMessage);
+                        notificationLink.appendChild(notificationDate);
+
+                        notificationList.appendChild(notificationLink);
+                    });
+                } else {
+                    notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+
+        // Toggle the visibility of the dropdown when the notification icon is clicked
+        notificationIcon.addEventListener('click', function () {
+            notificationDropdown.classList.toggle('hidden');
         });
 
-    // Toggle the visibility of the dropdown when the notification icon is clicked
-    notificationIcon.addEventListener('click', function () {
-        notificationDropdown.classList.toggle('hidden');
-    });
+        // Optional: Hide the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+        });
 
-    // Optional: Hide the dropdown if clicked outside
-    document.addEventListener('click', function (event) {
-        if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
-            notificationDropdown.classList.add('hidden');
+        // Function to generate the notification URL based on type
+        function getNotificationUrl(notification) {
+            if (notification.type === 'listing_approval') {
+                return '/admin/listingmanagement';  // Adjust to the correct URL where the admin manages listings
+            } else if (notification.type === 'payment') {
+                return '/user/payments';  // Adjust to the payment-related page
+            }
+            return '#';  // Default URL
+        }
+
+        // AJAX function to mark a notification as read
+        function markAsRead(notificationId, redirectUrl) {
+            fetch(`/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ read_at: new Date() })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Notification marked as read:', data);
+                // Redirect to the target page after marking the notification as read
+                window.location.href = redirectUrl;
+            })
+            .catch(error => {
+                console.error('Error marking notification as read:', error);
+            });
         }
     });
-
-    // Function to generate the notification URL based on type
-    function getNotificationUrl(notification) {
-        if (notification.notificationType === 'listing_approval') {
-            return '/admin/listingmanagement'; // Adjust to the correct URL where the admin manages listings
-        }
-        return '#';
-    }
-});
 </script>
+

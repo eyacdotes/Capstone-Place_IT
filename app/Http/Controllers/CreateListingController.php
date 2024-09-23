@@ -59,9 +59,9 @@ class CreateListingController extends Controller
         $admin = User::where('role', 'admin')->first();  // Assuming there's only one admin
 
         Notification::create([
-            'userID' => $admin->userID,
-            'description' => Auth::user()->firstName . ' has posted a new listing that requires approval.',
-            'notificationType' => 'listing_approval',
+            'n_userID' => $admin->userID,
+            'data' => $listing->title,
+            'type' => 'listing_approval',
         ]);
     }
 }

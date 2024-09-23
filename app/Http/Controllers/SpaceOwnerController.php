@@ -48,6 +48,18 @@ public function edit($listingID)
     return view('space_owner.edit', compact('listing'));
 }
 
+public function destroy($listingID)
+    {
+        // Find the listing by its ID
+        $listing = Listing::findOrFail($listingID); // Throws a 404 if not found
+
+        // Delete the listing
+        $listing->delete();
+
+        // Redirect back with a success message or JSON response
+        return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
+    }
+
 public function update(Request $request, $listingID)
 {
     $listing = Listing::findOrFail($listingID); // Get the listing by ID

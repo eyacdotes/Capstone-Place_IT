@@ -10,10 +10,11 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id('notificationID');
-            $table->unsignedBigInteger('userID'); 
-            $table->foreign('userID')->references('userID')->on('users'); // Reference the correct column
-            $table->string('description');
-            $table->string('notificationType');
+            $table->unsignedBigInteger('n_userID')->nullable();
+            $table->foreign('n_userID')->references('userID')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('type');
+            $table->string('data');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
@@ -23,4 +24,3 @@ return new class extends Migration
         Schema::dropIfExists('notifications');
     }
 };
-
