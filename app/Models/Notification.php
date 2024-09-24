@@ -13,7 +13,7 @@ class Notification extends Model
 
     protected $primaryKey = 'notificationID';
 
-    protected $fillable = ['userID', 'description', 'notificationType'];
+    protected $fillable = ['n_userID','read_at','data', 'type'];
 
     public $timestamps = true;
 

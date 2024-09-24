@@ -35,7 +35,7 @@
                     <!-- Red dot label (initially hidden) -->
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
                     <!-- Notification Dropdown (initially hidden) -->
-                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
                         <div id="notification-list">
                             <p class="px-4 py-2 text-gray-800">No new notifications.</p>
                         </div>
@@ -123,81 +123,114 @@
 </nav>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const notificationIcon = document.querySelector('.fa-bell');
-    const notificationDropdown = document.getElementById('notification-dropdown');
-    const notificationDot = document.getElementById('notification-dot');
-    const notificationList = document.getElementById('notification-list');
+        const notificationIcon = document.querySelector('.fa-bell');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        const notificationDot = document.getElementById('notification-dot');
+        const notificationList = document.getElementById('notification-list');
 
-    notificationDropdown.classList.add('w-96');
+        // Fetch notifications via AJAX
+        fetch('/notifications')  // Adjust the URL based on your route
+            .then(response => response.json())
+            .then(notifications => {
+                // Filter for unread notifications (those with read_at === null)
+                const unreadNotifications = notifications.filter(notification => notification.read_at === null);
 
-    // Fetch notifications via AJAX
-    fetch('/notifications')  // Adjust this route to call your getNotifications method
-        .then(response => response.json())
-        .then(notifications => {
-            // If there are notifications, display them in the dropdown
-            if (notifications.length > 0) {
-                notificationDot.style.display = 'inline-block'; // Show the red dot
-                notificationList.innerHTML = ''; // Clear the "No new notifications" text
+                // Show or hide red dot based on unread notifications
+                if (unreadNotifications.length > 0) {
+                    notificationDot.style.display = 'inline-block';  // Show the red dot
+                } else {
+                    notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
+                }
 
-                // Append each notification to the list
-                notifications.forEach(notification => {
-                    // Create a div container for each notification
-                    const notificationItem = document.createElement('div');
-                    notificationItem.classList.add('flex', 'flex-col', 'w-full', 'px-4', 'py-2', 'text-gray-800', 'border-b', 'space-y-1');
+                if (notifications.length > 0) {
+                    notificationList.innerHTML = '';  // Clear any placeholder text
 
-                    // Create a span for the notification message based on the notification type
-                    const notificationMessage = document.createElement('span');
+                    // Append each notification to the list
+                    notifications.forEach(notification => {
+                        const notificationLink = document.createElement('a');
+                        notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+                        notificationLink.href = getNotificationUrl(notification);  // Set the notification URL
+                        notificationLink.setAttribute('data-id', notification.notificationID);  // Add a data-id attribute for AJAX
 
-                    // Define custom messages for each notification type
-                    if (notification.notificationType === 'listing') {
-                        notificationMessage.innerHTML = `<strong>${notification.user.firstName}</strong> has posted a new listing. See more about the listing.`;
-                    } else if (notification.notificationType === 'negotiation') {
-                        notificationMessage.innerHTML = `<strong>${notification.user.firstName}</strong> requested to negotiate your space. See more about the details.`;
-                    } else if (notification.notificationType === 'feedback') {
-                        notificationMessage.innerHTML = `<strong>${notification.user.firstName}</strong> gives a feedback to you. See more about the details.`;
-                    } else if (notification.notificationType === 'payment') {
-                        notificationMessage.innerHTML = `<strong>Admin</strong> already sent/paid the amount to you. See more about the details.`;
-                    } else if (notification.notificationType === 'maintenance') {
-                        notificationMessage.innerHTML = `<strong>Admin</strong> posted a new announcement. See more about the details.`;
-                    } else if (notification.notificationType === 'listing_approval') {
-                        notificationMessage.innerHTML = `${notification.description}`;
-                    }
+                        // Event listener for marking notification as read and redirecting
+                        notificationLink.addEventListener('click', function (event) {
+                            event.preventDefault();  // Prevent default to handle mark-as-read first
 
-                    // Create a span for the date below the message
-                    const notificationDate = document.createElement('span');
-                    notificationDate.classList.add('text-gray-500', 'text-sm'); // Make the date faded and smaller
-                    notificationDate.textContent = new Date(notification.created_at).toLocaleString(); // Format the date to a readable string
+                            const url = this.href;  // Capture the target URL
+                            const notificationId = this.getAttribute('data-id');  // Get notification ID
 
-                    // Append the message and date to the notification item
-                    notificationItem.appendChild(notificationMessage);
-                    notificationItem.appendChild(notificationDate);
+                            // Mark as read
+                            markAsRead(notificationId, url);  // Pass the URL for redirect after marking
+                        });
+                        
+                        const notificationMessage = document.createElement('div');
+                        if (notification.type === 'listing_approved') {
+                            notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> was approved';
+                        } else if (notification.type === 'payment') {
+                            notificationMessage.textContent = 'You received a payment';
+                        } else {
+                            notificationMessage.textContent = notification.description;  // Default message
+                        }
 
-                    // Append the notification item to the list
-                    notificationList.appendChild(notificationItem);
-                });
-            } else {
-                notificationDot.style.display = 'none'; // Hide the red dot if no notifications
-                notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching notifications:', error);
+                        const notificationDate = document.createElement('span');
+                        notificationDate.classList.add('text-gray-500', 'text-sm');
+                        notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+
+                        notificationLink.appendChild(notificationMessage);
+                        notificationLink.appendChild(notificationDate);
+
+                        notificationList.appendChild(notificationLink);
+                    });
+                } else {
+                    notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+
+        // Toggle the visibility of the dropdown when the notification icon is clicked
+        notificationIcon.addEventListener('click', function () {
+            notificationDropdown.classList.toggle('hidden');
         });
 
-    // Toggle the visibility of the dropdown when the notification icon is clicked
-    notificationIcon.addEventListener('click', function () {
-        notificationDropdown.classList.toggle('hidden');
-    });
+        // Optional: Hide the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+        });
 
-    // Optional: Hide the dropdown if clicked outside
-    document.addEventListener('click', function (event) {
-        if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
-            notificationDropdown.classList.add('hidden');
+        // Function to generate the notification URL based on type
+        function getNotificationUrl(notification) {
+            if (notification.type === 'listing_approved') {
+                return '/space/dashboard';  // Adjust to the correct URL where the admin manages listings
+            } else if (notification.type === 'payment') {
+                return '/user/payments';  // Adjust to the payment-related page
+            }
+            return '#';  // Default URL
+        }
+
+        // AJAX function to mark a notification as read
+        function markAsRead(notificationId, redirectUrl) {
+            fetch(`/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ read_at: new Date() })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Notification marked as read:', data);
+                // Redirect to the target page after marking the notification as read
+                window.location.href = redirectUrl;
+            })
+            .catch(error => {
+                console.error('Error marking notification as read:', error);
+            });
         }
     });
-});
-
-
-
 </script>
 

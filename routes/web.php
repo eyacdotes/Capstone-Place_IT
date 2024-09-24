@@ -110,6 +110,7 @@ Route::middleware('auth')->group(function () {
 //edit and update listing
 Route::get('/spaces/{listingID}/edit', [SpaceOwnerController::class, 'edit'])->name('space_owner.edit');
 Route::post('/spaces/{listingID}/edit', [SpaceOwnerController::class, 'update'])->name('space_owner.update');
+Route::delete('/spaces/listings/{listingID}', [SpaceOwnerController::class, 'destroy'])->name('listings.destroy');
 
 //delete image and edit
 Route::delete('/spaces/image/{listingImageID}', [SpaceOwnerController::class, 'deleteImage'])->name('space_owner.delete_image');
@@ -186,6 +187,7 @@ Route::get('/notifications', [NotificationController::class, 'getNotifications']
 
 Route::get('/space/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
 
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
 
 // Profile routes
 Route::middleware('auth')->group(function () {

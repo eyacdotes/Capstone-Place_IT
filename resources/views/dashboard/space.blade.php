@@ -62,13 +62,17 @@
                                     <hr class="border-gray-500 w-full border-1 my-6">
 
                                     <!-- Edit and Delete Button Section (placed below details) -->
-                                    <div class="flex space-x-2 w-full justify-end">
-                                        <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-blue-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-blue-700 text-center">
+                                    <div class="flex w-full space-x-2 justify-end">
+                                            <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-blue-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-blue-700 text-center">
                                             Edit
                                         </a>
-                                        <button class="bg-red-600 text-white px-4 w-40 py-2 rounded-lg hover:bg-red-700 text-center">
-                                            Delete
-                                        </button>
+                                        <form action="{{ route('listings.destroy', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this listing?');" class="inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-red-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-red-700 text-center">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             @endif
@@ -88,4 +92,25 @@
             </div>
         </div>
     </div>
+    <script>
+    function deleteListing(id) {
+        if (confirm('Are you sure you want to delete this listing?')) {
+            fetch(`/listings/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove listing from the DOM or refresh the page
+                    alert('Listing deleted successfully!');
+                    location.reload(); // Optional: Reload page
+                }
+            })
+            .catch(error => console.error('Error deleting listing:', error));
+        }
+    }
+</script>
 </x-app-layout>

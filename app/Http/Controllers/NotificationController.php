@@ -13,8 +13,8 @@ class NotificationController extends Controller
     {
         // Validate the request data
         $request->validate([
-            'message' => 'required|string|max:255',
-            'type'    => 'required|string|max:255', // Ensure notification type is also sent
+            'type' => 'required|string|max:255',
+            'data' => 'required|string|max:255',
         ]);
 
         // Retrieve all users except admins
@@ -23,10 +23,9 @@ class NotificationController extends Controller
         // Loop through each user and create a notification entry for them
         foreach ($users as $user) {
             Notification::create([
-                'userID'           => $user->userID, 
-                'description'      => $request->message, 
-                'notificationType' => $request->type, 
-                'created_at'       => now(),
+                'n_userID' => $user->userID,  // Ensure the n_userID references the users table
+                'type' => $request->type,  // You can put additional data here if needed
+                'created_at' => now(),
             ]);
         }
 
@@ -34,10 +33,21 @@ class NotificationController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Notification sent successfully!');
     }
 
+    // Mark a notification as read
+    public function markAsRead($id)
+    {
+        $notification = Notification::findOrFail($id);
+
+        // Update the read_at column to the current timestamp
+        $notification->update(['read_at' => now()]);
+
+        return response()->json(['message' => 'Notification marked as read successfully.']);
+    }
+
     // Fetch all notifications for the authenticated user
     public function getNotifications(Request $request)
     {
-        $notifications = Notification::where('userID', auth()->id())
+        $notifications = Notification::where('n_userID', auth()->id())
             ->orderBy('created_at', 'desc')
             ->get();
 

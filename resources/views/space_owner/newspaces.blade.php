@@ -37,9 +37,6 @@
                         <input type="file" name="images[]" id="imageInput" class="w-full p-3 border rounded-md" multiple onchange="displayFileNames()">
                         <div id="fileNames" class="mt-2 text-gray-600"></div>
                     </div>
-
-
-
                     <div>
                         <button type="submit" class="bg-orange-400 text-white py-2 px-4 rounded-md">Post Space</button>
                     </div>
