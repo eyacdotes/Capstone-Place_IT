@@ -30,9 +30,9 @@
                                 <td class="px-6 py-4 bg-gray-100">{{ number_format($negotiation->offerAmount, 2) }}</td>
                                 <td class="px-6 py-4 bg-gray-100">
                                 <span class="
-                                                    {{ $negotiation->negoStatus === 'Approve' ? 'text-green-600' : '' }}
+                                                    {{ $negotiation->negoStatus === 'Approved' ? 'text-green-600' : '' }}
                                                     {{ $negotiation->negoStatus === 'Pending' ? 'text-blue-600' : '' }}
-                                                    {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-red-600' : '' }}
+                                                    {{ $negotiation->negoStatus === 'Disapproved' || $negotiation->negoStatus === 'Another Term' ? 'text-red-600' : '' }}
                                                     font-bold">
                                                     {{ $negotiation->negoStatus }}
                                                 </span>

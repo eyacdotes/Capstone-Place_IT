@@ -31,7 +31,9 @@ class BusinessOwnerController extends Controller
         // Loop through the locations and get the count for each
         foreach ($locations as $location) {
             // Count listings for the current location
-            $listingsCount[$location] = Listing::where('location', 'LIKE', '%' . $location . '%')->count();
+            $listingsCount[$location] = Listing::where('location', 'LIKE', '%' . $location . '%')
+                                                ->where('status', '!=', 'Deactivated')
+                                                ->count();
         }
 
          // Return the count to the view
@@ -41,7 +43,10 @@ class BusinessOwnerController extends Controller
     public function showByLocation($location)
     {
         // Fetch all listings for the specific location
-        $listings = Listing::with('owner')->where('location', 'LIKE', '%' . $location . '%')->get();
+        $listings = Listing::with('owner')
+                          ->where('location', 'LIKE', '%' . $location . '%')
+                          ->where('status', '!=', 'Deactivated')
+                          ->get();
 
         // Pass the listings and the location to the view
         return view('place.showByLocation', compact('listings', 'location'));

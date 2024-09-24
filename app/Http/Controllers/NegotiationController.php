@@ -156,7 +156,7 @@ class NegotiationController extends Controller
     {
     // Validate the status field
     $request->validate([
-        'status' => 'required|in:Pending,Approve,Disapprove',
+        'status' => 'required|in:Pending,Approved,Disapproved',
     ]);
 
     // Find the negotiation by ID
@@ -170,6 +170,13 @@ class NegotiationController extends Controller
     // Update the status
     $negotiation->negoStatus = $request->input('status');
     $negotiation->save();
+
+    Notification::create([
+        'n_userID' => $negotiation->senderID,  // Notify the business owner (sender)
+        'type' => 'negotiation',  // You can define this type for negotiation
+        'data' => 'Your negotiation for "' . $negotiation->listing->title . '" has been ' . $request->input('status') . '.', // Custom message
+        'created_at' => now(),
+    ]);
 
     // Redirect back with a success message
     return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID])

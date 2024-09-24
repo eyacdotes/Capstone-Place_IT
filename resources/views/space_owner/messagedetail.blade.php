@@ -69,23 +69,23 @@
                                 <div>
                                     <h4 class="text-lg font-semibold">Status</h4>
                                     <span class="
-                                        {{ $negotiation->negoStatus === 'Approve' ? 'text-xl font-bold text-green-600' : '' }}
+                                        {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
                                         {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
-                                        {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
+                                        {{ $negotiation->negoStatus === 'Disapproved' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
                                         font-bold">
                                         {{ $negotiation->negoStatus }}
                                     </span>
                                 </div>
                             </div>
-                            @if($negotiation->negoStatus !== 'Approve')
+                            @if($negotiation->negoStatus !== 'Approved')
                                 <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                                     @csrf
                                     <div class="mb-4">
                                         <label for="status" class="block text-lg font-semibold">Update Status:</label>
                                         <select name="status" id="status" class="form-select mt-1 block w-full">
                                             <option value="Pending" {{ $negotiation->negoStatus === 'Pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="Approve" {{ $negotiation->negoStatus === 'Approve' ? 'selected' : '' }}>Approve</option>
-                                            <option value="Disapprove" {{ $negotiation->negoStatus === 'Disapprove' ? 'selected' : '' }}>Disapprove</option>
+                                            <option value="Approved" {{ $negotiation->negoStatus === 'Approved' ? 'selected' : '' }}>Approve</option>
+                                            <option value="Disapproved" {{ $negotiation->negoStatus === 'Disapproved' ? 'selected' : '' }}>Disapprove</option>
                                         </select>
                                     </div>
                                     <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>

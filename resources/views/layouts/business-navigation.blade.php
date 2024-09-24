@@ -27,19 +27,21 @@
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
+            <!-- Notification Icon and Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
+                <!-- Notification Bell Icon -->
                 <div class="relative">
                     <i class="fa-regular fa-bell text-gray-500 hover:text-gray-700 cursor-pointer"></i>
-                    <!-- Red dot label (initially hidden) -->
+                    <!-- Red dot for new notifications -->
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
-                    <!-- Notification Dropdown (initially hidden) -->
-                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                    <!-- Notification Dropdown -->
+                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
                         <div id="notification-list">
                             <p class="px-4 py-2 text-gray-800">No new notifications.</p>
                         </div>
                     </div>
                 </div>
+                <!-- Settings Dropdown -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -66,7 +68,7 @@
                 </x-dropdown>
             </div>
 
-            <!-- Hamburger -->
+            <!-- Hamburger Menu (Responsive) -->
             <div class="-mr-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -116,48 +118,123 @@
         </div>
     </div>
 </nav>
+
+<!-- JavaScript for Notifications -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const notificationIcon = document.querySelector('.fa-bell');
-    const notificationDropdown = document.getElementById('notification-dropdown');
-    const notificationDot = document.getElementById('notification-dot');
-    const notificationList = document.getElementById('notification-list');
+        const notificationIcon = document.querySelector('.fa-bell');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        const notificationDot = document.getElementById('notification-dot');
+        const notificationList = document.getElementById('notification-list');
 
-    // Fetch notifications via AJAX
-    fetch('/notifications')  // Adjust the URL based on your route
-        .then(response => response.json())
-        .then(notifications => {
-            // If there are notifications, show the red dot and display notifications in the dropdown
-            if (notifications.length > 0) {
-                notificationDot.style.display = 'inline-block'; // Show the red dot
-                notificationList.innerHTML = ''; // Clear the "No new notifications" text
+        // Fetch notifications via AJAX
+        fetch('/notifications')  // Adjust the URL based on your route
+            .then(response => response.json())
+            .then(notifications => {
+                // Filter for unread notifications (those with read_at === null)
+                const unreadNotifications = notifications.filter(notification => notification.read_at === null);
 
-                // Append each notification to the list
-                notifications.forEach(notification => {
-                    const notificationItem = document.createElement('div');
-                    notificationItem.classList.add('px-4', 'py-2', 'text-gray-800');
-                    notificationItem.textContent = notification.description; // assuming 'description' is the field
-                    notificationList.appendChild(notificationItem);
-                });
-            } else {
-                notificationDot.style.display = 'none'; // Hide the red dot if no notifications
-                notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
-            }
-        })                      
-        .catch(error => {
-            console.error('Error fetching notifications:', error);
+                // Show or hide red dot based on unread notifications
+                if (unreadNotifications.length > 0) {
+                    notificationDot.style.display = 'inline-block';  // Show the red dot
+                } else {
+                    notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
+                }
+
+                if (notifications.length > 0) {
+                    notificationList.innerHTML = '';  // Clear any placeholder text
+
+                    // Append each notification to the list
+                    notifications.forEach(notification => {
+                        const notificationLink = document.createElement('a');
+                        notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+                        notificationLink.href = getNotificationUrl(notification);  // Set the notification URL
+                        notificationLink.setAttribute('data-id', notification.notificationID);  // Add a data-id attribute for AJAX
+
+                        // Event listener for marking notification as read and redirecting
+                        notificationLink.addEventListener('click', function (event) {
+                            event.preventDefault();  // Prevent default to handle mark-as-read first
+
+                            const url = this.href;  // Capture the target URL
+                            const notificationId = this.getAttribute('data-id');  // Get notification ID
+
+                            // Mark as read
+                            markAsRead(notificationId, url);  // Pass the URL for redirect after marking
+                        });
+                        
+                        const notificationMessage = document.createElement('div');
+                        if (notification.type === 'listing_approved') {
+                            notificationMessage.innerHTML = 'Your listing <strong>' + notification.data + '</strong> was approved';
+                        } else if (notification.type === 'payment') {
+                            notificationMessage.textContent = 'You received a payment';
+                        } else if (notification.type === 'negotiation') {
+                            notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
+                        } else if (notification.type === 'maintenance') {
+                            notificationMessage.innerHTML = notification.data;
+                        } else {
+                            notificationMessage.textContent = notification.description;  // Default message
+                        }
+
+                        const notificationDate = document.createElement('span');
+                        notificationDate.classList.add('text-gray-400', 'text-sm');
+                        notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+
+                        notificationLink.appendChild(notificationMessage);
+                        notificationLink.appendChild(notificationDate);
+
+                        notificationList.appendChild(notificationLink);
+                    });
+                } else {
+                    notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+
+        // Toggle the visibility of the dropdown when the notification icon is clicked
+        notificationIcon.addEventListener('click', function () {
+            notificationDropdown.classList.toggle('hidden');
         });
 
-    // Toggle the visibility of the dropdown when the notification icon is clicked
-    notificationIcon.addEventListener('click', function () {
-        notificationDropdown.classList.toggle('hidden');
-    });
+        // Optional: Hide the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+        });
 
-    // Optional: Hide the dropdown if clicked outside
-    document.addEventListener('click', function (event) {
-        if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
-            notificationDropdown.classList.add('hidden');
+        // Function to generate the notification URL based on type
+        function getNotificationUrl(notification) {
+            if (notification.type === 'listing_approved') {
+                return '/business/dashboard';  // Adjust to the correct URL where the admin manages listings
+            } else if (notification.type === 'payment') {
+                return '/business/payment';  // Adjust to the payment-related page
+            } else if (notification.type === 'negotiation') {
+                return '/business/negotiations';
+            }
+            return '#';  // Default URL
+        }
+
+        // AJAX function to mark a notification as read
+        function markAsRead(notificationId, redirectUrl) {
+            fetch(`/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ read_at: new Date() })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Notification marked as read:', data);
+                // Redirect to the target page after marking the notification as read
+                window.location.href = redirectUrl;
+            })
+            .catch(error => {
+                console.error('Error marking notification as read:', error);
+            });
         }
     });
-});
 </script>

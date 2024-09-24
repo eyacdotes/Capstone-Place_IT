@@ -52,7 +52,8 @@
                                             <p class="mt-2 font-semibold text-sm 
                                                 {{ $listing->status === 'Vacant' ? 'text-green-500' : '' }}
                                                 {{ $listing->status === 'Pending' ? 'text-gray-400' : '' }}
-                                                {{ $listing->status === 'Disapproved' ? 'text-red-500' : '' }}">
+                                                {{ $listing->status === 'Disapproved' ? 'text-red-500' : '' }}
+                                                {{ $listing->status === 'Deactivated' ? 'text-red-500' : '' }}">
                                                 {{ $listing->status }}
                                             </p>
                                             
@@ -66,13 +67,21 @@
                                             <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-blue-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-blue-700 text-center">
                                             Edit
                                         </a>
-                                        <form action="{{ route('listings.destroy', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this listing?');" class="inline-block">
+                                        @if ($listing->status === 'Deactivated')
+                                        <form action="{{ route('listings.restore', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to restore this listing?');" class="inline-block">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-red-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-red-700 text-center">
-                                                Delete
+                                            <button type="submit" class="bg-green-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-green-700 text-center">
+                                                Restore
                                             </button>
                                         </form>
+                                        @else
+                                        <form action="{{ route('listings.destroy', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to deactivate this listing?');" class="inline-block">
+                                            @csrf
+                                            <button type="submit" class="bg-red-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-red-700 text-center">
+                                                Deactivate
+                                            </button>
+                                        </form>
+                                        @endif
                                     </div>
                                 </div>
                             @endif

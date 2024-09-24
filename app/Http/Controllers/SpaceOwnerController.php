@@ -53,12 +53,22 @@ public function destroy($listingID)
         // Find the listing by its ID
         $listing = Listing::findOrFail($listingID); // Throws a 404 if not found
 
-        // Delete the listing
-        $listing->delete();
+        // Update status to 'Deactivated' before soft delete
+        $listing->status = 'Deactivated';
+        $listing->save();
 
         // Redirect back with a success message or JSON response
         return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
     }
+
+public function restore($listingID) {
+    $listing = Listing::findOrFail($listingID); // Throws a 404 if not found
+
+        // Update status to 'Vacant' before soft delete
+        $listing->status = 'Vacant';
+        $listing->save();
+        return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
+}
 
 public function update(Request $request, $listingID)
 {
