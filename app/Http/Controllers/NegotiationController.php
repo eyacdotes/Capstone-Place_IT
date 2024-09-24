@@ -7,6 +7,7 @@ use App\Models\Negotiation;
 use App\Models\Reply;
 use App\Models\RentalAgreement;
 use App\Models\BillingDetail;
+use App\Models\Notification;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 
@@ -114,7 +115,7 @@ class NegotiationController extends Controller
             'offerAmount' => 'required|numeric',
         ]);
 
-        Negotiation::create([
+        $negotiation = Negotiation::create([
             'listingID' => $request->listingID,
             'senderID' => Auth::id(),
             'receiverID' => $request->receiverID,
@@ -122,7 +123,15 @@ class NegotiationController extends Controller
             'negoStatus' => 'Pending',
             'offerAmount' => $request->offerAmount,
         ]);
-        return redirect()->route('business.negotiations')->with('success', 'Your offer has been sent successfully.');
+
+        Notification::create([
+            'n_userID' => $request->receiverID,  // Notify the space owner (receiver)
+            'type' => 'negotiation',  // You can define this type for negotiation
+            'data' => $negotiation->listing->title, // Custom message
+            'created_at' => now(),
+        ]);
+
+        return redirect()->route('business.negotiations')->with('success', 'Your offer has been sent successfully, and the space owner has been notified.');
     }
     public function storeDB(Request $request, $negotiationID)
     {

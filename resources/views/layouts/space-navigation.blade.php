@@ -168,12 +168,16 @@
                             notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> was approved';
                         } else if (notification.type === 'payment') {
                             notificationMessage.textContent = 'You received a payment';
+                        } else if (notification.type === 'maintenance') {
+                            notificationMessage.textContent = notification.data;
+                        } else if (notification.type === 'negotiation') {
+                            notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>';
                         } else {
                             notificationMessage.textContent = notification.description;  // Default message
                         }
 
                         const notificationDate = document.createElement('span');
-                        notificationDate.classList.add('text-gray-500', 'text-sm');
+                        notificationDate.classList.add('text-gray-400', 'text-sm');
                         notificationDate.textContent = new Date(notification.created_at).toLocaleString();
 
                         notificationLink.appendChild(notificationMessage);
@@ -206,7 +210,9 @@
             if (notification.type === 'listing_approved') {
                 return '/space/dashboard';  // Adjust to the correct URL where the admin manages listings
             } else if (notification.type === 'payment') {
-                return '/user/payments';  // Adjust to the payment-related page
+                return '/space/payment';  // Adjust to the payment-related page
+            } else if (notification.type === 'negotiation') {
+                return '/space/negotiations';
             }
             return '#';  // Default URL
         }

@@ -9,6 +9,8 @@ use App\Models\Negotiation;
 use App\Models\Payment;
 use App\Models\Reviews;
 use App\Models\RentalAgreement;
+use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class BusinessOwnerController extends Controller
@@ -154,6 +156,22 @@ class BusinessOwnerController extends Controller
 
         // For now, we'll just return a view where you could show the payment form or details
         return view('business_owner.payment', compact('negotiation'));
+    }
+
+    protected function notifySpaceOwner(Listing $listing)
+    {
+    // Find the space owner based on the ownerID in the Listing model
+    $spaceOwner = User::find($listing->ownerID);  // Assuming ownerID is the space owner's user ID
+
+    // Check if the space owner exists
+    if ($spaceOwner) {
+        // Create the notification for the space owner
+        Notification::create([
+            'n_userID' => $spaceOwner->userID,  // The space owner's user ID
+            'data' => $listing->title,  // Store the title in the notification's data field as JSON
+            'type' => 'listing_approved',  // Notification type
+            ]);
+        }
     }
     
 

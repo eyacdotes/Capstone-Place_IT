@@ -88,7 +88,7 @@ class AdminController extends Controller
     }
 
     protected function notifySpaceOwner(Listing $listing)
-{
+    {
     // Find the space owner based on the ownerID in the Listing model
     $spaceOwner = User::find($listing->ownerID);  // Assuming ownerID is the space owner's user ID
 
@@ -99,9 +99,7 @@ class AdminController extends Controller
             'n_userID' => $spaceOwner->userID,  // The space owner's user ID
             'data' => $listing->title,  // Store the title in the notification's data field as JSON
             'type' => 'listing_approved',  // Notification type
-        ]);
+            ]);
+        }
     }
-}
-
-
 }

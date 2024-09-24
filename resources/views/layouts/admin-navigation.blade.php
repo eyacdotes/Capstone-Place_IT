@@ -144,6 +144,14 @@
                         <option value="feedback">Feedback</option>
                     </select>
                 </div>
+                <div class="mt-4">
+                <label for="selectUser" class="block text-sm font-medium text-gray-700">Select User Type</label>
+                <select id="selectUser" name="selectUser" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" required>
+                    <option value="">Choose..</option>
+                    <option value="business_owner">Business Owner</option>
+                    <option value="space_owner">Space Owner</option>
+                </select>
+            </div>
             </form>
         </div>
         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -165,6 +173,9 @@
         const notificationDropdown = document.getElementById('notification-dropdown');
         const notificationDot = document.getElementById('notification-dot');
         const notificationList = document.getElementById('notification-list');
+        const createNotificationBtn = document.getElementById('create-notification-btn');
+        const notificationModal = document.getElementById('notification-modal');
+        const closeModalBtn = document.getElementById('close-modal');
 
         // Fetch notifications via AJAX
         fetch('/notifications')  // Adjust the URL based on your route
@@ -270,6 +281,22 @@
                 console.error('Error marking notification as read:', error);
             });
         }
+
+        createNotificationBtn.addEventListener('click', function () {
+            notificationModal.classList.remove('hidden');
+        });
+
+        // Hide the modal when the "Cancel" button is clicked
+        closeModalBtn.addEventListener('click', function () {
+            notificationModal.classList.add('hidden');
+        });
+
+        // Optional: Hide the modal when clicking outside of it
+        notificationModal.addEventListener('click', function (event) {
+            if (event.target === notificationModal) {
+                notificationModal.classList.add('hidden');
+            }
+        });
     });
 </script>
 
