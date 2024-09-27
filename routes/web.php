@@ -68,6 +68,23 @@ Route::get('/admin/usermanagement', [AdminController::class, 'users'])
     ->name('admin.usermanagement')
     ->middleware(['auth', 'verified', 'role:admin']);
 
+Route::get('/admin/usermanagement/space-owners', [AdminController::class, 'spaceOwners'])
+    ->name('admin.spaceOwners')
+    ->middleware(['auth', 'verified', 'role:admin']);
+
+Route::get('/admin/usermanagement/business-owners', [AdminController::class, 'businessOwners'])
+    ->name('admin.businessOwners')
+    ->middleware(['auth', 'verified', 'role:admin']);
+
+Route::get('/admin/usermanagement/admins', [AdminController::class, 'adminUsers'])
+    ->name('admin.adminUsers')
+    ->middleware(['auth', 'verified', 'role:admin']);
+// ADD NEW ADMIN
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/admin/usermanagement/admins/add', [AdminController::class, 'create'])->name('admin.create');
+    Route::post('/admin/usermanagement/admins', [AdminController::class, 'store'])->name('admin.store');
+});
+
 
 // Admin LISTINGS
 Route::get('/admin/listingmanagement', [AdminController::class, 'listing'])

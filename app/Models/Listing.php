@@ -50,6 +50,7 @@ class Listing extends Model
             'rentalAgreementID', // Foreign key on Reviews table
             'listingID', // Local key on Listing table
             'rentalAgreementID' // Local key on RentalAgreement table
-    );
+        );
     }
+    
 }

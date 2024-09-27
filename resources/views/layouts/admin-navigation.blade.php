@@ -15,9 +15,25 @@
                     <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.usermanagement')" :active="request()->routeIs('admin.usermanagement')">
-                        {{ __('User Management') }}
-                    </x-nav-link>
+                    <div class="relative pt-4">
+                        <button id="account-management-btn" class="flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            {{ __('Account Management') }}
+                            <svg class="fill-current h-4 w-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div id="account-management-dropdown" class="border-2 absolute left-0 z-10 hidden mt-2 w-48 bg-white rounded-md shadow-lg py-1">
+                            <x-dropdown-link :href="route('admin.spaceOwners')" :active="request()->routeIs('admin.spaceOwners')">
+                                {{ __('Space Owner Account') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.businessOwners')" :active="request()->routeIs('admin.businessOwners')">
+                                {{ __('Business Owner Account') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.adminUsers')" :active="request()->routeIs('admin.adminUsers')">
+                                {{ __('Admin Account') }}
+                            </x-dropdown-link>
+                        </div>
+                    </div>
                     <x-nav-link :href="route('admin.listingmanagement')" :active="request()->routeIs('admin.listingmanagement')">
                         {{ __('Listing Management') }}
                     </x-nav-link>
@@ -176,6 +192,8 @@
         const createNotificationBtn = document.getElementById('create-notification-btn');
         const notificationModal = document.getElementById('notification-modal');
         const closeModalBtn = document.getElementById('close-modal');
+        const accountManagementBtn = document.getElementById('account-management-btn');
+        const accountManagementDropdown = document.getElementById('account-management-dropdown');
 
         // Fetch notifications via AJAX
         fetch('/notifications')  // Adjust the URL based on your route
@@ -296,6 +314,16 @@
             if (event.target === notificationModal) {
                 notificationModal.classList.add('hidden');
             }
+        });
+        accountManagementBtn.addEventListener('click', function () {
+        accountManagementDropdown.classList.toggle('hidden');
+        });
+
+        // Optional: Hide the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+        if (!accountManagementBtn.contains(event.target) && !accountManagementDropdown.contains(event.target)) {
+            accountManagementDropdown.classList.add('hidden');
+        }
         });
     });
 </script>
