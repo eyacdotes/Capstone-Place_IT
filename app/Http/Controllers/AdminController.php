@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -35,6 +36,30 @@ class AdminController extends Controller
         $userCount = User::where('role', '!=', 'admin')->count();
         $users  = User::where('role', '!=', 'admin')->get();
         return view('admin.usermanagement', compact('userCount','users'));
+    }
+    // NAVBAR USERS ACCOUNT MANAGEMENT
+    public function spaceOwners()
+    {
+        $users = User::where('role', 'space_owner')->get();
+        $userCount = $users->count();
+        $currentRole = 'space_owner';
+        return view('admin.usermanagement', compact('userCount', 'users', 'currentRole'));
+    }
+
+    public function businessOwners()
+    {
+        $users = User::where('role', 'business_owner')->get();
+        $userCount = $users->count();
+        $currentRole = 'business_owner';
+        return view('admin.usermanagement', compact('userCount', 'users', 'currentRole'));
+    }
+
+    public function adminUsers()
+    {
+        $users = User::where('role', 'admin')->get();
+        $userCount = $users->count();
+        $currentRole = 'admin';
+        return view('admin.usermanagement', compact('userCount', 'users', 'currentRole'));
     }
 
     public function listing() {
@@ -102,4 +127,35 @@ class AdminController extends Controller
             ]);
         }
     }
+    public function create() {
+        return view('admin.create');
+    }
+
+    public function store(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email', // Ensure email is unique
+            'password' => 'required|string|min:8|confirmed', // Password confirmation required
+            'mobile_number' => 'required|string|max:15|unique:users,mobileNumber', // Ensure mobile number is unique
+        ]);
+
+        // Create the admin user
+        User::create([
+            'firstName' => $request->first_name, // Ensure this matches your database field
+            'lastName' => $request->last_name,   // Ensure this matches your database field
+            'email' => $request->email,
+            'password' => bcrypt($request->password), // Hash the password
+            'mobileNumber' => $request->mobile_number, // Ensure this matches your database field
+            'role' => 'admin', // Assign the 'admin' role
+            'isVerified' => true, // Assuming new admins are verified by default
+        ]);
+
+        // Redirect back to the admin list page with a success message
+        return redirect()->route('admin.adminUsers')->with('success', 'Admin created successfully!');
+    }
+
+
 }
