@@ -141,6 +141,7 @@
             </div>
         </div>
     </div>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
     let userScrolledUp = false; // Track if the user has scrolled up
 
