@@ -2,7 +2,7 @@
 <x-guest-layout>
     <form method="POST" action="{{ route('space.register') }}">
         @csrf
-        <div class="flex justify-between mb-2">
+        <div class="flex justify-between mb-2 font-semibold">
             <span>Are you a Business Owner?</span>
             <a href="{{ route('business.register') }}" class="text-blue-500 hover:underline">Register here</a>
         </div>
