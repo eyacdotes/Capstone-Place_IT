@@ -23,10 +23,19 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
+        // Authenticate the user
         $request->authenticate();
 
+        // Check if the user is not verified
+        $user = Auth::user();
+        if ($user->isVerified === 0) {
+            // Redirect to the OTP verification page if not verified
+            return redirect()->route('otp.verify')->with('status', 'Please check your email for the OTP.');
+        }
+
+        // If verified, proceed to the dashboard or intended route
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);

@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->route('otp.verify')->with('status', 'Please check your email for the OTP.');
     }
 
     /**
@@ -69,7 +69,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->route('otp.verify')->with('status', 'Please check your email for the OTP.');
     }
 
     /**
