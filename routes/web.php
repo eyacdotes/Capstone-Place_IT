@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NegotiationController;
+use App\Http\Controllers\OtpVerifyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpaceOwnerController;
 use App\Http\Controllers\BusinessOwnerController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CreateListingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Auth\EmailVerifyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -208,11 +210,20 @@ Route::get('/space/notifications/unread', [NotificationController::class, 'getUn
 
 Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
 
+// SEND EMAIL FOR VERIFICATION
+Route::get('verify-otp', function () {
+    return view('emails.verify_email_otp'); 
+})->name('otp.verify');
+
+Route::post('send-email-verification', [OtpVerifyController::class, 'store'])->name('email.send');
+Route::post('otp-verify', [OtpVerifyController::class, 'verifyOtp'])->name('otp.verify.submit');
+
 // Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
