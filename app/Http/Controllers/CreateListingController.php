@@ -29,7 +29,7 @@ class CreateListingController extends Controller
             'dateCreated' => now(),
             'ownerID' => Auth::id(),
             'status' => 'Pending',
-            'approvedBy_userID' => 4, // Admin will later approve this listing
+            'approvedBy_userID' => null, // It wont store any data since it was not approved. it will update later if approved
         ]);
         $listing->save();
 
@@ -56,12 +56,16 @@ class CreateListingController extends Controller
      */
     protected function notifyAdmin(Listing $listing)
     {
-        $admin = User::where('role', 'admin')->first();  // Assuming there's only one admin
+        // Get all admins
+        $admins = User::where('role', 'admin')->get();
 
-        Notification::create([
-            'n_userID' => $admin->userID,
-            'data' => $listing->title,
-            'type' => 'listing_approval',
-        ]);
+        // Loop through each admin and send a notification
+        foreach ($admins as $admin) {
+            Notification::create([
+                'n_userID' => $admin->userID,
+                'data' => $listing->title,
+                'type' => 'listing_approval',
+            ]);
+        }
     }
 }

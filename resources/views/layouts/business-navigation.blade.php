@@ -169,6 +169,8 @@
                             notificationMessage.textContent = 'You received a payment';
                         } else if (notification.type === 'negotiation') {
                             notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
+                        } else if (notification.type === 'negotiation_status_update') {
+                            notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
                         } else if (notification.type === 'maintenance') {
                             notificationMessage.innerHTML = notification.data;
                         } else {
@@ -211,6 +213,8 @@
             } else if (notification.type === 'payment') {
                 return '/business/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'negotiation') {
+                return '/business/negotiations';
+            } else if (notification.type === 'negotiation_status_update') {
                 return '/business/negotiations';
             }
             return '#';  // Default URL

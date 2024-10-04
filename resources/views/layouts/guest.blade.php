@@ -12,7 +12,7 @@
 </head>
 <body class="bg-white font-sans antialiased min-h-screen flex flex-col">
     <!-- Navbar -->
-    <nav class="p-6 bg-white shadow flex justify-between items-center">
+    <nav class="p-4 bg-white shadow flex justify-between items-center">
         <!-- Logo Section with "Get Started" next to it on mobile -->
         <div class="flex items-center space-x-4">
             <a href="{{ url('/') }}" class="text-orange-600 text-3xl font-bold">place.it</a>
@@ -25,7 +25,7 @@
 
         <!-- Get Started Button on larger screens, hidden on mobile -->
         @if (Route::has('login') && !Auth::check())
-            <a href="{{ url('/register') }}" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md hidden md:block">Get Started</a>
+            <a href="{{ url('/register') }}" class="font-semibold bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md hidden md:block">Register</a>
         @endif
     </nav>
 

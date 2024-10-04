@@ -77,6 +77,7 @@ class AdminController extends Controller
         // Approve the listing
         if ($listing) {
             $listing->status = 'Vacant';
+            $listing->approvedBy_userID = Auth::id();
             $listing->save();
             $this->notifySpaceOwner($listing);
         }
@@ -88,7 +89,9 @@ class AdminController extends Controller
         $listing = Listing::find($id);
         if ($listing) {
             $listing->status = 'Disapproved';
+            $listing->approvedBy_userID = Auth::id();
             $listing->save();
+            $this->notifySpaceOwner($listing);
         }
 
         return redirect()->route('admin.listingmanagement')->with('status', 'Listing disapproved!');

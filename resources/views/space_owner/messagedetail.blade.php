@@ -6,7 +6,11 @@
         </h2>
     </x-slot>
 
-    <div class="w-full py-6 flex justify-center">
+    <div class="flex justify-center py-2">
+        <span class="font-semibold text-gray-800">{{ ucwords($negotiation->sender->firstName) }} {{ ucwords($negotiation->sender->lastName) }}</span>
+    </div>
+
+    <div class="w-full py-4 flex justify-center">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
             <div class="flex flex-col lg:flex-row h-[500px]">
                 <!-- Chat Section -->
@@ -63,11 +67,11 @@
                         <div class="mb-4">
                             <div class="flex items-center mb-2">
                                 <div class="mr-4">
-                                    <h4 class="text-lg font-semibold">Amount Offered</h4>
-                                    <input class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="P{{ number_format($negotiation->offerAmount, 2) }}" readonly>
+                                    <h4 class="text-lg font-semibold pl-2">Amount Offered</h4>
+                                    <input class="pl-7 text-2xl bg-gray-100 rounded-md w-40 font-bold" value="₱{{ number_format($negotiation->offerAmount, 2) }}" readonly>
                                 </div>
-                                <div>
-                                    <h4 class="text-lg font-semibold">Status</h4>
+                                <div class="pl-28 text-right mb-6 pt-2">
+                                    <h4 class="text-lg font-semibold pr-4">Status</h4>
                                     <span class="
                                         {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
                                         {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}

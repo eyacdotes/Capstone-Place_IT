@@ -5,8 +5,10 @@
             {{ __('Negotiation Details') }}
         </h2>
     </x-slot>
-
-    <div class="w-full py-6 flex justify-center">
+    <div class="flex justify-center py-2">
+        <span class="font-semibold text-gray-800">{{ ucwords($negotiation->receiver->firstName) }} {{ ucwords($negotiation->receiver->lastName) }} </span>
+    </div>
+    <div class="w-full py-4 flex justify-center">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
             <div class="flex flex-col lg:flex-row h-[500px]">
                 <!-- Chat Section -->
@@ -68,20 +70,20 @@
                         @csrf
                         @method('PUT')
                         <div>
-                            <h4 class="text-lg font-semibold">Amount Offered</h4>
-                            <input type="text" name="offerAmount" class="text-2xl bg-gray-100 rounded-md w-40 font-bold" value="{{ number_format($negotiation->offerAmount, 2) }}" step="0.01" required>
+                            <h4 class="text-lg font-semibold pl-2">Amount Offered</h4>
+                            <input type="text" name="offerAmount" class="pl-7 text-2xl bg-gray-100 rounded-md w-40 font-bold" value="₱{{ number_format($negotiation->offerAmount, 2) }}" step="0.01" required>
                         </div>
 
-                        <button type="submit" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Update Offer
                         </button>
                     </form>
-                        <div class="text-right mb-6">
-                            <h4 class="text-lg font-semibold pr-2">Status</h4>
-                            <span class=" 
-                                {{ $negotiation->negoStatus === 'Approve' ? 'text-xl font-bold text-green-600' : '' }}
+                        <div class="text-right mb-6 pb-16">
+                            <h4 class="text-lg font-semibold pr-4">Status</h4>
+                            <span class="
+                                {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
                                 {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
-                                {{ $negotiation->negoStatus === 'Disapprove' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
+                                {{ $negotiation->negoStatus === 'Disapproved' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
                                 font-bold">
                                 {{ $negotiation->negoStatus }}
                             </span>
@@ -89,7 +91,7 @@
                     </div>
 
                     <!-- Conditional Display of Form or Proceed to Payment Button -->
-                    @if($negotiation->negoStatus !== 'Approve')
+                    @if($negotiation->negoStatus !== 'Approved')
                         <!-- Form Section for Rental Term, Start Date, End Date -->
                         <form action="{{ route('negotiation.rentAgree', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                             @csrf

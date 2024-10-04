@@ -1,4 +1,15 @@
-<title>Login</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('storage/images/placeholder.png') }}" type="image/png">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-nmkRI2k3l2GKtWo8ZxLpW2VfZHRlXYWnPbm2LFl9hAL5ZtntF7D1h6jcNcdEHOo5AC5f5E3i6fq4+Qkv3DdOdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    @vite(['resources/css/app.css', 'resources/js/app.js']) <!-- Ensure Tailwind is loaded -->
+    
+</head>
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -18,7 +29,7 @@
             <label for="password" class="block text-gray-700 font-bold mb-2">Password</label>
             <input type="password" id="password" name="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-red-500" required placeholder="Enter password..">
             <!-- Show/Hide password link -->
-            <span id="togglePassword" class="absolute right-3 top-10 text-gray-500 cursor-pointer select-none">Show</span>
+            <span id="togglePassword" class="absolute right-3 top-10 text-gray-400 cursor-pointer select-none">Show</span>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 

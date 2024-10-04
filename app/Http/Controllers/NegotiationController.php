@@ -171,12 +171,8 @@ class NegotiationController extends Controller
     $negotiation->negoStatus = $request->input('status');
     $negotiation->save();
 
-    Notification::create([
-        'n_userID' => $negotiation->senderID,  // Notify the business owner (sender)
-        'type' => 'negotiation',  // You can define this type for negotiation
-        'data' => 'Your negotiation for "' . $negotiation->listing->title . '" has been ' . $request->input('status') . '.', // Custom message
-        'created_at' => now(),
-    ]);
+    // Notify the Business Owner
+    $this->notifyBusinessOwner($negotiation, $request->input('status'));
 
     // Redirect back with a success message
     return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID])
@@ -227,5 +223,20 @@ class NegotiationController extends Controller
     $billingDetails = BillingDetail::where('user_id', Auth::id())->first();
 
     return view('space_owner.payment_details', compact('negotiations', 'businessOwner','listing','billingDetails'));
+    }
+    protected function notifyBusinessOwner($negotiation, $newStatus)
+    {
+        // Find the business owner (sender of the negotiation)
+        $businessOwner = $negotiation->sender;
+
+        // Check if the business owner exists
+        if ($businessOwner) {
+            // Create a notification for the business owner
+            Notification::create([
+                'n_userID' => $businessOwner->userID,  // The business owner's user ID
+                'data' => 'Your negotiation for "' . $negotiation->listing->title . '" has been ' . $newStatus . '.',  // Custom message
+                'type' => 'negotiation_status_update',  // Define the type of notification
+            ]);
+        }
     }
 }

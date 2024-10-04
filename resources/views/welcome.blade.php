@@ -12,10 +12,10 @@
 </head>
 <body class="bg-white font-sans antialiased">
     <!-- Navbar -->
-    <nav class="p-6 bg-white shadow md:flex md:justify-between md:items-center">
+    <nav class="p-4 bg-white shadow md:flex md:justify-between md:items-center border-b-2">
         <!-- Logo Section -->
         <div class="flex justify-between items-center">
-            <a href="{{ url('/') }}" class="text-orange-600 text-3xl font-bold">place.it</a>
+            <a href="{{ url('/') }}" class="hover:text-red-800 text-orange-600 text-3xl font-bold">place.it</a>
             <!-- Hamburger Icon for Mobile -->
             <div class="md:hidden">
                 <button class="text-gray-700 focus:outline-none" id="menu-btn">
@@ -28,9 +28,9 @@
 
         <!-- Navigation Links -->
         <div class="hidden md:flex md:flex-grow justify-center space-y-4 md:space-y-0 md:space-x-8 mt-4 md:mt-0" id="menu">
-            <a href="#top" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block font-bold">HOME</a>
-            <a href="#about-us" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block font-bold">ABOUT US</a>
-            <a href="#contacts" class="text-red-600 hover:text-gray-800 uppercase block md:inline-block font-bold">CONTACT US</a>
+            <a href="#top" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">HOME</a>
+            <a href="#about-us" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">ABOUT US</a>
+            <a href="#contacts" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">CONTACT US</a>
 
             <!-- Mobile Login and Get Started Buttons -->
             <div class="block md:hidden space-y-4">
@@ -48,8 +48,8 @@
             @if (Route::has('login') && Auth::check())
                 <a href="{{ url('/home') }}" class="text-red-600  hover:text-gray-800 ">Dashboard</a>
             @elseif (Route::has('login') && !Auth::check())
-                <a href="{{ url('/login') }}" class="text-red-600 border-2 border-red-700 rounded-lg py-2 px-4 hover:text-blue-800">Login</a>
-                <a href="{{ url('/register') }}" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">Get Started</a>
+                <a href="{{ url('/login') }}" class="font-semibold bg-red-500 hover:bg-sky-600 text-white py-2 px-4 rounded-md">Login</a>
+                <a href="{{ url('/register') }}" class="font-semibold bg-red-500 hover:bg-sky-600 text-white py-2 px-4 rounded-md">Get Started</a>
             @endif
         </div>
     </nav>
