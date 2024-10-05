@@ -12,7 +12,7 @@
 </head>
 <body class="bg-white font-sans antialiased">
     <!-- Navbar -->
-    <nav class="p-4 bg-white shadow md:flex md:justify-between md:items-center border-b-2">
+    <nav class="p-4 bg-white shadow md:flex md:justify-between md:items-center border-b-2 border-orange-100">
         <!-- Logo Section -->
         <div class="flex justify-between items-center">
             <a href="{{ url('/') }}" class="hover:text-red-800 text-orange-600 text-3xl font-bold">place.it</a>
@@ -56,13 +56,13 @@
 
     <!-- Hero Section -->
     <section class="relative bg-white py-16 px-6 lg:px-8">
-        <div class="container mx-auto flex flex-col-reverse lg:flex-row items-center">
+        <div class="container mx-auto flex flex-col-reverse lg:flex-row items-center -mt-9">
             <!-- Left Content -->
             <div class="lg:w-1/2 text-center lg:text-left mt-8 lg:mt-0">
                 <h1 class="text-4xl md:text-6xl font-bold text-orange-600 leading-tight mb-4">PlaceIt</h1>
                 <h2 class="text-3xl md:text-4xl font-bold text-red-600 mb-4">Monetize your empty spaces!</h2>
                 <p class="text-gray-600 text-base md:text-lg mb-6">Transforming spaces, maximizing potential. PlaceIt — where opportunities meet visibility.</p>
-                <a href="{{ url('/learn-more') }}" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-md text-lg">Learn More</a>
+                <a href="{{ url('/register') }}" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-md text-lg">Learn More</a>
             </div>
 
             <!-- Right Image -->
@@ -128,7 +128,7 @@
                     <a href="https://www.facebook.com/yani.mcphee"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.instagram.com/yani.mcphee/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
                     <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="404 | Not Found"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="https://www.linkedin.com/in/frances-diana-carsido-987286207/?originalSubdomain=ph"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
 
