@@ -30,7 +30,7 @@
     </nav>
 
     <!-- Main Content Section -->
-    <div class="container mx-auto flex flex-col lg:flex-row justify-center items-center h-screen space-y-8 lg:space-y-0 lg:space-x-12 px-4">
+    <div class="-mt-8 container mx-auto flex flex-col lg:flex-row justify-center items-center h-screen space-y-8 lg:space-y-0 lg:space-x-12 px-4">
         <!-- Left Image Section (hidden on mobile, visible on large screens) -->
         <div class="hidden lg:block lg:w-1/2">
             <img src="https://freemockup.net/wp-content/uploads/2021/01/Free-Vertical-Building-Billboard-Mockup-PSD.jpg" alt="Building" class="h-full w-full object-cover  shadow-lg">
