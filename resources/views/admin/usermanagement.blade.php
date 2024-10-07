@@ -55,12 +55,11 @@
                                         <td class="py-2 px-4 border-b">{{ $user->isVerified ? 'Yes' : 'No' }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->created_at->format('Y-m-d') }}</td>
                                         <td class="py-2 px-4 border-b">
-                                            <a href="#" class="text-blue-600 hover:text-blue-900">View</a>
-                                            <a href="#" class="ml-2 text-green-600 hover:text-green-900">Edit</a>
+                                            <a href="#" class="font-semibold border-2 rounded-lg bg-green-500 p-2 text-black hover:text-green-100">Edit</a>
                                             <form method="POST" action="#" class="inline-block ml-2">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                                <button type="submit" class="font-semibold border-2 bg-red-500 rounded-lg p-2 text-black hover:text-red-100">Deactivate</button>
                                             </form>
                                         </td>
                                     </tr>

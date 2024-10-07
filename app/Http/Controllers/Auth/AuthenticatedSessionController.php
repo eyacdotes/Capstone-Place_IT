@@ -35,6 +35,9 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('otp.verify')->with('status', 'Please check your email for the OTP.');
         }
 
+        // Set session flag for showing welcome modal
+        session(['show_welcome_modal' => true]);
+
         // If verified, proceed to the dashboard or intended route
         $request->session()->regenerate();
 

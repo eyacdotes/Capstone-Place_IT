@@ -33,7 +33,7 @@
                         </div>
 
                         <!-- Message Input -->
-                        <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                        <form action="{{ route('bnegotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
                             @csrf
                             <div class="flex items-center space-x-2 bg-gray-100 p-2 rounded-lg ">
                                 <!-- Hidden file input -->
@@ -71,7 +71,7 @@
                         @method('PUT')
                         <div>
                             <h4 class="text-lg font-semibold pl-2">Amount Offered</h4>
-                            <input type="text" name="offerAmount" class="pl-7 text-2xl bg-gray-100 rounded-md w-40 font-bold" value="₱{{ number_format($negotiation->offerAmount, 2) }}" step="0.01" required>
+                            <input name="offerAmount" class="pl-2 text-2xl bg-gray-100 rounded-md w-40 font-bold" value="{{ number_format($negotiation->offerAmount, 2) }}" step="0.01" required>
                         </div>
 
                         <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

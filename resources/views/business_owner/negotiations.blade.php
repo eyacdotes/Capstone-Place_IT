@@ -24,7 +24,7 @@
                             @forelse($negotiations as $negotiation)
                             <tr class="hover:bg-opacity-75 hover:border-orange-400 hover:shadow-lg cursor-pointer transition duration-200 ease-in-out"
                                 style="border: 1px solid transparent;" 
-                                onclick="window.location='{{ route('negotiation.show', ['negotiationID' => $negotiation->negotiationID]) }}'">
+                                onclick="window.location='{{ route('business.negotiation.show', ['negotiationID' => $negotiation->negotiationID]) }}'">
                                 <td class="px-6 py-4 bg-gray-100">{{ $negotiation->listing->title }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ $negotiation->receiver->firstName . ' ' . $negotiation->receiver->lastName }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ number_format($negotiation->offerAmount, 2) }}</td>

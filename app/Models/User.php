@@ -28,6 +28,7 @@ class User extends Authenticatable
         'role',
         'password',
         'isVerified',
+        'terms_accepted',
     ];
 
     /**
@@ -41,12 +42,45 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the value of the "remember me" token for the user.
+     *
+     * @return string|null
+     */
+
+    public function getRememberToken()
+    {
+        return $this->remember_token;
+    }
+
+    /**
+     * Set the value of the "remember me" token for the user.
+     *
+     * @param  string|null  $value
+     * @return void
+     */
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+
+    /**
+     * Get the name of the "remember me" token.
+     *
+     * @return string
+     */
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'isVerified' => 'boolean',
     ];
     public function reviews()
     {

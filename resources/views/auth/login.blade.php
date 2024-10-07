@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-nmkRI2k3l2GKtWo8ZxLpW2VfZHRlXYWnPbm2LFl9hAL5ZtntF7D1h6jcNcdEHOo5AC5f5E3i6fq4+Qkv3DdOdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js']) <!-- Ensure Tailwind is loaded -->
-    
 </head>
 <x-guest-layout>
     <!-- Session Status -->
@@ -20,7 +19,7 @@
         <!-- Email Address -->
         <div class="mb-4">
             <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
-            <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-red-500" :value="old('email')" required autofocus placeholder="Enter email..">
+            <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-red-500" value="{{ old('email') }}" required autofocus placeholder="Enter email..">
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -28,7 +27,6 @@
         <div class="mb-4 relative">
             <label for="password" class="block text-gray-700 font-bold mb-2">Password</label>
             <input type="password" id="password" name="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-red-500" required placeholder="Enter password..">
-            <!-- Show/Hide password link -->
             <span id="togglePassword" class="absolute right-3 top-10 text-gray-400 cursor-pointer select-none">Show</span>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -36,7 +34,7 @@
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember" {{ old('remember') ? 'checked' : '' }}>
                 <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
         </div>
@@ -69,4 +67,3 @@
         });
     </script>
 </x-guest-layout>
-

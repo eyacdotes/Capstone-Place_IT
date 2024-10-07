@@ -42,60 +42,79 @@ class NegotiationController extends Controller
         // Conditionally return the correct view based on the user's role
         if (Auth::user()->role === 'business_owner') {
             return view('business_owner.messagedetail', compact('negotiation'));
-        } else if (Auth::user()->role === 'space_owner') {
+        } elseif (Auth::user()->role === 'space_owner') {
             return view('space_owner.messagedetail', compact('negotiation'));
         }
+
+        abort(403, 'Unauthorized access');
     }
-    public function updateOfferAmount(Request $request, $id)
+
+    protected function showForBusinessOwner($negotiation)
     {
-    $request->validate([
-        'offerAmount' => 'required|numeric|min:0',
-    ]);
-
-    $negotiation = Negotiation::findOrFail($id);
-    $negotiation->offerAmount = $request->input('offerAmount');
-    $negotiation->save();
-
-    return redirect()->back()->with('success', 'Offer amount updated successfully.');
+        return view('business_owner.messagedetail', compact('negotiation'));
     }
+
+    protected function showForSpaceOwner($negotiation)
+    {
+        return view('space_owner.messagedetail', compact('negotiation'));
+    }
+    public function updateOfferAmount(Request $request, $negotiationID)
+    {
+        $request->validate([
+            'offerAmount' => 'required|numeric|min:0',
+        ]);
+
+        $negotiation = Negotiation::findOrFail($negotiationID);
+        $negotiation->offerAmount = $request->input('offerAmount');
+        $negotiation->save();
+
+        return redirect()->back()->with('success', 'Offer amount updated successfully.');
+    }
+    
 
     /**
      * Store a reply (message) for a negotiation.
      */
     public function reply(Request $request, $negotiationID)
     {
-    $request->validate([
-        'message' => 'nullable|string|max:1000',
-        'aImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the rules as needed
-    ]);
+        $request->validate([
+            'message' => 'nullable|string|max:1000',
+            'aImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the rules as needed
+        ]);
 
-    $negotiation = Negotiation::findOrFail($negotiationID);
+        $negotiation = Negotiation::findOrFail($negotiationID);
 
-    // Ensure only the sender (business owner) or receiver (space owner) can reply
-    if (Auth::id() != $negotiation->senderID && Auth::id() != $negotiation->receiverID) {
-        abort(403, 'Unauthorized');
-    }
+        // Ensure only the sender (business owner) or receiver (space owner) can reply
+        if (Auth::id() !== $negotiation->senderID && Auth::id() !== $negotiation->receiverID) {
+            abort(403, 'Unauthorized');
+        }
 
-    // Handle the image upload
-    $imageName = null;
-    if ($request->hasFile('aImage')) {
-        $image = $request->file('aImage');
-        $imageName = $image->getClientOriginalName(); // Get the original name of the uploaded file
-        $image->storeAs('negotiation_images', $imageName, 'public'); // Store the file with its original name
-    }
+        // Handle the image upload
+        $imageName = null;
+        if ($request->hasFile('aImage')) {
+            $image = $request->file('aImage');
+            $imageName = $image->getClientOriginalName(); // Get the original name of the uploaded file
+            $image->storeAs('negotiation_images', $imageName, 'public'); // Store the file with its original name
+        }
 
-    // Prepare the reply data
-    $replyData = [
-        'negotiationID' => $negotiationID,
-        'senderID' => Auth::id(),
-        'message' => $imageName ?? $request->input('message'), // Save the image name or the message text
-    ];
+        // Prepare the reply data
+        $replyData = [
+            'negotiationID' => $negotiationID,
+            'senderID' => Auth::id(),
+            'message' => $imageName ?? $request->input('message'), // Save the image name or the message text
+        ];
 
-    // Create a reply
-    Reply::create($replyData);
+        // Create a reply
+        Reply::create($replyData);
 
-    // Conditionally redirect based on the user's role
-    return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID]);
+        // Conditionally redirect based on the user's role
+        if (Auth::user()->role === 'business_owner') {
+            return redirect()->route('business.negotiation.show', ['negotiationID' => $negotiationID]);
+        } elseif (Auth::user()->role === 'space_owner') {
+            return redirect()->route('space.negotiation.show', ['negotiationID' => $negotiationID]);
+        } else {
+            abort(403, 'Unauthorized'); // If role is not authorized
+        }
     }
 
     /**
@@ -154,29 +173,34 @@ class NegotiationController extends Controller
 
     public function updateStatus(Request $request, $negotiationID)
     {
-    // Validate the status field
-    $request->validate([
-        'status' => 'required|in:Pending,Approved,Disapproved',
-    ]);
+        // Validate the status field
+        $request->validate([
+            'status' => 'required|in:Pending,Approved,Disapproved',
+        ]);
 
-    // Find the negotiation by ID
-    $negotiation = Negotiation::findOrFail($negotiationID);
+        // Find the negotiation by ID
+        $negotiation = Negotiation::findOrFail($negotiationID);
 
-    // Ensure the current user is either the receiver (space owner) or the sender (business owner)
-    if (Auth::id() != $negotiation->receiverID && !Auth::user()->hasRole('business_owner')) {
-        abort(403, 'Unauthorized');
-    }
+        // Ensure the current user is either the receiver (space owner) or the sender (business owner)
+        if (Auth::id() != $negotiation->receiverID && !Auth::user()->hasRole('business_owner')) {
+            abort(403, 'Unauthorized');
+        }
 
-    // Update the status
-    $negotiation->negoStatus = $request->input('status');
-    $negotiation->save();
+        // Update the status
+        $negotiation->negoStatus = $request->input('status');
+        $negotiation->save();
 
-    // Notify the Business Owner
-    $this->notifyBusinessOwner($negotiation, $request->input('status'));
+        // Notify the Business Owner
+        $this->notifyBusinessOwner($negotiation, $request->input('status'));
 
-    // Redirect back with a success message
-    return redirect()->route('negotiation.show', ['negotiationID' => $negotiationID])
-                    ->with('success', 'Negotiation status updated successfully.');
+        // Redirect back with a success message
+        if (Auth::user()->role === 'business_owner') {
+            return redirect()->route('business.negotiation.show', ['negotiationID' => $negotiationID]);
+        } elseif (Auth::user()->role === 'space_owner') {
+            return redirect()->route('space.negotiation.show', ['negotiationID' => $negotiationID]);
+        } else {
+            abort(403, 'Unauthorized'); // If role is not authorized
+        }
     }
 
     public function rentAgree(Request $request, $negotiationID)

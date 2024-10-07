@@ -12,7 +12,7 @@
 </head>
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600 font-medium">
-        {{ __('Thanks for signing up! Before getting started, could you verify using the OTP (One-Time Passcode) we just emailed to you?') }}
+        {{ __('Before you get started, please verify your email address. Click the "Send OTP" button below to receive your One-Time Passcode (OTP) via email. Once you\'ve received the OTP, enter it to complete the verification process.') }}
     </div>
 
     @if(session('status'))
@@ -25,7 +25,7 @@
 
     <form method="POST" action="{{ route('otp.verify.submit') }}">
         @csrf
-            <label for="otp">Enter the OTP:</label>
+            <label for="otp" class="font-sans">Enter the OTP:</label>
             <input type="text" name="otp" id="otp" required>
             <button class="border-2 p-2 rounded-lg bg-green-400 font-semibold" type="submit">Verify OTP</button>
     </form>

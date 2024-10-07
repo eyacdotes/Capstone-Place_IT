@@ -28,7 +28,7 @@ class EmailVerifyController extends Controller
         $user->save();
 
         // Send email with OTP
-        Mail::to($user->email)->send(new EmailVerify($otp));
+        Mail::to($user->email)->send(new EmailVerify());
 
         return back()->with('status', 'OTP has been sent to your email address.');
     }

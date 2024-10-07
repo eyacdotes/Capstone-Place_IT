@@ -39,5 +39,10 @@
             {{ $slot }}
         </main>
     </div>
+
+    <!-- Include the welcome modal -->
+    @if(auth()->check() && !auth()->user()->terms_accepted)
+        @include('welcome-modal')
+    @endif
 </body>
 </html>
