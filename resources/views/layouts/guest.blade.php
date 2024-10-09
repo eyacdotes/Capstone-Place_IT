@@ -14,7 +14,7 @@
     <!-- Navbar -->
     <nav class="p-4 bg-white shadow flex justify-between items-center">
         <!-- Logo Section with "Get Started" next to it on mobile -->
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-40">
             <a href="{{ url('/') }}" class="text-orange-600 text-3xl font-bold">place.it</a>
 
             <!-- Get Started Button next to the logo on mobile, hidden on larger screens -->
