@@ -72,7 +72,8 @@ class BusinessOwnerController extends Controller
             'amount' => $negotiation->offerAmount,// Assuming amount is already saved elsewhere
             'date' => now(),
             'proof' => $proofPath, // Save the proof path
-            'details' => $request->details ?? ''
+            'details' => $request->details ?? '',
+            'status' => 'Pending',
         ]);
 
         // Redirect back with a success message

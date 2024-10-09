@@ -91,6 +91,11 @@ Route::get('/admin/payment', [AdminController::class, 'payment'])
     ->name('admin.payment')
     ->middleware(['auth', 'verified', 'role:admin']);
 
+Route::put('/admin/payments/{paymentID}', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');
+Route::post('/admin/payments/transfer', [AdminController::class, 'transfer'])->name('admin.payments.transfer');
+
+
+
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/admin/notifications/create', [NotificationController::class, 'create'])->name('admin.notifications.create');
     Route::post('/admin/notifications', [NotificationController::class, 'store'])->name('admin.notifications.store');
@@ -129,9 +134,10 @@ Route::middleware(['auth', 'verified', 'role:space_owner'])->group(function () {
     Route::get('/space/reviews', [SpaceOwnerController::class, 'reviews'])->name('space.reviews');
     Route::post('/space/reviews.submit', [SpaceOwnerController::class, 'submiit'])->name('space.submit');
     Route::get('/space/payment', [NegotiationController::class, 'showPaymentDetails'])->name('space.business_details');
+    Route::put('/space/payment/{payment}/approve', [NegotiationController::class, 'approve'])->name('payments.approve');
     Route::post('/space/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name(name: 'negotiation.reply');
-    Route::post('space/negotiations/{negotiationID}/status', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');
-    Route::post('space/negotiations/{negotiationID}/billingStore', [NegotiationController::class, 'storeDB'])->name('billing.store');
+    Route::post('/space/negotiations/{negotiationID}/status', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');
+    Route::post('/space/negotiations/{negotiationID}/billingStore', [NegotiationController::class, 'storeDB'])->name('billing.store');
 });
 
 Route::post('/terms/accept', [UserController::class, 'acceptTerms'])->name('terms.accept');

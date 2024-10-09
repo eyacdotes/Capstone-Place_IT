@@ -18,9 +18,9 @@ class Listing extends Model
     const CREATED_AT = 'dateCreated';
     const created_at = 'created_at';
     const UPDATED_AT = 'updated_at';
-    public function owner() 
+    public function spaceOwner()
     {
-        return $this->belongsTo(User::class, 'ownerID'); // Adjust the foreign key if necessary
+        return $this->belongsTo(User::class, 'ownerID', 'userID'); // Adjust the foreign key names if necessary
     }
     protected $fillable = [
         'title',
@@ -52,5 +52,6 @@ class Listing extends Model
             'rentalAgreementID' // Local key on RentalAgreement table
         );
     }
+    
     
 }

@@ -36,4 +36,7 @@ class Negotiation extends Model
     public function bill() {
         return $this->hasOne(BillingDetail::class, 'rental_agreement_id', 'rentalAgreementID');
     }
+    public function payment() {
+        return $this->hasOne(Payment::class, 'rentalAgreementID', 'rentalAgreementID'); // Ensure this matches your foreign keys
+    }
 }

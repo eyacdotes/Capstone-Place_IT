@@ -205,49 +205,59 @@ class NegotiationController extends Controller
 
     public function rentAgree(Request $request, $negotiationID)
     {
+        // Validate the input fields
+        $request->validate([
+            'ownerID' => 'required|exists:users,userID',
+            'renterID' => 'required|exists:users,userID',
+            'listingID' => 'required|exists:listing,listingID',
+            'rentalTerm' => 'required|in:weekly,monthly,yearly',
+            'offerAmount' => 'required|numeric',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate', // Ensure end date is after start date
+        ]);
 
-    // Validate the input fields
-    $request->validate([
-        'ownerID' => 'required|exists:users,userID',
-        'renterID' => 'required|exists:users,userID',
-        'listingID' => 'required|exists:listing,listingID',
-        'rentalTerm' => 'required|in:weekly,monthly,yearly',
-        'offerAmount' => 'required|numeric',
-        'startDate' => 'required|date',
-        'endDate' => 'required|date|after_or_equal:startDate', // Ensure end date is after start date
-    ]);
+        // Create a new rental agreement and insert into the database
+        RentalAgreement::create([
+            'ownerID' => $request->input('ownerID'),
+            'renterID' => $request->input('renterID'),
+            'listingID' => $request->input('listingID'),
+            'rentalTerm' => $request->input('rentalTerm'),
+            'dateCreated' => now(),
+            'offerAmount' => $request->input('offerAmount'),
+            'dateStart' => $request->input('startDate'),
+            'dateEnd' => $request->input('endDate'),
+            'status' => 'Agree', // Set status to 'Agree' by default
+        ]);
 
-    // Create a new rental agreement and insert into the database
-    RentalAgreement::create([
-        'ownerID' => $request->input('ownerID'),
-        'renterID' => $request->input('renterID'),
-        'listingID' => $request->input('listingID'),
-        'rentalTerm' => $request->input('rentalTerm'),
-        'dateCreated' => now(),
-        'offerAmount' => $request->input('offerAmount'),
-        'dateStart' => $request->input('startDate'),
-        'dateEnd' => $request->input('endDate'),
-        'status' => 'Agree', // Set status to 'Agree' by default
-    ]);
-
-    // Redirect to the business owner dashboard after successful insert
-    return redirect()->route('business.dashboard')->with('success', 'Rental agreement created successfully.');
+        // Redirect to the business owner dashboard after successful insert
+        return redirect()->route('business.dashboard')->with('success', 'Rental agreement created successfully.');
     }
     public function showPaymentDetails(Request $request)
     {
-    // Fetch negotiations where the authenticated user is involved (either as sender or receiver)
-    $negotiations = Negotiation::where('senderID', Auth::id())
-                                ->orWhere('receiverID', Auth::id())
-                                ->with('listing', 'sender', 'receiver','bill')
-                                ->get();
-    
-    // Assuming the sender is the Business Owner
-    $businessOwner = $negotiations->first()->sender; // You can adjust based on your role logic
-    $listing = $negotiations->first()->listing;
-    $billingDetails = BillingDetail::where('user_id', Auth::id())->first();
+        // Fetch negotiations where the authenticated user is involved (either as sender or receiver)
+        $negotiations = Negotiation::where('senderID', Auth::id())
+        ->orWhere('receiverID', Auth::id())
+        ->with(['listing', 'sender', 'receiver', 'bill','payment']) 
+        ->get();
 
-    return view('space_owner.payment_details', compact('negotiations', 'businessOwner','listing','billingDetails'));
+        $payments = Payment::with(['renter', 'listing', 'rentalAgreement', 'spaceOwner'])->get();
+
+        // Combine both collections in an array
+        $data = [
+            'negotiations' => $negotiations,
+            'payments' => $payments,
+        ];
+
+
+        // Group negotiations by senderID (assuming the sender is the Business Owner)
+        $negotiationsByOwner = $negotiations->groupBy('senderID');
+
+        // Fetch billing details for the authenticated user
+        $billingDetails = BillingDetail::where('user_id', Auth::id())->first();
+
+        return view('space_owner.payment_details', compact('negotiations', 'billingDetails', 'negotiationsByOwner','payments','data'));
     }
+
     protected function notifyBusinessOwner($negotiation, $newStatus)
     {
         // Find the business owner (sender of the negotiation)
@@ -262,5 +272,19 @@ class NegotiationController extends Controller
                 'type' => 'negotiation_status_update',  // Define the type of notification
             ]);
         }
+    }
+
+    public function approve($paymentID)
+    {
+        $payment = Payment::findOrFail($paymentID);
+        // Check if the payment status is 'Transferred' before approving
+        if ($payment->status == 'transferred') {
+            $payment->status = 'received';
+            $payment->save();
+
+            return back()->with('success', 'Payment approved successfully.');
+        }
+
+        return back()->with('error', 'Unable to approve payment.');
     }
 }

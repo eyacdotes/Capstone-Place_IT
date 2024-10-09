@@ -6,6 +6,7 @@ use App\Models\Listing;
 use App\Models\ListingImages;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -111,8 +112,43 @@ class AdminController extends Controller
     }
 
     public function payment() {
+        // Fetch all payments with related details
+        $payments = Payment::with(['renter', 'listing', 'rentalAgreement', 'spaceOwner','sender'])
+            ->get();
+    
         $userCount = User::where('role', '!=', 'admin')->count();
-        return view('admin.payment', compact('userCount'));
+    
+        return view('admin.payment', compact('userCount', 'payments'));
+    }
+
+    public function updatePaymentStatus(Request $request, $paymentID)
+    {
+        // Find the payment by ID
+        $payment = Payment::find($paymentID);
+        
+        // Update the status based on form input
+        $payment->status = $request->input('status');
+        
+        // Save the updated payment
+        $payment->save();
+
+        return redirect()->back()->with('success', 'Payment status updated successfully!');
+    }
+    public function transfer(Request $request)
+    {
+        // Find the payment by ID
+        $payment = Payment::find($request->paymentID);
+
+        // Handle the proof of payment file upload
+        if ($request->hasFile('proof')) {
+            $filePath = $request->file('proof')->store('payments', 'public');
+            $payment->admin_proof = $filePath; // Save proof uploaded by admin
+        }
+
+        $payment->status = 'transferred';  // Update status to transferred
+        $payment->save();
+
+        return redirect()->back()->with('success', 'Payment transferred successfully!');
     }
 
     protected function notifySpaceOwner(Listing $listing)
