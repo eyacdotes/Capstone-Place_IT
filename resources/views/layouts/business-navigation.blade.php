@@ -26,7 +26,6 @@
                     </x-nav-link>
                 </div>
             </div>
-
             <!-- Notification Icon and Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <!-- Notification Bell Icon -->
