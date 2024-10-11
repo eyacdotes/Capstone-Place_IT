@@ -4,16 +4,16 @@
                 {{ __('Feedback') }}
             </h2>
             <style>
-        .rate-emoji {
-            transition: background-color 0.3s;
-            padding: 10px; /* Adjust as needed */
-            border-radius: 20%; /* Optional: For rounded appearance */
-        }
-        .selected {
-            background-color: orange;
-            color: white; /* Ensure emoji remains visible */
-        }
-    </style>
+            .rate-emoji {
+                transition: background-color 0.3s;
+                padding: 10px; /* Adjust as needed */
+                border-radius: 20%; /* Optional: For rounded appearance */
+            }
+            .selected {
+                background-color: orange;
+                color: white; /* Ensure emoji remains visible */
+            }
+            </style>
         </x-slot>
 
         <div class="w-full py-6 flex justify-center">

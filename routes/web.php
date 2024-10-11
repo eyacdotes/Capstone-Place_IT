@@ -132,7 +132,7 @@ Route::middleware(['auth', 'verified', 'role:space_owner'])->group(function () {
     Route::get('/space/negotiations', [NegotiationController::class, 'index'])->name('space.negotiations');
     Route::get('/space/negotiations/{negotiationID}', [NegotiationController::class, 'show'])->name('space.negotiation.show');
     Route::get('/space/reviews', [SpaceOwnerController::class, 'reviews'])->name('space.reviews');
-    Route::post('/space/reviews.submit', [SpaceOwnerController::class, 'submiit'])->name('space.submit');
+    Route::post('/space/reviews.submit', [SpaceOwnerController::class, 'submit'])->name('space.submit');
     Route::get('/space/payment', [NegotiationController::class, 'showPaymentDetails'])->name('space.business_details');
     Route::put('/space/payment/{payment}/approve', [NegotiationController::class, 'approve'])->name('payments.approve');
     Route::post('/space/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name(name: 'negotiation.reply');

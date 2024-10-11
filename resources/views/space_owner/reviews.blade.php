@@ -4,50 +4,101 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Feedback') }}
         </h2>
+        <style>
+        .rate-emoji {
+            transition: background-color 0.3s;
+            padding: 10px; /* Adjust as needed */
+            border-radius: 20%; /* Optional: For rounded appearance */
+        }
+        .selected {
+            background-color: orange;
+            color: white; /* Ensure emoji remains visible */
+        }
+    </style>
     </x-slot>
 
     <div class="w-full py-6 flex justify-center">
-        <div class="max-w-lg mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg border border-gray-300">
-                
-                <!-- Feedback Title -->
-                <div class="text-center mb-4">
-                    <h3 class="text-lg font-bold">Submit Feedback</h3>
-                </div>
-
-                <!-- Feedback Experience Section -->
-                <div class="text-center">
-                    <h4 class="text-lg font-semibold">How was your experience?</h4>
-                    <p class="text-sm text-gray-600">How do you feel about the system?</p>
-                    <div class="flex justify-center mt-4 space-x-4">
-                        <img src="{{ asset('storage/images/smile.png') }}" alt="Happy" class="w-10">
-                        <img src="{{ asset('storage/images/neutral.png') }}" alt="Neutral" class="w-10">
-                        <img src="{{ asset('storage//images/sad.png') }}" alt="Sad" class="w-10">
-                        <img src="{{ asset('storage/images/angry.png') }}" alt="Angry" class="w-10">
-                    </div>
-                </div>
-
-                <!-- Feedback Form -->
-                <form action="#" method="POST" class="mt-6">
-                    @csrf
+            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8"> <!-- Increased max-width to fit all items -->
+                <div class="bg-white p-6 shadow-sm sm:rounded-lg border border-gray-300">
 
                     <!-- Feedback Title -->
                     <div class="text-center mb-4">
-                        <h4 class="text-lg font-bold">Leave Feedback for the System</h4>
-                        <p class="text-sm text-gray-600">Summarize your experience</p>
+                        <h3 class="text-lg font-bold">Submit Feedback</h3>
                     </div>
 
-                    <!-- Feedback Textarea -->
-                    <div class="mb-4">
-                        <textarea name="feedback" rows="4" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Leave your rant here..."></textarea>
-                    </div>
+                    <!-- Feedback Experience Section -->
+                    <form action="{{ route('space.submit') }}" method="POST" class="mt-6">
+                        @csrf
+                        <div class="text-center">
+                            <h4 class="text-lg font-semibold">How was your experience to our system?</h4>
+                            <p class="text-sm text-gray-700">How do you feel using our website?</p>
+                            <div class="flex justify-between mt-4 space-x-6"> <!-- Adjusted spacing -->
+                                <label class="flex flex-col items-center">
+                                    <input type="radio" name="rate" value="1" class="hidden rate-input" required>
+                                    <span class="text-4xl cursor-pointer rate-emoji" data-value="1">😡</span>
+                                    <span class="text-yellow-500 text-sm mt-2">⭐</span>
+                                </label>
+                                <label class="flex flex-col items-center">
+                                    <input type="radio" name="rate" value="2" class="hidden rate-input" required>
+                                    <span class="text-4xl cursor-pointer rate-emoji" data-value="2">😞</span>
+                                    <span class="text-yellow-500 text-sm mt-2">⭐⭐</span>
+                                </label>
+                                <label class="flex flex-col items-center">
+                                    <input type="radio" name="rate" value="3" class="hidden rate-input" required>
+                                    <span class="text-4xl cursor-pointer rate-emoji" data-value="3">😐</span>
+                                    <span class="text-yellow-500 text-sm mt-2">⭐⭐⭐</span>
+                                </label>
+                                <label class="flex flex-col items-center">
+                                    <input type="radio" name="rate" value="4" class="hidden rate-input" required>
+                                    <span class="text-4xl cursor-pointer rate-emoji" data-value="4">😀</span>
+                                    <span class="text-yellow-500 text-sm mt-2">⭐⭐⭐⭐</span>
+                                </label>
+                                <label class="flex flex-col items-center">
+                                    <input type="radio" name="rate" value="5" class="hidden rate-input" required>
+                                    <span class="text-4xl cursor-pointer rate-emoji" data-value="5">😊</span>
+                                    <span class="text-yellow-500 text-sm mt-2">⭐⭐⭐⭐⭐</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center mb-4 mt-4">
+                            <h4 class="text-lg font-bold">Leave Feedback for the PlaceIt</h4>
+                            <p class="text-sm text-gray-700">Summarize your experience</p>
+                        </div>
 
-                    <!-- Submit Button -->
-                    <div class="text-center">
-                        <button type="submit" class="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600">Submit</button>
-                    </div>
-                </form>
+                        <!-- Feedback Form -->
+                        <input type="hidden" name="renterID" value="{{ auth()->id() }}">
+                        
+
+                        <!-- Feedback Textarea -->
+                        <div class="mb-4">
+                            <textarea name="comment" rows="4" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Leave your feedback here..." required></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+        <!-- JavaScript to handle emoji click and update radio button -->
+        <script>
+            document.querySelectorAll('.rate-emoji').forEach(emoji => {
+                emoji.addEventListener('click', function() {
+                    // Remove 'selected' class from all emojis
+                    document.querySelectorAll('.rate-emoji').forEach(e => e.classList.remove('selected'));
+                    
+                    // Add 'selected' class to the clicked emoji
+                    this.classList.add('selected');
+
+                    // Find the corresponding radio button and select it
+                    const value = this.getAttribute('data-value');
+                    const radioButton = document.querySelector(`input[name="rate"][value="${value}"]`);
+                    if (radioButton) {
+                        radioButton.checked = true;
+                    }
+                });
+            });
+        </script>
 </x-app-layout>

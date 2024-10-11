@@ -43,7 +43,7 @@ class BusinessOwnerController extends Controller
     public function showByLocation($location)
     {
         // Fetch all listings for the specific location
-        $listings = Listing::with('owner')
+        $listings = Listing::with('spaceOwner')
                           ->where('location', 'LIKE', '%' . $location . '%')
                           ->where('status', '!=', 'Deactivated')
                           ->get();
@@ -83,7 +83,7 @@ class BusinessOwnerController extends Controller
 
     public function detail($listingID)
     {
-    $listing = Listing::with(['owner', 'rentalAgreements.reviews'])->findOrFail($listingID);
+    $listing = Listing::with(['spaceOwner', 'rentalAgreements.reviews'])->findOrFail($listingID);
     $ratings = $listing->rentalAgreements->flatMap->reviews; // Get all reviews related to the listing
     $averageRating = $ratings->avg('rate');
     return view('place.detail', compact('listing','averageRating'));
@@ -123,6 +123,8 @@ class BusinessOwnerController extends Controller
             return view('business_owner.dashboard', compact('rentalAgreements', 'selectedAgreement'));
         }
 
+        $feedbacks = Reviews::where('renterID', auth()->id())->get()->keyBy('rentalAgreementID');
+
         // Pass the rental agreements to the view
         return view('business_owner.view_feedback', compact('rentalAgreements'));
     }
@@ -146,6 +148,15 @@ class BusinessOwnerController extends Controller
             'rate' => 'required|integer|between:1,5',
             'comment' => 'nullable|string',
         ]);
+
+        // Check if feedback already exists
+        $existingFeedback = Reviews::where('renterID', $validated['renterID'])
+                                    ->where('rentalAgreementID', $validated['rentalAgreementID'])
+                                    ->first();
+
+        if ($existingFeedback) {
+            return redirect()->back()->withErrors(['feedback' => 'You have already submitted feedback for this rental agreement.']);
+        }
 
         // Create a new review
         Reviews::create($validated);

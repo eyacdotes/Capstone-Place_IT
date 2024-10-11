@@ -30,9 +30,9 @@
                             @forelse ($rentalAgreements as $agreement)
                                 <tr>
                                     <td class="border px-4 py-2">{{ $agreement->listing->title }}</td>
-                                    <td class="border px-4 py-2">{{ $agreement->owner->firstName }}</td>
+                                    <td class="border px-4 py-2">{{ ucwords($agreement->owner->firstName) }} {{ ucwords($agreement->owner->lastName) }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->offerAmount }}</td>
-                                    <td class="border px-4 py-2">{{ $agreement->rentalTerm }}</td>
+                                    <td class="border px-4 py-2">{{ ucwords($agreement->rentalTerm) }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->dateStart }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->dateEnd }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->status }}</td>
@@ -52,6 +52,12 @@
 
                     @if(isset($selectedAgreement))
                         <h3 class="text-lg font-bold mt-6 mb-4">Submit Feedback for Rental Agreement ID: {{ $selectedAgreement->rentalAgreementID }}</h3>
+
+                        @if($errors->has('feedback'))
+                            <div class="bg-red-200 text-red-600 p-4 rounded mb-4">
+                                {{ $errors->first('feedback') }}
+                            </div>
+                        @endif
 
                         <form action="{{ route('business.submit') }}" method="POST">
                             @csrf
@@ -77,6 +83,7 @@
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit Feedback</button>
                         </form>
                     @endif
+
 
                 </div>
             </div>

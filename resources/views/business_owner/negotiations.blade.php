@@ -26,7 +26,7 @@
                                 style="border: 1px solid transparent;" 
                                 onclick="window.location='{{ route('business.negotiation.show', ['negotiationID' => $negotiation->negotiationID]) }}'">
                                 <td class="px-6 py-4 bg-gray-100">{{ $negotiation->listing->title }}</td>
-                                <td class="px-6 py-4 bg-gray-100">{{ $negotiation->receiver->firstName . ' ' . $negotiation->receiver->lastName }}</td>
+                                <td class="px-6 py-4 bg-gray-100">{{ ucwords($negotiation->receiver->firstName) . ' ' . ucwords($negotiation->receiver->lastName) }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ number_format($negotiation->offerAmount, 2) }}</td>
                                 <td class="px-6 py-4 bg-gray-100">
                                 <span class="

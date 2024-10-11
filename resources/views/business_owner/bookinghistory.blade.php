@@ -26,8 +26,8 @@
                             @forelse($bhistory as $history)
                             <tr class="hover:bg-opacity-75">
                                 <td class="px-6 py-4 bg-gray-100">{{ $history->rentalAgreement->space->title ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 bg-gray-100">{{ $history->rentalAgreement->owner->firstName ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 bg-gray-100">{{ $history->rentalAgreement->rentalTerm ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 bg-gray-100">{{ ucwords($history->rentalAgreement->owner->firstName).' '.ucwords($history->rentalAgreement->owner->lastName)?? 'N/A' }}</td>
+                                <td class="px-6 py-4 bg-gray-100">{{ ucwords($history->rentalAgreement->rentalTerm) ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ number_format($history->rentalAgreement->offerAmount, 2) }}</td>
                                 <td class="px-6 py-4 bg-gray-100">{{ $history->date }}</td>
                             </tr>

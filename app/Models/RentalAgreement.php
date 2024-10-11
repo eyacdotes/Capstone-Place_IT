@@ -46,4 +46,8 @@ class RentalAgreement extends Model
     public function billingDetails() {
         return $this->hasMany(BillingDetail::class, 'rental_agreement_id', 'rentalAgreementID');
     }
+    public function negotiation()
+    {
+        return $this->belongsTo(Negotiation::class, 'negotiationID');
+    }
 }
