@@ -159,7 +159,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <!-- Address -->
             <div class="flex flex-col items-center">
-            <img src="{{ asset('storage/images/location.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 30px;" />
+            <img src="{{ asset('storage/images/location.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 35px;" />
                 <h3 class="text-xl font-bold mb-2">ADDRESS</h3>
                 <p class="text-gray-600 font-medium">Alaska Duljo Cebu City</p>
             </div>
