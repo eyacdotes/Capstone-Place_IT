@@ -9,7 +9,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-6 sm:-my-px sm:ml-12 sm:flex">
                     <x-nav-link :href="route('space.dashboard')"  class="ajax-link" :active="request()->routeIs('space.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
@@ -31,7 +31,7 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <div class="relative">
-                    <i class="fa-regular font-semibold fa-bell text-gray-500 hover:text-gray-700 cursor-pointer"></i>
+                    <i class="fa-regular font-semibold fa-bell text-xl text-gray-500 hover:text-orange-500 cursor-pointer"></i>
                     <!-- Red dot label (initially hidden) -->
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
                     <!-- Notification Dropdown (initially hidden) -->
@@ -43,7 +43,7 @@
                 </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-3 font-medium rounded-md text-gray-500 bg-white hover:text-orange-500 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->firstName }}</div>
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
