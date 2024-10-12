@@ -59,7 +59,7 @@
         <div class="container mx-auto flex flex-col-reverse lg:flex-row items-center -mt-9">
             <!-- Left Content -->
             <div class="lg:w-1/2 text-center lg:text-left mt-8 lg:mt-0">
-                <h1 class="text-4xl md:text-8xl font-bold text-orange-600 leading-tight mb-4">PlaceIt</h1>
+                <h1 class="text-4xl md:text-6xl font-bold text-orange-600 leading-tight mb-4">PlaceIt</h1>
                 <h2 class="text-3xl md:text-4xl font-bold text-red-600 mb-4">Monetize your empty spaces!</h2>
                 <p class="text-gray-600 text-base md:text-lg mb-6">Transforming spaces, maximizing potential. PlaceIt — where opportunities meet visibility.</p>
                 <a href="{{ url('/register') }}" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-md text-lg">Learn More</a>
@@ -159,21 +159,21 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <!-- Address -->
             <div class="flex flex-col items-center">
-            <img src="{{ asset('storage/images/location.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 30px;" />
+            <img src="{{ asset('storage/images/location.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
                 <h3 class="text-xl font-bold mb-2">ADDRESS</h3>
                 <p class="text-gray-600 font-medium">Alaska Duljo Cebu City</p>
             </div>
 
             <!-- Phone -->
             <div class="flex flex-col items-center font-bold">
-            <img src="{{ asset('storage/images/phone-call.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 30px;" />
+            <img src="{{ asset('storage/images/phone-call.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
                 <h3 class="text-xl font-bold mb-2">PHONE</h3>
                 <p class="text-gray-600 font-medium">+63 919 988 4880</p>
             </div>
 
             <!-- Email -->
             <div class="flex flex-col items-center">
-            <img src="{{ asset('storage/images/email.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 30px;" />
+            <img src="{{ asset('storage/images/email.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
                 <h3 class="text-xl font-bold mb-2">EMAIL</h3>
                 <p class="text-gray-600 font-medium">placeit13@gmail.com</p>
             </div>

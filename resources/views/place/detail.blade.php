@@ -122,7 +122,7 @@
             <form action="{{ route('negotiation.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="listingID" value="{{ $listing->listingID }}">
-                <input type="hidden" name="receiverID" value="{{ $listing->spaceOwner->userID }}">
+                <input type="hidden" name="receiverID" value="{{ $listing->owner->userID }}">
 
                 <!-- Message -->
                 <div class="mb-4">
