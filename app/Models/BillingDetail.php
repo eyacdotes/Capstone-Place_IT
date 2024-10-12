@@ -22,4 +22,8 @@ class BillingDetail extends Model
     {
         return $this->belongsTo(RentalAgreement::class, 'rental_agreement_id');
     }
+    public function negotiation()
+    {
+        return $this->belongsTo(Negotiation::class, 'negotiationID');
+    }
 }

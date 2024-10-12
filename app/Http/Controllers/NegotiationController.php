@@ -236,26 +236,23 @@ class NegotiationController extends Controller
     {
         // Fetch negotiations where the authenticated user is involved (either as sender or receiver)
         $negotiations = Negotiation::where('senderID', Auth::id())
-        ->orWhere('receiverID', Auth::id())
-        ->with(['listing', 'sender', 'receiver', 'bill','payment']) 
-        ->get();
+            ->orWhere('receiverID', Auth::id())
+            ->with(['listing', 'sender', 'receiver', 'payment']) 
+            ->get();
 
+        // Fetch all payments
         $payments = Payment::with(['renter', 'listing', 'rentalAgreement', 'spaceOwner'])->get();
 
-        // Combine both collections in an array
-        $data = [
-            'negotiations' => $negotiations,
-            'payments' => $payments,
-        ];
+        // Fetch all billing details for the authenticated user
+        $billingDetails = BillingDetail::where('user_id', Auth::id())
+            ->with('rentalAgreement.negotiation') // Eager load relationships
+            ->get();
 
-
-        // Group negotiations by senderID (assuming the sender is the Business Owner)
+        // Combine negotiations by senderID (assuming the sender is the Business Owner)
         $negotiationsByOwner = $negotiations->groupBy('senderID');
 
-        // Fetch billing details for the authenticated user
-        $billingDetails = BillingDetail::where('user_id', Auth::id())->first();
-
-        return view('space_owner.payment_details', compact('negotiations', 'billingDetails', 'negotiationsByOwner','payments','data'));
+        // Pass all necessary data to the view
+        return view('space_owner.payment_details', compact('negotiations', 'billingDetails', 'negotiationsByOwner', 'payments'));
     }
 
     protected function notifyBusinessOwner($negotiation, $newStatus)

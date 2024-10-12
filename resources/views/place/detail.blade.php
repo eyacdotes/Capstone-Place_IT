@@ -13,7 +13,7 @@
                     <!-- Title and Owner -->
                     <div class="flex justify-between">
                         <h3 class="text-2xl font-semibold mb-2">{{ $listing->title }}</h3>
-                        <p class="text-black-700"><strong>{{ $listing->spaceOwner->firstName . " " . $listing->spaceOwner->lastName }}</strong></p>
+                        <p class="text-black-700"><strong>{{ $listing->owner->firstName . " " . $listing->owner->lastName }}</strong></p>
                     </div>
 
                     <!-- Images with Modal -->

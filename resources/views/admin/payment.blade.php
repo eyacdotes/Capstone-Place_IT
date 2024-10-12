@@ -13,7 +13,7 @@
             <div class="p-6">
                 <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
                     <thead>
-                        <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                        <tr class="bg-orange-400 text-black uppercase text-sm leading-normal">
                             <th class="py-3 px-4 text-left">Payment ID</th>
                             <th class="py-3 px-4 text-left">Renter Name</th>
                             <th class="py-3 px-4 text-left">Listing Title</th>

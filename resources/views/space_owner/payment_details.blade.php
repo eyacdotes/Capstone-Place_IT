@@ -48,7 +48,11 @@
 
                     <!-- Billing Details Section -->
                     <h3 class="text-2xl font-bold mt-6 mb-4">Billing Details</h3>
-                    @if($billingDetails)
+                    @php
+                        // Get billing detail for the current negotiation
+                        $billingDetail = $billingDetails->firstWhere('rental_agreement_id', $negotiations->first()->negotiationID);
+                    @endphp
+                    @if($billingDetail)
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
@@ -58,12 +62,8 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Billing ID</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $billingDetails->billingDetailID }}</td>
-                            </tr>
-                            <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GCash Number</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $billingDetails->gcash_number }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $billingDetail->gcash_number }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -79,7 +79,7 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Amount</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Proof of Payment</th>
+                                    <th class="px-6 py-3 text-center text-xs font-bold uppercase tracking-wider">Proof of Payment</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
@@ -96,9 +96,9 @@
                                             @endphp
                                             {{ $payment ? ucwords($payment->status) : 'No Payment' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                         @if($payment && $payment->admin_proof)
-                                            <div class="mt-4">
+                                            <div class="mt-4 pl-24">
                                                 <a href="{{ asset('storage/' . $payment->admin_proof) }}" target="_blank">
                                                     <img src="{{ asset('storage/' . $payment->admin_proof) }}" alt="Admin Proof of Payment" class="w-32 h-32 object-cover rounded" />
                                                 </a>

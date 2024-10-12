@@ -48,8 +48,8 @@
                                 @foreach($users as $user)
                                     <tr>
                                         <td class="py-2 px-4 border-b">{{ $user->userID }}</td>
-                                        <td class="py-2 px-4 border-b">{{ $user->firstName }}</td>
-                                        <td class="py-2 px-4 border-b">{{ $user->lastName }}</td>
+                                        <td class="py-2 px-4 border-b">{{ ucwords($user->firstName) }}</td>
+                                        <td class="py-2 px-4 border-b">{{ ucwords($user->lastName) }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->role }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->isVerified ? 'Yes' : 'No' }}</td>

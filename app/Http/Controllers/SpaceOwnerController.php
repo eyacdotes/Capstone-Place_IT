@@ -42,13 +42,13 @@ class SpaceOwnerController extends Controller
         return view('space_owner.reviews', compact('feedbacks'));
     }
 
-public function edit($listingID)
-{
-    $listing = Listing::findOrFail($listingID);
-    return view('space_owner.edit', compact('listing'));
-}
+    public function edit($listingID)
+    {
+        $listing = Listing::findOrFail($listingID);
+        return view('space_owner.edit', compact('listing'));
+    }
 
-public function destroy($listingID)
+    public function destroy($listingID)
     {
         // Find the listing by its ID
         $listing = Listing::findOrFail($listingID); // Throws a 404 if not found
@@ -61,52 +61,53 @@ public function destroy($listingID)
         return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
     }
 
-public function restore($listingID) {
-    $listing = Listing::findOrFail($listingID); // Throws a 404 if not found
+    public function restore($listingID) 
+    {
+        $listing = Listing::findOrFail($listingID); // Throws a 404 if not found
 
-        // Update status to 'Vacant' before soft delete
-        $listing->status = 'Vacant';
-        $listing->save();
-        return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
-}
-
-public function update(Request $request, $listingID)
-{
-    $listing = Listing::findOrFail($listingID); // Get the listing by ID
-
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'location' => 'required|string|max:255',
-        'description' => 'required|string',
-    ]);
-
-    // Update the listing with the new data
-    $listing->update([
-        'title' => $request->title,
-        'location' => $request->location,
-        'description' => $request->description,
-    ]);
-
-    return redirect()->route('space.dashboard')->with('success', 'Listing updated successfully.');
-}
-public function deleteImage($listingImageID)
-{
-    // Find the image record by ID
-    $image = ListingImages::findOrFail($listingImageID);
-
-    // Construct the full file path
-    $filePath = public_path('storage/images/' . $image->image_path);
-
-    // Check if the file exists and delete it
-    if (file_exists($filePath)) {
-        unlink($filePath);  // Delete the file from the file system
+            // Update status to 'Vacant' before soft delete
+            $listing->status = 'Vacant';
+            $listing->save();
+            return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
     }
 
-    // Delete the image record from the database
-    $image->delete();
+    public function update(Request $request, $listingID)
+    {
+        $listing = Listing::findOrFail($listingID); // Get the listing by ID
 
-    return redirect()->back()->with('success', 'Image removed successfully.');
-}
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        // Update the listing with the new data
+        $listing->update([
+            'title' => $request->title,
+            'location' => $request->location,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('space.dashboard')->with('success', 'Listing updated successfully.');
+    }
+    public function deleteImage($listingImageID)
+    {
+        // Find the image record by ID
+        $image = ListingImages::findOrFail($listingImageID);
+
+        // Construct the full file path
+        $filePath = public_path('storage/images/' . $image->image_path);
+
+        // Check if the file exists and delete it
+        if (file_exists($filePath)) {
+            unlink($filePath);  // Delete the file from the file system
+        }
+
+        // Delete the image record from the database
+        $image->delete();
+
+        return redirect()->back()->with('success', 'Image removed successfully.');
+    }
 
     public function addImage(Request $request, $listingID)
     {
@@ -128,5 +129,21 @@ public function deleteImage($listingImageID)
         ]);
 
         return redirect()->back()->with('success', 'Image added successfully.');
+    }
+    public function submit(Request $request)
+    {   
+        // Validate the incoming request
+        $validated = $request->validate([
+            'renterID' => 'required|exists:users,userID',
+            'rentalAgreementID' => 'required|exists:rental_agreements,rentalAgreementID',
+            'rate' => 'required|integer|between:1,5',
+            'comment' => 'nullable|string',
+        ]);
+
+        // Create a new review
+        Reviews::create($validated);
+
+        // Redirect with a success message
+        return redirect()->route('space.dashboard')->with('success', 'Feedback submitted successfully.');
     }
 }
