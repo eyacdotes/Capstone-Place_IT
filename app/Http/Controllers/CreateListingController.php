@@ -41,7 +41,7 @@ class CreateListingController extends Controller
 
                 ListingImages::create([
                     'imageID' => $listing->listingID,
-                    'image_path' => $filename,
+                    'image_path' => $filename,  
                 ]);
             }
         }

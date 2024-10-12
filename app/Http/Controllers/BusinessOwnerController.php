@@ -61,12 +61,12 @@ class BusinessOwnerController extends Controller
         
         $negotiation = Negotiation::findOrFail($negotiationID);
         // Store the proof of payment file
-        if ($request->hasFile('proof')) {
+        if ($request->hasFile('proof')) {   
             $proofPath = $request->file('proof')->store('payments', 'public'); // Save in storage/app/public/payments
         }
 
         // Create the payment record in the database
-        Payment::create([
+        $payment = Payment::create([
             'rentalAgreementID' => $negotiationID, // This can be linked to your rental agreement/negotiation ID
             'renterID' => Auth::id(),
             'amount' => $negotiation->offerAmount,// Assuming amount is already saved elsewhere
@@ -75,6 +75,8 @@ class BusinessOwnerController extends Controller
             'details' => $request->details ?? '',
             'status' => 'Pending',
         ]);
+
+        $this->notifyAdminPayment($payment);
 
         // Redirect back with a success message
         return redirect()->route('business.dashboard', ['negotiationID' => $negotiationID])
@@ -175,23 +177,17 @@ class BusinessOwnerController extends Controller
         return view('business_owner.payment', compact('negotiation'));
     }
 
-    protected function notifySpaceOwner(Listing $listing)
+    protected function notifyAdminPayment($payment)
     {
     // Find the space owner based on the ownerID in the Listing model
-    $spaceOwner = User::find($listing->ownerID);  // Assuming ownerID is the space owner's user ID
+        $adminUsers = User::where('role', 'admin')->get(); // Adjust based on your role management
 
-    // Check if the space owner exists
-    if ($spaceOwner) {
-        // Create the notification for the space owner
-        Notification::create([
-            'n_userID' => $spaceOwner->userID,  // The space owner's user ID
-            'data' => $listing->title,  // Store the title in the notification's data field as JSON
-            'type' => 'listing_approved',  // Notification type
-            ]);
-        }
+        foreach ($adminUsers as $admin) {
+            Notification::create([
+                'n_userID' => $admin->userID,  // The space owner's user ID
+                'data' => $payment->renter->firstName . ' ' . $payment->renter->lastName,  // Store the title in the notification's data field as JSON
+                'type' => 'payment_submitted',  // Notification type
+                ]);
+        }   
     }
-    
-
-    // Add additional methods specific to business owners here
-    // For example, methods to manage businesses, view reports, etc.
-}
+}    

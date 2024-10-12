@@ -234,6 +234,8 @@
                         const notificationMessage = document.createElement('div');
                         if (notification.type === 'listing_approval') {
                             notificationMessage.innerHTML = 'A new listing needs approval: <strong>' + notification.data +'</strong>';
+                        } else if (notification.type === 'payment_submitted') {
+                            notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has submitted a payment.';
                         } else if (notification.type === 'payment') {
                             notificationMessage.textContent = 'You received a payment';
                         } else {
@@ -273,8 +275,10 @@
         function getNotificationUrl(notification) {
             if (notification.type === 'listing_approval') {
                 return '/admin/listingmanagement';  // Adjust to the correct URL where the admin manages listings
+            } else if (notification.type === 'payment_submitted') {
+                return '/admin/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'payment') {
-                return '/user/payments';  // Adjust to the payment-related page
+                return '/admin/payment';  // Adjust to the payment-related page
             }
             return '#';  // Default URL
         }

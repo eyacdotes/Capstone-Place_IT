@@ -14,21 +14,21 @@
                 <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
                     <thead>
                         <tr class="bg-orange-400 text-black uppercase text-sm leading-normal">
-                            <th class="py-3 px-4 text-left">Payment ID</th>
+                            <th class="py-3 px-4 text-left">Space Owner Name</th>
                             <th class="py-3 px-4 text-left">Renter Name</th>
                             <th class="py-3 px-4 text-left">Listing Title</th>
                             <th class="py-3 px-4 text-left">Amount</th>
                             <th class="py-3 px-4 text-left">Date</th>
                             <th class="py-3 px-4 text-left">Status</th>
                             <th class="py-3 px-4 text-left">Proof of Payment</th>
-                            <th class="py-3 px-4 text-left">Space Owner #</th>
+                            <th class="py-3 px-4 text-left">Space Owner Gcash #</th>
                             <th class="py-3 px-4 text-left">Action</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm font-medium">
                         @foreach($payments as $payment)
                             <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                <td class="py-3 px-4">{{ $payment->paymentID }}</td>
+                                <td class="py-3 px-4">{{ ucwords($payment->spaceOwner->firstName) }} {{ ucwords($payment->spaceOwner->lastName) }}</td>
                                 <td class="py-3 px-4">{{ ucwords($payment->renter->firstName) }} {{ ucwords($payment->renter->lastName) }}</td>
                                 <td class="py-3 px-4">{{ $payment->rentalAgreement->listing->title }}</td>
                                 <td class="py-3 px-4">{{ number_format($payment->amount, 2) }} PHP</td>
@@ -60,7 +60,7 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4">
-                                    @if($payment->status === 'pending')
+                                    @if($payment->status === 'Pending')
                                         <form action="{{ route('admin.payments.update', $payment->paymentID) }}" method="POST">
                                             @csrf
                                             @method('PUT')

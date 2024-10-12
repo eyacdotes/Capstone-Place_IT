@@ -131,6 +131,7 @@ class AdminController extends Controller
         
         // Save the updated payment
         $payment->save();
+        $this->notifyOwnerPayment($payment);
 
         return redirect()->back()->with('success', 'Payment status updated successfully!');
     }
@@ -147,6 +148,8 @@ class AdminController extends Controller
 
         $payment->status = 'transferred';  // Update status to transferred
         $payment->save();
+        $this->notifyOwnerSentPayment($payment);
+        
 
         return redirect()->back()->with('success', 'Payment transferred successfully!');
     }
@@ -166,6 +169,39 @@ class AdminController extends Controller
             ]);
         }
     }
+
+    protected function notifyOwnerPayment(Payment $payment)
+    {
+    // Find the space owner based on the ownerID in the Listing model
+    $spaceOwner = $payment->spaceOwner;  // Assuming ownerID is the space owner's user ID
+
+    // Check if the space owner exists
+    if ($spaceOwner) {
+        // Create the notification for the space owner
+        Notification::create([
+            'n_userID' => $spaceOwner->userID,  // The space owner's user ID
+            'data' => $spaceOwner->firstName . ' ' . $spaceOwner->lastName,  // Store the title in the notification's data field as JSON
+            'type' => 'payment_confirmed',  // Notification type
+            ]);
+        }
+    }
+
+    protected function notifyOwnerSentPayment(Payment $payment)
+    {
+    // Find the space owner based on the ownerID in the Listing model
+    $spaceOwner = $payment->spaceOwner;  // Assuming ownerID is the space owner's user ID
+
+    // Check if the space owner exists
+    if ($spaceOwner) {
+        // Create the notification for the space owner
+        Notification::create([
+            'n_userID' => $spaceOwner->userID,  // The space owner's user ID
+            'data' => 'You have received a payment sent by admin, check your credentials.',  // Store the title in the notification's data field as JSON
+            'type' => 'payment_sent',  // Notification type
+            ]);
+        }
+    }
+
     public function create() {
         return view('admin.create');
     }
