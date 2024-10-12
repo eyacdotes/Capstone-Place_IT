@@ -5,6 +5,7 @@
             {{ __('Negotiation Details') }}
         </h2>
     </x-slot>
+    
     <div class="flex justify-center py-2">
         <span class="font-semibold text-gray-800">{{ ucwords($negotiation->receiver->firstName) }} {{ ucwords($negotiation->receiver->lastName) }} </span>
     </div>
@@ -91,7 +92,70 @@
                     </div>
 
                     <!-- Conditional Display of Form or Proceed to Payment Button -->
-                    @if($negotiation->negoStatus !== 'Approved')
+                    <h4 class="text-lg font-semibold pl-2">Rental Agreement</h4>
+                    @if($rentalAgreement) <!-- Check if rental agreement exists -->
+                        <!-- Display the Rental Agreement Details -->
+                        <div class="p-4 bg-gray-300 rounded-lg">
+                            <p><strong>Rental Term:</strong> {{ ucfirst($rentalAgreement->rentalTerm) }}</p>
+                            <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateStart)->format('M d, Y') }}</p>
+                            <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateEnd)->format('M d, Y') }}</p>
+                            <p><strong>Offer Amount:</strong> ₱{{ number_format($rentalAgreement->offerAmount, 2) }}</p>
+                        </div>
+
+                        <!-- Allow Business Owner to Edit if not confirmed -->
+                        @if(Auth::id() == $negotiation->senderID && !$rentalAgreement->isConfirmed)
+                        <button id="editModalButton" data-id="{{ $rentalAgreement->rentalAgreementID }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+                            Edit Rental Agreement
+                        </button>
+
+                        <button id="editModalButton" data-id="{{ $rentalAgreement->rentalAgreementID }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+                            Approve Rental Agreement
+                        </button>
+
+                        <!-- Modal Background -->
+                        <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                            <!-- Modal Content -->
+                            <div class="bg-white rounded-lg w-full max-w-lg p-6">
+                                <h2 class="text-xl font-bold mb-4">Edit Rental Agreement</h2>
+
+                                <!-- Edit Rental Agreement Form -->
+                                <form method="POST" action="{{ route('rentalagreement.update', ['negotiationID' => $negotiation->negotiationID, 'rentalAgreementID' => $rentalAgreement->rentalAgreementID]) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <!-- term -->
+                                    <div class="mb-4">
+                                        <label for="rentalTerm" class="block text-gray-700">Rental Term</label>
+                                        <input type="text" id="rentalTerm" name="rentalTerm" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->rentalTerm }}" required>
+                                    </div>
+
+                                    <!-- start date -->
+                                    <div class="mb-4">
+                                        <label for="dateStart" class="block text-gray-700">Start Date</label>
+                                        <input type="date" id="dateStart" name="dateStart" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->dateStart }}" required>
+                                    </div>
+
+                                    <!-- end date -->
+                                    <div class="mb-4">
+                                        <label for="dateEnd" class="block text-gray-700">End Date</label>
+                                        <input type="date" id="dateEnd" name="dateEnd" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->dateEnd }}" required>
+                                    </div>
+
+                                    <!-- offer amount -->
+                                    <div class="mb-4">
+                                        <label for="offerAmount" class="block text-gray-700">Offer Amoount</label>
+                                        <input type="text" id="offerAmount" name="offerAmount" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->offerAmount }}" required>
+                                    </div>
+                                    
+                                    <!-- Submit Button -->
+                                    <div class="flex justify-end">
+                                        <button type="button" id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        @endif
+                        @elseif(Auth::id() == $negotiation->senderID) <!-- If BO has not filled it out yet -->
                         <!-- Form Section for Rental Term, Start Date, End Date -->
                         <form action="{{ route('negotiation.rentAgree', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                             @csrf
@@ -233,6 +297,29 @@
             fileNameDisplay.textContent = ''; // Clear the text if no file is selected
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const editModal = document.getElementById('editModal');
+        const editModalButton = document.getElementById('editModalButton');
+        const closeModalButton = document.getElementById('closeModal');
+
+        // Open the modal when the "Edit" button is clicked
+        editModalButton.addEventListener('click', function () {
+            editModal.classList.remove('hidden');
+        });
+
+        // Close the modal when the "Cancel" button is clicked
+        closeModalButton.addEventListener('click', function () {
+            editModal.classList.add('hidden');
+        });
+
+        // Optional: Close the modal when clicking outside of the modal content
+        editModal.addEventListener('click', function (event) {
+            if (event.target === editModal) {
+                editModal.classList.add('hidden');
+            }
+        });
+    });
 </script>
 
 

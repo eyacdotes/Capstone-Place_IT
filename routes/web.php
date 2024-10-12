@@ -115,6 +115,8 @@ Route::middleware(['auth', 'verified', 'role:business_owner'])->group(function (
     Route::get('/business/feedback/{rentalAgreementID}', [BusinessOwnerController::class, 'action'])->name('business.action');
     Route::post('/business/feedback/submit', [BusinessOwnerController::class, 'submit'])->name('business.submit');
     Route::post('/business/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('bnegotiation.reply');
+    Route::post('business/negotiations/{negotiationID}/{rentalAgreementID}/edit', [App\Http\Controllers\NegotiationController::class, 'edit'])->name('rentalAgreement.edit');
+    Route::put('business/negotiations/{negotiationID}/{rentalAgreementID}/update', [App\Http\Controllers\NegotiationController::class, 'update'])->name('rentalagreement.update');
     Route::post('business/negotiations/{negotiationID}/rent-agreement', [App\Http\Controllers\NegotiationController::class, 'rentAgree'])->name('negotiation.rentAgree');
     Route::post('business/negotiations/store', [App\Http\Controllers\NegotiationController::class, 'store'])->name('negotiation.store');
 });
@@ -128,13 +130,14 @@ Route::middleware(['auth', 'verified', 'role:space_owner'])->group(function () {
     Route::post('/spaces/listings/{listingID}', [SpaceOwnerController::class, 'destroy'])->name('listings.destroy');
     Route::post('/spaces/listings/{listingID}/restore', [SpaceOwnerController::class, 'restore'])->name('listings.restore');
     Route::delete('/spaces/image/{listingImageID}', [SpaceOwnerController::class, 'deleteImage'])->name('space_owner.delete_image');
-    Route::post('/spaces/{listingID}/add_image', [SpaceOwnerController::class, 'addImage'])->name('space_owner.add_image');
+    Route::post('/spaces/{listingID}/add_image', [  SpaceOwnerController::class, 'addImage'])->name('space_owner.add_image');
     Route::get('/space/negotiations', [NegotiationController::class, 'index'])->name('space.negotiations');
     Route::get('/space/negotiations/{negotiationID}', [NegotiationController::class, 'show'])->name('space.negotiation.show');
     Route::get('/space/reviews', [SpaceOwnerController::class, 'reviews'])->name('space.reviews');
     Route::post('/space/reviews.submit', [SpaceOwnerController::class, 'submit'])->name('space.submit');
     Route::get('/space/payment', [NegotiationController::class, 'showPaymentDetails'])->name('space.business_details');
     Route::put('/space/payment/{payment}/approve', [NegotiationController::class, 'approve'])->name('payments.approve');
+    Route::post('space/rentalagreement/{rentalAgreementID}/approve', [NegotiationController::class, 'approveRentalAgreement'])->name('rentalagreement.approve');
     Route::post('/space/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name(name: 'negotiation.reply');
     Route::post('/space/negotiations/{negotiationID}/status', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');
     Route::post('/space/negotiations/{negotiationID}/billingStore', [NegotiationController::class, 'storeDB'])->name('billing.store');

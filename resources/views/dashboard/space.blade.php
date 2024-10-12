@@ -9,8 +9,8 @@
     <div class="w-full py-6 flex justify-center">
         <!-- Modify the container width to be wider -->
         <div class="w-64 py-1 p-4 flex flex-col space-y-4 sticky top-0 h-screen"> 
-            <img src="{{ asset('storage/images/jobi.jpg') }}" alt="Left Advertisement" class="w-max h-auto rounded-md">
-            <img src="{{ asset('storage/images/jolibini.jpg') }}" alt="Left Advertisement" class="w-max h-auto rounded-md">
+            <img src="{{ asset('storage/images/nike.jpg') }}" alt="Left Advertisement" class="w-max h-auto rounded-md">
+            <img src="{{ asset('storage/images/samsung.jpg') }}" alt="Left Advertisement" class="w-max h-auto rounded-md">
         </div>
         <div class="w-full lg:w-3/4 mx-0 sm:px-8 lg:px-8">
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">

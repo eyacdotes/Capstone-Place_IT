@@ -39,14 +39,52 @@ class NegotiationController extends Controller
     {
         $negotiation = Negotiation::with('listing', 'sender', 'receiver', 'replies')->findOrFail($negotiationID);
 
+        $rentalAgreement = $negotiation->rentalAgreement;
+
         // Conditionally return the correct view based on the user's role
         if (Auth::user()->role === 'business_owner') {
-            return view('business_owner.messagedetail', compact('negotiation'));
+            return view('business_owner.messagedetail', compact('negotiation', 'rentalAgreement'));
         } elseif (Auth::user()->role === 'space_owner') {
-            return view('space_owner.messagedetail', compact('negotiation'));
+            return view('space_owner.messagedetail', compact('negotiation', 'rentalAgreement'));
         }
 
         abort(403, 'Unauthorized access');
+    }
+
+    public function edit($rentalAgreementID)
+    {
+        // Fetch the rental agreement by ID
+        $rentalAgreement = RentalAgreement::findOrFail($rentalAgreementID);
+
+        // Check if the user is authorized to edit this agreement
+        if (Auth::id() !== $rentalAgreement->ownerID && Auth::id() !== $rentalAgreement->renterID) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Return the edit view with the rental agreement data
+        return view('rental_agreements.edit', compact('rentalAgreement'));
+    }
+
+    public function update(Request $request, $rentalAgreementID)
+    {
+        
+        $validated = $request->validate([
+            'rentalTerm' => 'required|in:weekly,monthly,yearly',
+            'offerAmount' => 'required|numeric',
+            'dateStart' => 'required|date',
+            'dateEnd' => 'required|date|after_or_equal:dateStart',
+        ]);
+
+        $rentalAgreement = RentalAgreement::findOrFail($rentalAgreementID);
+
+        $rentalAgreement->update([
+            'rentalTerm' => $validated['rentalTerm'],
+            'offerAmount' => $validated['offerAmount'],
+            'dateStart' => $validated['dateStart'],
+            'dateEnd' => $validated['dateEnd'],
+        ]);
+
+        return redirect()->back()->with('success', 'Rental Agreement updated successfully.');
     }
 
     protected function showForBusinessOwner($negotiation)
@@ -226,12 +264,31 @@ class NegotiationController extends Controller
             'offerAmount' => $request->input('offerAmount'),
             'dateStart' => $request->input('startDate'),
             'dateEnd' => $request->input('endDate'),
-            'status' => 'Agree', // Set status to 'Agree' by default
+            'status' => 'Ongoing', // Set status to 'Ongoing' by default
         ]);
 
         // Redirect to the business owner dashboard after successful insert
         return redirect()->route('business.dashboard')->with('success', 'Rental agreement created successfully.');
     }
+
+    public function approveRentalAgreement($rentalAgreementID)
+    {
+        // Find the rental agreement by its ID
+        $rentalAgreement = RentalAgreement::where('rentalAgreementID', $rentalAgreementID)
+                                        ->firstOrFail();
+
+        // Check if it's already approved
+        if ($rentalAgreement->status === 'approved') {
+            return redirect()->back()->with('info', 'Rental Agreement is already approved.');
+        }
+
+        // Update the rental agreement status to approved
+        $rentalAgreement->status = 'approved';
+        $rentalAgreement->save();
+
+        return redirect()->back()->with('success', 'Rental Agreement approved successfully.');
+    }
+
     public function showPaymentDetails(Request $request)
     {
         // Fetch negotiations where the authenticated user is involved (either as sender or receiver)

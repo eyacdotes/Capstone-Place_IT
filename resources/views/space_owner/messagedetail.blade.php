@@ -81,6 +81,30 @@
                                     </span>
                                 </div>
                             </div>
+
+                            <!-- Rental Agreement Section -->
+                            <div class="mb-4">
+                                <h4 class="text-lg font-semibold">Rental Agreement</h4>
+                                @if($negotiation->rentalAgreement)
+                                    <div class="bg-gray-100 p-4 rounded-lg">
+                                        <p><strong>Rental Term:</strong> {{ ucfirst($negotiation->rentalAgreement->rentalTerm) }}</p>
+                                        <p><strong>Offer Amount:</strong> ₱{{ number_format($negotiation->rentalAgreement->offerAmount, 2) }}</p>
+                                        <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateStart)->format('M d, Y') }}</p>
+                                        <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateEnd)->format('M d, Y') }}</p>
+
+                                        <!-- Approve Button -->
+                                            <form action="{{ route('rentalagreement.approve', ['negotiationID' => $negotiation->negotiationID, 'rentalAgreementID' => $rentalAgreement->rentalAgreementID]) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full mt-4">
+                                                    Approve Rental Agreement
+                                                </button>
+                                            </form>
+                                    </div>
+                                @else
+                                    <p class="text-red-500">No rental agreement submitted yet.</p>
+                                @endif
+                            </div>
+
                             @if($negotiation->negoStatus !== 'Approved')
                                 <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                                     @csrf
@@ -100,6 +124,8 @@
                                 </button>
                             @endif
                         </div>
+
+
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                         @csrf
                         <div id="detailsModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden">
