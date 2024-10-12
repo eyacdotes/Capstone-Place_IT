@@ -169,7 +169,7 @@
                         } else if (notification.type === 'negotiation') {
                             notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
                         } else if (notification.type === 'negotiation_status_update') {
-                            notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
+                            notificationMessage.innerHTML = 'Your negotiation for ' + '<strong>' + notification.data + '</strong>' + ' has been approved!';
                         } else if (notification.type === 'maintenance') {
                             notificationMessage.innerHTML = notification.data;
                         } else {

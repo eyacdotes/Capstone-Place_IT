@@ -165,13 +165,19 @@
                         
                         const notificationMessage = document.createElement('div');
                         if (notification.type === 'listing_approved') {
-                            notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> was approved';
+                            notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved';
                         } else if (notification.type === 'payment') {
                             notificationMessage.textContent = 'You received a payment';
                         } else if (notification.type === 'maintenance') {
                             notificationMessage.textContent = notification.data;
                         } else if (notification.type === 'negotiation') {
                             notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>';
+                        } else if (notification.type === 'payment_sent') {
+                            notificationMessage.innerHTML = notification.data;
+                        } else if (notification.type === 'payment_confirmed') {
+                            notificationMessage.innerHTML = 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
+                        } else if (notification.type === 'payment_sent') {
+                            notificationMessage.textContent = notification.data;
                         } else {
                             notificationMessage.textContent = notification.description;  // Default message
                         }
@@ -209,6 +215,8 @@
         function getNotificationUrl(notification) {
             if (notification.type === 'listing_approved') {
                 return '/space/dashboard';  // Adjust to the correct URL where the admin manages listings
+            } else if (notification.type === 'payment_sent') {
+                return '/space/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'payment') {
                 return '/space/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'negotiation') {

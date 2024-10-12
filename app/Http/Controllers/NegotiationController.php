@@ -265,7 +265,7 @@ class NegotiationController extends Controller
             // Create a notification for the business owner
             Notification::create([
                 'n_userID' => $businessOwner->userID,  // The business owner's user ID
-                'data' => 'Your negotiation for "' . $negotiation->listing->title . '" has been ' . $newStatus . '.',  // Custom message
+                'data' => $negotiation->listing->title,  // Custom message
                 'type' => 'negotiation_status_update',  // Define the type of notification
             ]);
         }
