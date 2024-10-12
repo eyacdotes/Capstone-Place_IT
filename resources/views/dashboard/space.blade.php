@@ -8,7 +8,11 @@
 
     <div class="w-full py-6 flex justify-center">
         <!-- Modify the container width to be wider -->
-        <div class="w-full lg:w-3/4 mx-auto sm:px-6 lg:px-8">
+        <div class="w-64 py-1 p-4 flex flex-col space-y-4 sticky top-0 h-screen"> 
+            <img src="{{ asset('storage/images/jobi.jpg') }}" alt="Left Advertisement" class="w-max h-auto rounded-md">
+            <img src="{{ asset('storage/images/jolibini.jpg') }}" alt="Left Advertisement" class="w-max h-auto rounded-md">
+        </div>
+        <div class="w-full lg:w-3/4 mx-0 sm:px-8 lg:px-8">
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="flex-1 p-6 bg-white">
                     <h5>Sort by date</h5>
@@ -64,7 +68,7 @@
 
                                     <!-- Edit and Delete Button Section (placed below details) -->
                                     <div class="flex w-full space-x-2 justify-end">
-                                            <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-blue-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-blue-700 text-center">
+                                            <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-blue-600 text-white px-4 py-2 w-40 h-10 rounded-lg hover:bg-blue-700 text-center">
                                             Edit
                                         </a>
                                         @if ($listing->status === 'Deactivated')
