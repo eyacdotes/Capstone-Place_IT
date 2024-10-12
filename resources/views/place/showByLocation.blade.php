@@ -27,7 +27,7 @@
                                     <p class="text-gray-700 text-sm mb-1">{{ $listing->description }}</p>
                                 </div>
                                 <div class="text-right pb-14">
-                                    <p class="text-black-700"><strong>Owner:</strong> {{ $listing->owner->firstName }}</p>
+                                    <p class="text-black-700"><strong>Owner:</strong> {{ $listing->spaceOwner->firstName }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
