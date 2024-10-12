@@ -59,7 +59,7 @@
         <div class="container mx-auto flex flex-col-reverse lg:flex-row items-center -mt-9">
             <!-- Left Content -->
             <div class="lg:w-1/2 text-center lg:text-left mt-8 lg:mt-0">
-                <h1 class="text-4xl md:text-6xl font-bold text-orange-600 leading-tight mb-4">PlaceIt</h1>
+                <h1 class="text-4xl md:text-8xl font-bold text-orange-600 leading-tight mb-4">PlaceIt</h1>
                 <h2 class="text-3xl md:text-4xl font-bold text-red-600 mb-4">Monetize your empty spaces!</h2>
                 <p class="text-gray-600 text-base md:text-lg mb-6">Transforming spaces, maximizing potential. PlaceIt — where opportunities meet visibility.</p>
                 <a href="{{ url('/register') }}" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-md text-lg">Learn More</a>
@@ -82,7 +82,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Top Row - 3 Team Members -->
             <div class="text-center">
-                <img src="{{ asset('storage/images/perod.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('storage/images/Ballesteros.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
                 <p class="text-orange-600 mb-2 font-bold">SOFTWARE ENGINEER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -121,13 +121,13 @@
         <!-- Bottom Row - 2 Team Members -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             <div class="text-center">
-                <img src="{{ asset('storage/images/carsido.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('storage/images/Carsido.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">FRANCES DIANA N. CARSIDO</h3>
                 <p class="text-orange-600 mb-2 font-bold">DATABASE MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
                     <a href="https://www.facebook.com/yani.mcphee"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.instagram.com/yani.mcphee/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="#"><img src="{{ asset('storage/images/Carsido.jpg') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.linkedin.com/in/frances-diana-carsido-987286207/?originalSubdomain=ph"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
@@ -159,21 +159,21 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <!-- Address -->
             <div class="flex flex-col items-center">
-            <img src="{{ asset('storage/images/location.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
+            <img src="{{ asset('storage/images/location.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 30px;" />
                 <h3 class="text-xl font-bold mb-2">ADDRESS</h3>
                 <p class="text-gray-600 font-medium">Alaska Duljo Cebu City</p>
             </div>
 
             <!-- Phone -->
             <div class="flex flex-col items-center font-bold">
-            <img src="{{ asset('storage/images/phone-call.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
+            <img src="{{ asset('storage/images/phone-call.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 30px;" />
                 <h3 class="text-xl font-bold mb-2">PHONE</h3>
                 <p class="text-gray-600 font-medium">+63 919 988 4880</p>
             </div>
 
             <!-- Email -->
             <div class="flex flex-col items-center">
-            <img src="{{ asset('storage/images/email.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 80px;" />
+            <img src="{{ asset('storage/images/email.png') }}" alt="Description of icon" class="mb-4" style="width: auto; height: 30px;" />
                 <h3 class="text-xl font-bold mb-2">EMAIL</h3>
                 <p class="text-gray-600 font-medium">placeit13@gmail.com</p>
             </div>

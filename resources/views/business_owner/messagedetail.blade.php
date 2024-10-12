@@ -5,17 +5,26 @@
             {{ __('Negotiation Details') }}
         </h2>
     </x-slot>
-    <div class="flex justify-center py-2">
-        <span class="font-semibold text-gray-800">{{ ucwords($negotiation->receiver->firstName) }} {{ ucwords($negotiation->receiver->lastName) }} </span>
-    </div>
+
     <div class="w-full py-4 flex justify-center">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
             <div class="flex flex-col lg:flex-row h-[500px]">
                 <!-- Chat Section -->
                 <div class="w-full lg:w-2/3 p-4 border-b lg:border-b-0 lg:border-r border-gray-300">
                     <div class="h-full flex flex-col justify-between">
+                        <!-- Name Section -->
+                        <div class="flex items-center justify-between p-4 border-b border-gray-300">
+                            <div class="flex items-center text-gray-800">
+                                <a href="{{ route('business.negotiations') }}" class="flex items-center text-orange-500 hover:text-orange-800 hover:bg-gray-200 rounded-3xl p-2">
+                                    <span class="flex items-center">
+                                        <i class="fas fa-arrow-left mr-2"></i> 
+                                    </span>
+                                </a>
+                                <span class="font-semibold p-4 text-xl">{{ ucwords($negotiation->receiver->firstName) }} {{ ucwords($negotiation->receiver->lastName) }}</span>
+                            </div>
+                        </div>
                         <!-- Messages Section -->
-                        <div class="space-y-4 overflow-y-auto flex-1 chat-box h-[500px]">
+                        <div class="space-y-4 overflow-y-auto flex-1 chat-box h-[calc(100%_-_80px)] pt-4">
                         @foreach($negotiation->replies as $reply)
                             <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
                                 <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">

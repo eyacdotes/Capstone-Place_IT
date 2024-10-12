@@ -8,7 +8,16 @@
 
     <div class="w-full py-6 flex justify-center">
         <!-- Modify the container width to be wider -->
-        <div class="w-full lg:w-3/4 mx-auto sm:px-6 lg:px-8">
+        <div class="w-1/4 py-2 p-4 flex flex-col space-y-4 sticky top-0 h-screen items-center"> 
+            <div class="slideshow-container">
+            <!-- Image 1 -->
+                <img id="slideshow1" src="{{ asset('storage/images/jollibee.jpg') }}" alt="Advertisement" class="w-60 h-25 rounded-md">
+            </div>
+            <div class="slideshow-container">
+                <img id="slideshow2" src="{{ asset('storage/images/mcdo.jpg') }}" alt="Advertisement" class="w-60 h-25 rounded-md">
+            </div>
+        </div>
+        <div class="w-full lg:w-3/4 mx-auto sm:px-4 lg:px-9">
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="flex-1 p-6 bg-white">
                     <h5>Sort by date</h5>
@@ -64,20 +73,20 @@
 
                                     <!-- Edit and Delete Button Section (placed below details) -->
                                     <div class="flex w-full space-x-2 justify-end">
-                                            <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-blue-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-blue-700 text-center">
+                                            <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-orange-500 text-white px-4 py-2 w-40 h-10 rounded-lg hover:bg-orange-400 text-center">
                                             Edit
                                         </a>
                                         @if ($listing->status === 'Deactivated')
                                         <form action="{{ route('listings.restore', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to restore this listing?');" class="inline-block">
                                             @csrf
-                                            <button type="submit" class="bg-green-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-green-700 text-center">
+                                            <button type="submit" class="bg-orange-500 text-white px-4 py-2 w-40 rounded-lg hover:bg-green-700 text-center">
                                                 Restore
                                             </button>
                                         </form>
                                         @else
                                         <form action="{{ route('listings.destroy', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to deactivate this listing?');" class="inline-block">
                                             @csrf
-                                            <button type="submit" class="bg-red-600 text-white px-4 py-2 w-40 rounded-lg hover:bg-red-700 text-center">
+                                            <button type="submit" class="bg-red-700 text-white px-4 py-2 w-40 rounded-lg hover:bg-red-500 text-center">
                                                 Deactivate
                                             </button>
                                         </form>
@@ -121,5 +130,52 @@
             .catch(error => console.error('Error deleting listing:', error));
         }
     }
+ 
+    //Add JavaScript for Slideshow
+    // Array of image URLs
+    const images1 = [
+        "{{ asset('storage/images/jollibee.jpg') }}",  // Image 1
+        "{{ asset('storage/images/jobi.jpg') }}",      // Image 2
+    ];
+
+    let currentIndex1 = 0;
+
+    function changeImage1() {
+        const imageElement1 = document.getElementById('slideshow1');
+        currentIndex1 = (currentIndex1 + 1) % images1.length;
+        imageElement1.src = images1[currentIndex1];
+
+        // Fade out effect
+        imageElement1.classList.remove('fade-in');
+        imageElement1.classList.add('fade-out');
+
+        // Change the image after fading out
+        setTimeout(() => {
+            imageElement1.src = images1[currentIndex1];
+            imageElement1.classList.remove('fade-out');
+            imageElement1.classList.add('fade-in');
+        }, 500); // Duration should match the CSS transition time
+    }
+
+    // Set the interval for the first slideshow
+    setInterval(changeImage1, 3000);
+
+    // Array of image URLs for the second slideshow
+    const images2 = [
+        "{{ asset('storage/images/mcdo.jpg') }}",      // Image 1
+        "{{ asset('storage/images/mcmc.jpg') }}"      // Image 3 (add more if needed)
+    ];
+
+    let currentIndex2 = 0;
+
+    function changeImage2() {
+        const imageElement2 = document.getElementById('slideshow2');
+        currentIndex2 = (currentIndex2 + 1) % images2.length;
+        imageElement2.src = images2[currentIndex2];
+    }
+
+    // Set the interval for the second slideshow
+    setInterval(changeImage2, 3000);
+
 </script>
 </x-app-layout>
