@@ -14,7 +14,7 @@
                     <h3 class="text-lg font-bold mb-4">My Booking History</h3>
                     <table class="w-full border-collapse">
                         <thead>
-                            <tr class="bg-blue-400 text-white">
+                            <tr class="bg-orange-400 text-white">
                                 <th class="px-6 py-4">Space Title</th>
                                 <th class="px-6 py-4">Owner</th>
                                 <th class="px-6 py-4">Rental Term</th>

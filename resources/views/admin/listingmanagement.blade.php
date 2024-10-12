@@ -32,7 +32,7 @@
                                     <tr>
                                         <td class="border px-6 py-3">{{ $listing->title }}</td>
                                         <td class="border px-6 py-3">{{ $listing->location }}</td>
-                                        <td class="border px-6 py-3">{{ $listing->owner->firstName }} {{ $listing->owner->lastName }}</td>
+                                        <td class="border px-6 py-3">{{ $listing->spaceOwner->firstName }} {{ $listing->spaceOwner->lastName }}</td>
                                         <td class="border px-6 py-3">{{ ucfirst($listing->status) }}</td>
                                         <td class="border px-6 py-3">
                                             <div class="flex space-x-2">
@@ -79,7 +79,7 @@
                                     <tr>
                                         <td class="border px-6 py-3">{{ $listing->title }}</td>
                                         <td class="border px-6 py-3">{{ $listing->location }}</td>
-                                        <td class="border px-6 py-3">{{ $listing->owner->firstName }} {{ $listing->owner->lastName }}</td>
+                                        <td class="border px-6 py-3">{{ $listing->spaceOwner->firstName }} {{ $listing->spaceOwner->lastName }}</td>
                                         <td class="border px-6 py-3">
                                             <span class="
                                                 {{ $listing->status === 'Pending' ? 'text-gray-600' : '' }}
