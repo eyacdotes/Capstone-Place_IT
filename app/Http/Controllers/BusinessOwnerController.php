@@ -43,7 +43,7 @@ class BusinessOwnerController extends Controller
     public function showByLocation($location)
     {
         // Fetch all listings for the specific location
-        $listings = Listing::with('owner')
+        $listings = Listing::with('spaceOwner')
                           ->where('location', 'LIKE', '%' . $location . '%')
                           ->where('status', '!=', 'Deactivated')
                           ->get();
@@ -85,7 +85,7 @@ class BusinessOwnerController extends Controller
 
     public function detail($listingID)
     {
-    $listing = Listing::with(['owner', 'rentalAgreements.reviews'])->findOrFail($listingID);
+    $listing = Listing::with(['spaceOwner', 'rentalAgreements.reviews'])->findOrFail($listingID);
     $ratings = $listing->rentalAgreements->flatMap->reviews; // Get all reviews related to the listing
     $averageRating = $ratings->avg('rate');
     return view('place.detail', compact('listing','averageRating'));
