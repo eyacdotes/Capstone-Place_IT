@@ -82,7 +82,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Top Row - 3 Team Members -->
             <div class="text-center">
-                <img src="{{ asset('storage/images/ballesteros.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('storage/images/Ballesteros.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
                 <p class="text-orange-600 mb-2 font-bold">SOFTWARE ENGINEER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -121,13 +121,13 @@
         <!-- Bottom Row - 2 Team Members -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             <div class="text-center">
-                <img src="{{ asset('storage/images/carsido.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('storage/images/Carsido.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">FRANCES DIANA N. CARSIDO</h3>
                 <p class="text-orange-600 mb-2 font-bold">DATABASE MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
                     <a href="https://www.facebook.com/yani.mcphee"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.instagram.com/yani.mcphee/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="#"><img src="{{ asset('storage/images/Carsido.jpg') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.linkedin.com/in/frances-diana-carsido-987286207/?originalSubdomain=ph"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
