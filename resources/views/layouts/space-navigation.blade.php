@@ -43,7 +43,7 @@
                 </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-3 font-medium rounded-md text-gray-500 bg-white hover:text-orange-500 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-3 font-medium rounded-md text-gray-500 bg-white hover:text-orange-500 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->firstName }}</div>
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -92,9 +92,6 @@
                 {{ __('Negotiations') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('space.reviews')" :active="request()->routeIs('space.reviews')">
-                {{ __('Feedback') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('space.business_details')" :active="request()->routeIs('space.business_details')">
                 {{ __('Feedback') }}
             </x-responsive-nav-link>
         </div>
