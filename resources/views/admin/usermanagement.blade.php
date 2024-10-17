@@ -100,7 +100,7 @@
                 </div> 
             </div>
         </div>
-    </div>
+    </div> 
 
     <!-- Modal Background -->
     <div id="add-modal" class="fixed z-50 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 hidden">
