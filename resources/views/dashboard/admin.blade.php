@@ -47,15 +47,6 @@
                 </div>
             </div>
 
-            <!-- User Management Section -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-800">User Management</h3>
-                    <p class="text-gray-500 mb-4">Manage all registered users</p>
-                    <a href="{{ route('admin.usermanagement') }}" class="text-indigo-600 hover:underline">View All Users</a>
-                </div>
-            </div>
-
             <!-- Listing Management Section -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">

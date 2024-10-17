@@ -53,8 +53,8 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4">
-                                    @if($payment->rentalAgreement->listing->spaceOwner)
-                                        {{ $payment->rentalAgreement->listing->spaceOwner->mobileNumber }}
+                                    @if($payment->rentalAgreement->listing->owner)
+                                        {{ $payment->rentalAgreement->listing->owner->mobileNumber }}
                                     @else
                                         <span class="text-red-600">No Space Owner</span>
                                     @endif
@@ -68,7 +68,7 @@
                                             <button type="submit" class="bg-green-500 text-white rounded px-2 py-1 hover:bg-green-600 transition">Confirm Payment</button>
                                         </form>
                                     @elseif($payment->status === 'confirmed')
-                                        <button type="button" class="bg-blue-500 text-white rounded px-2 py-1 hover:bg-blue-600 transition" onclick="openModal({{ $payment->paymentID }}, {{ $payment->amount }}, '{{ $payment->rentalAgreement->listing->spaceOwner->mobileNumber }}')">
+                                        <button type="button" class="bg-blue-500 text-white rounded px-2 py-1 hover:bg-blue-600 transition" onclick="openModal({{ $payment->paymentID }}, {{ $payment->amount }}, '{{ $payment->rentalAgreement->listing->owner->mobileNumber }}')">
                                             Transfer to Space Owner
                                         </button>
                                     @elseif($payment->status === 'transferred')

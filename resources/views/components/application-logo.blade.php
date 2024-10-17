@@ -1,1 +1,1 @@
-<img src="{{ asset('storage/images/PlaceIt_logo.jpg') }}" alt="PlaceIt Logo" class="w-12 h-12">
+<img src="{{ asset('storage/images/placeit.jpg') }}" alt="PlaceIt Logo" class="w-12 h-12">

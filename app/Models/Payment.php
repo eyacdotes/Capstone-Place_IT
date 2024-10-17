@@ -45,16 +45,16 @@ class Payment extends Model
         return $this->belongsTo(RentalAgreement::class, 'rentalAgreementID', 'rentalAgreementID'); // Adjust if necessary
     }
     public function spaceOwner()
-{
-    return $this->hasOneThrough(
-        User::class,
-        Listing::class,
-        'listingID', // Foreign key on the listings table
-        'userID',    // Foreign key on the users table
-        'rentalAgreementID', // Local key on the payments table
-        'ownerID'    // Local key on the listings table
-    );
-}
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Listing::class,
+            'listingID', // Foreign key on the listings table
+            'userID',    // Foreign key on the users table
+            'rentalAgreementID', // Local key on the payments table
+            'ownerID'    // Local key on the listings table
+        );
+    }
     public function negotiation()
     {
         return $this->belongsTo(Negotiation::class, 'rentalAgreementID', 'listingID'); // Assuming rentalAgreementID relates to the listingID in Negotiation

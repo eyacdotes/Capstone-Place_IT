@@ -177,8 +177,83 @@
             </div>
         </div>
     </div>
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
+    let userScrolledUp = false;
+
+    function fetchMessages() {
+        $.ajax({
+            url: '{{ route("negotiation.getMessages", ["negotiationID" => $negotiation->negotiationID]) }}',
+            method: 'GET',
+            success: function(data) {
+                updateChat(data);
+                scrollToBottom(); // Automatically scroll to the bottom after updating the chat, if user hasn't scrolled up
+            }
+        });
+    }
+
+    function updateChat(messages) {
+        let chatBox = $('.chat-box');
+        chatBox.empty();
+
+        messages.forEach(function(message) {
+            let messageHtml = '';
+
+            if (/\.(jpeg|jpg|png|gif)$/i.test(message.message)) {
+                // If the message is an image
+                messageHtml = `
+                    <div class="flex ${message.senderID == {{ Auth::id() }} ? 'justify-end' : 'justify-start'}">
+                        <div class="p-4 rounded-lg shadow-lg ${message.senderID == {{ Auth::id() }} ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
+                            <img src="{{ asset('storage/negotiation_images/') }}/${message.message}" alt="Image" class="max-w-xs rounded-lg cursor-pointer" onclick="openModal('{{ asset('storage/negotiation_images/') }}/${message.message}')">
+                            <small class="text-xs">${new Date(message.created_at).toLocaleTimeString()}</small>
+                        </div>
+                    </div>
+                `;
+            } else {
+                messageHtml = `
+                    <div class="flex ${message.senderID == {{ Auth::id() }} ? 'justify-end' : 'justify-start'}">
+                        <div class="p-4 rounded-lg shadow-lg ${message.senderID == {{ Auth::id() }} ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
+                            <p class="text-sm">${message.message}</p>
+                            <small class="text-xs">${new Date(message.created_at).toLocaleTimeString()}</small>
+                        </div>
+                    </div>
+                `;
+            }
+
+            chatBox.append(messageHtml);
+        });
+
+        scrollToBottom(); // Scroll to the bottom if user has not scrolled up
+    }
+
+    function scrollToBottom() {
+        let chatBox = $('.chat-box');
+
+        // Only scroll to the bottom if user hasn't scrolled up
+        if (!userScrolledUp) {
+            chatBox.scrollTop(chatBox.prop("scrollHeight"));
+        }
+    }
+
+    // Detect if user scrolls up in the chat box
+    $('.chat-box').on('scroll', function() {
+        let chatBox = $(this);
+
+        // If user is near the bottom (within 50px), we consider it as not scrolled up
+        if (chatBox.scrollTop() + chatBox.innerHeight() >= chatBox.prop('scrollHeight') - 50) {
+            userScrolledUp = false; // User is near the bottom
+        } else {
+            userScrolledUp = true; // User has scrolled up
+        }
+    });
+
+    $(document).ready(function() {
+        scrollToBottom(); // Immediately scroll to the bottom when the page is ready
+    });
+
+    // Fetch messages every 1 second
+    setInterval(fetchMessages, 1000);
+    
         document.getElementById('openModalButton').addEventListener('click', function() {
             const offerAmount = this.getAttribute('data-offer-amount');
             document.getElementById('amountSent').value = offerAmount;

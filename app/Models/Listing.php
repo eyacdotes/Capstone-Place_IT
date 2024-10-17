@@ -22,7 +22,7 @@ class Listing extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function spaceOwner()
+    public function owner()
     {
         return $this->belongsTo(User::class, 'ownerID', 'userID'); // Adjust the foreign key names if necessary
     }

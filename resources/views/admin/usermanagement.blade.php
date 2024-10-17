@@ -34,14 +34,14 @@
                         <table class="min-w-full bg-white">
                             <thead>
                                 <tr>
-                                    <th class="py-2 px-4 border-b">ID</th>
-                                    <th class="py-2 px-4 border-b">First Name</th>
-                                    <th class="py-2 px-4 border-b">Last Name</th>
-                                    <th class="py-2 px-4 border-b">Email</th>
-                                    <th class="py-2 px-4 border-b">Role</th>
-                                    <th class="py-2 px-4 border-b">Verified</th>
-                                    <th class="py-2 px-4 border-b">Created At</th>
-                                    <th class="py-2 px-4 border-b">Actions</th>
+                                    <th class="py-2 px-4 border-b text-left">ID</th>
+                                    <th class="py-2 px-4 border-b text-left">First Name</th>
+                                    <th class="py-2 px-4 border-b text-left">Last Name</th>
+                                    <th class="py-2 px-4 border-b text-left">Email</th>
+                                    <th class="py-2 px-4 border-b text-left">Verified</th>
+                                    <th class="py-2 px-4 border-b text-left">Status</th>
+                                    <th class="py-2 px-4 border-b text-left">Created At</th>
+                                    <th class="py-2 px-4 border-b text-left">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,23 +51,53 @@
                                         <td class="py-2 px-4 border-b">{{ ucwords($user->firstName) }}</td>
                                         <td class="py-2 px-4 border-b">{{ ucwords($user->lastName) }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
-                                        <td class="py-2 px-4 border-b">{{ $user->role }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->isVerified ? 'Yes' : 'No' }}</td>
+                                        <td class="py-2 px-4 border-b">{{ $user->isActive ? 'Activated' : 'Deactivated' }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->created_at->format('Y-m-d') }}</td>
                                         <td class="py-2 px-4 border-b">
-                                            <a href="#" class="font-semibold border-2 rounded-lg bg-green-500 p-2 text-black hover:text-green-100">Edit</a>
-                                            <form method="POST" action="#" class="inline-block ml-2">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="font-semibold border-2 bg-red-500 rounded-lg p-2 text-black hover:text-red-100">Deactivate</button>
-                                            </form>
+                                        @if($currentRole !== 'admin')
+                                            @if($user->isActive)
+                                                <button onclick="showDeactivationModal('{{ $user->userID }}')" class="font-semibold border-2 bg-red-500 rounded-lg p-2 text-black hover:text-red-100">
+                                                    Deactivate
+                                                </button>
+                                            @else
+                                                <button onclick="showActivationModal('{{ $user->userID }}')" class="font-semibold border-2 bg-green-500 rounded-lg p-2 text-black hover:text-green-100">
+                                                    Activate
+                                                </button>
+
+                                                <!-- Activation Confirmation Modal -->
+                                                <div id="activate-modal-{{ $user->userID }}" class="fixed z-50 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 hidden">
+                                                    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+                                                        <h3 class="text-lg font-semibold mb-4">Are you sure you want to activate this user?</h3>
+                                                        <div class="flex justify-end">
+                                                            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onclick="activateUser('{{ $user->userID }}')">Yes</button>
+                                                            <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onclick="closeActivationModal('{{ $user->userID }}')">No</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            <!-- Deactivation Confirmation Modal -->
+                                            <div id="deactivate-modal-{{ $user->userID }}" class="fixed z-50 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 hidden">
+                                                <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+                                                    <h3 class="text-lg font-semibold mb-4">Are you sure you want to deactivate this user?</h3>
+                                                    <div class="flex justify-end">
+                                                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onclick="deactivateUser('{{ $user->userID }}')">Yes</button>
+                                                        <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onclick="closeDeactivationModal('{{ $user->userID }}')">No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        @else
+                                            <span class="text-gray-500">---------</span> 
+                                        @endif
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     @endif
-                </div>
+                </div> 
             </div>
         </div>
     </div>
@@ -130,5 +160,39 @@
         document.getElementById('submit-add-admin').onclick = function() {
             document.getElementById('add-admin-form').submit();
         };
+
+        function showActivationModal(userID) {
+            document.getElementById('activate-modal-' + userID).classList.remove('hidden');
+        }
+
+        function closeActivationModal(userID) {
+            document.getElementById('activate-modal-' + userID).classList.add('hidden');
+        }
+
+        function showDeactivationModal(userID) {
+        document.getElementById('deactivate-modal-' + userID).classList.remove('hidden');
+        }
+
+        function closeDeactivationModal(userID) {
+            document.getElementById('deactivate-modal-' + userID).classList.add('hidden');
+        }
+
+        function activateUser(userID) {
+        let form = document.createElement('form');
+        form.action = '/admin/usermanagement/activate/' + userID; // Update the action URL as needed
+        form.method = 'POST';
+        form.innerHTML = '@csrf @method("POST")'; // Include CSRF token and method
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+        function deactivateUser(userID) {
+            let form = document.createElement('form');
+            form.action = '/admin/usermanagement/deactivate/' + userID;
+            form.method = 'POST';
+            form.innerHTML = '@csrf @method("POST")';
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 </x-app-layout>

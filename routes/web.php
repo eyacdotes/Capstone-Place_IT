@@ -72,6 +72,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/admin/usermanagement/space-owners', [AdminController::class, 'spaceOwners'])->name('admin.spaceOwners');
     Route::get('/admin/usermanagement/business-owners', [AdminController::class, 'businessOwners'])->name('admin.businessOwners');
     Route::get('/admin/usermanagement/admins', [AdminController::class, 'adminUsers'])->name('admin.adminUsers');
+    Route::post('/admin/usermanagement/deactivate/{userID}', [AdminController::class, 'deactivate'])->name('admin.deactivate');
+    Route::post('/admin/usermanagement/activate/{userID}', [AdminController::class, 'activate'])->name('admin.activate');
 
     // Add new admin
     Route::get('/admin/usermanagement/admins/add', [AdminController::class, 'create'])->name('admin.create');

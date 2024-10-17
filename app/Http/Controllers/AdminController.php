@@ -10,6 +10,9 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountDeactivation;
+use App\Mail\AccountActivation;
 
 class AdminController extends Controller
 {
@@ -71,10 +74,10 @@ class AdminController extends Controller
 
         return view('admin.listingmanagement', compact('userCount','listingCount','pendingListings','allListings'));
     }
-    public function approveListing($id) {
-        // Find the listing by ID
-        $listing = Listing::find($id);
-    
+    public function approveListing($listingID) {
+        // Find the listing by listingID, not 'id'
+        $listing = Listing::where('listingID', $listingID)->first();
+        
         // Approve the listing
         if ($listing) {
             $listing->status = 'Vacant';
@@ -82,33 +85,34 @@ class AdminController extends Controller
             $listing->save();
             $this->notifySpaceOwner($listing);
         }
+    
         // Redirect back to the listing management page with success message
         return redirect()->route('admin.listingmanagement')->with('status', 'Listing approved successfully!');
     }
-
-    public function disapproveListing($id) {
-        $listing = Listing::find($id);
+    
+    public function disapproveListing($listingID) {
+        $listing = Listing::where('listingID', $listingID)->first();
         if ($listing) {
             $listing->status = 'Disapproved';
             $listing->approvedBy_userID = Auth::id();
             $listing->save();
             $this->notifySpaceOwner($listing);
         }
-
+    
         return redirect()->route('admin.listingmanagement')->with('status', 'Listing disapproved!');
     }
-
-    public function viewListing($id) {
-    // Find the listing by ID, with its images and owner
-    $listing = Listing::with(['images', 'owner'])->find($id);
-
-    // Check if the listing exists
-    if (!$listing) {
-        return response()->json(['error' => 'Listing not found'], 404);
-    }
-
-    // Return the listing details and images as JSON
-    return response()->json($listing);
+    
+    public function viewListing($listingID) {
+        // Find the listing by listingID, with its images and owner
+        $listing = Listing::with('images', 'owner')->where('listingID', $listingID)->first();
+    
+        // Check if the listing exists
+        if (!$listing) {
+            return response()->json(['error' => 'Listing not found'], 404);
+        }
+    
+        // Return the listing details and images as JSON
+        return response()->json($listing);
     }
 
     public function payment() {
@@ -232,5 +236,36 @@ class AdminController extends Controller
         return redirect()->route('admin.adminUsers')->with('success', 'Admin created successfully!');
     }
 
+    public function activate ($userID) {
+        $user = User::find($userID);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+
+        // Activate the user
+        $user->isActive = true;
+        $user->save();
+
+        // Optionally, you can send an activation email here
+        Mail::to($user->email)->send(new AccountActivation($user->firstName, $user->reason));
+        return redirect()->back()->with('success', 'User activated successfully.');
+    }
+    public function deactivate($userID) {
+        $user = User::find($userID);
+    
+        if ($user) {
+            // Set the user as inactive
+            $user->isActive = false;
+            $user->save();
+    
+            // Send an email notification to the user
+            Mail::to($user->email)->send(new AccountDeactivation($user->firstName, $user->reason));
+
+            return redirect()->back()->with('status', 'User deactivated successfully!');
+        } else {
+            return redirect()->back()->withErrors(['error' => 'User not found!']);
+        }
+    }
 
 }
