@@ -101,13 +101,21 @@
                                         <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateStart)->format('M d, Y') }}</p>
                                         <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateEnd)->format('M d, Y') }}</p>
 
-                                        <!-- Approve Button -->
+                                        @if($negotiation->rentalAgreement->status !== 'approved')
+                                            <!-- Approve Button -->
                                             <form action="{{ route('rentalagreement.approve', ['negotiationID' => $negotiation->negotiationID, 'rentalAgreementID' => $rentalAgreement->rentalAgreementID]) }}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full mt-4">
                                                     Approve Rental Agreement
                                                 </button>
                                             </form>
+                                        @else
+                                            <!-- Guide Message -->
+                                            <p class="text-green-600 font-light mb-2">Rental Agreement has been approved. You may now proceed with the next steps.</p>
+                                            <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
+                                                Click here to send details
+                                            </button>
+                                        @endif
                                     </div>
                                 @else
                                     <p class="text-red-500">No rental agreement submitted yet.</p>
@@ -118,7 +126,7 @@
                                 <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                                     @csrf
                                     <div class="mb-4">
-                                        <label for="status" class="block text-lg font-semibold">Update Status:</label>
+                                        <label for="status" class="block text-lg font-semibold">Update Negotiation Status:</label>
                                         <select name="status" id="status" class="form-select mt-1 block w-full">
                                             <option value="Pending" {{ $negotiation->negoStatus === 'Pending' ? 'selected' : '' }}>Pending</option>
                                             <option value="Approved" {{ $negotiation->negoStatus === 'Approved' ? 'selected' : '' }}>Approve</option>
@@ -127,17 +135,13 @@
                                     </div>
                                     <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
                                 </form>
-                            @else
-                                <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
-                                    Click here to send details
-                                </button>
                             @endif
                         </div>
 
 
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                         @csrf
-                        <div id="detailsModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden">
+                        <div id="detailsModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 items-center justify-center hidden">
                             <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative">
                                 <button onclick="closeDetailsModal()" 
                                         class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 text-xl z-10 
@@ -275,5 +279,29 @@
                 fileName.textContent = '';
             }
         }
+
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+
+        
     </script>
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">
+        <div class="relative max-w-full max-h-full">
+            <!-- Close Button with Circular Gray Background -->
+            <button onclick="closeModal()" 
+                    class="absolute top-0 right-0 mt-2 mr-2 text-white text-xl z-10 
+                           bg-gray-700 bg-opacity-100 hover:bg-opacity-50 rounded-full h-10 w-10 flex items-center justify-center">
+                &times;
+            </button>
+            <!-- Modal Image -->
+            <img id="modalImage" src="" alt="Modal Image" class="rounded-lg" style="max-width: 90vw; max-height: 90vh; object-fit: contain;">
+        </div>
+    </div>
 </x-app-layout>

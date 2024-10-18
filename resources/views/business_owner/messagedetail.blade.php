@@ -100,7 +100,7 @@
                     </div>
 
                     <!-- Conditional Display of Form or Proceed to Payment Button -->
-                    <h4 class="text-lg font-semibold pl-2">Rental Agreement</h4>
+                    <h4 class="text-lg font-semibold">Rental Agreement</h4>
                     @if($rentalAgreement) <!-- Check if rental agreement exists -->
                         <!-- Display the Rental Agreement Details -->
                         <div class="p-4 bg-gray-300 rounded-lg">
@@ -110,101 +110,100 @@
                             <p><strong>Offer Amount:</strong> ₱{{ number_format($rentalAgreement->offerAmount, 2) }}</p>
                         </div>
 
-                        <!-- Allow Business Owner to Edit if not confirmed -->
-                        @if(Auth::id() == $negotiation->senderID && !$rentalAgreement->isConfirmed)
-                        <button id="editModalButton" data-id="{{ $rentalAgreement->rentalAgreementID }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-                            Edit Rental Agreement
-                        </button>
+                        @if(Auth::id() == $negotiation->senderID) <!-- If Business Owner -->
+                            @if($rentalAgreement->status == 'approved' && !$rentalAgreement->isPaid)
+                                <!-- Proceed to Payment Button -->
+                                <a href="{{ route('business.proceedToPayment', ['negotiationID' => $negotiation->negotiationID]) }}" class="bg-green-600 text-white mt-4 py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center block">
+                                    Proceed to Payment
+                                </a>
+                            @elseif($rentalAgreement->isPaid)
+                                <!-- Payment Confirmation Message -->
+                                <p class="text-green-600 mt-4">Payment sent, wait for confirmation.</p>
+                            @else <!-- Check if rental agreement was submitted -->
+                                <!-- Allow Business Owner to Edit if not confirmed -->
+                                <button id="editModalButton" data-id="{{ $rentalAgreement->rentalAgreementID }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+                                    Edit Rental Agreement
+                                </button>
 
-                        <button id="editModalButton" data-id="{{ $rentalAgreement->rentalAgreementID }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-                            Approve Rental Agreement
-                        </button>
+                                <!-- Modal Background -->
+                                <div id="editModal" class="fixed inset-0 items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                                    <!-- Modal Content -->
+                                    <div class="bg-white rounded-lg w-full max-w-lg p-6">
+                                        <h2 class="text-xl font-bold mb-4">Edit Rental Agreement</h2>
 
-                        <!-- Modal Background -->
-                        <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-                            <!-- Modal Content -->
-                            <div class="bg-white rounded-lg w-full max-w-lg p-6">
-                                <h2 class="text-xl font-bold mb-4">Edit Rental Agreement</h2>
+                                        <!-- Edit Rental Agreement Form -->
+                                        <form method="POST" action="{{ route('rentalagreement.update', ['negotiationID' => $negotiation->negotiationID, 'rentalAgreementID' => $rentalAgreement->rentalAgreementID]) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <!-- term -->
+                                            <div class="mb-4">
+                                                <label for="rentalTerm" class="block text-gray-700">Rental Term</label>
+                                                <input type="text" id="rentalTerm" name="rentalTerm" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->rentalTerm }}" required>
+                                            </div>
 
-                                <!-- Edit Rental Agreement Form -->
-                                <form method="POST" action="{{ route('rentalagreement.update', ['negotiationID' => $negotiation->negotiationID, 'rentalAgreementID' => $rentalAgreement->rentalAgreementID]) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    <!-- term -->
-                                    <div class="mb-4">
-                                        <label for="rentalTerm" class="block text-gray-700">Rental Term</label>
-                                        <input type="text" id="rentalTerm" name="rentalTerm" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->rentalTerm }}" required>
+                                            <!-- start date -->
+                                            <div class="mb-4">
+                                                <label for="dateStart" class="block text-gray-700">Start Date</label>
+                                                <input type="date" id="dateStart" name="dateStart" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->dateStart }}" required>
+                                            </div>
+
+                                            <!-- end date -->
+                                            <div class="mb-4">
+                                                <label for="dateEnd" class="block text-gray-700">End Date</label>
+                                                <input type="date" id="dateEnd" name="dateEnd" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->dateEnd }}" required>
+                                            </div>
+                                            
+                                            <!-- Submit Button -->
+                                            <div class="flex justify-end">
+                                                <button type="button" id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
+                                            </div>
+                                        </form>
                                     </div>
-
-                                    <!-- start date -->
-                                    <div class="mb-4">
-                                        <label for="dateStart" class="block text-gray-700">Start Date</label>
-                                        <input type="date" id="dateStart" name="dateStart" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->dateStart }}" required>
-                                    </div>
-
-                                    <!-- end date -->
-                                    <div class="mb-4">
-                                        <label for="dateEnd" class="block text-gray-700">End Date</label>
-                                        <input type="date" id="dateEnd" name="dateEnd" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->dateEnd }}" required>
-                                    </div>
-
-                                    <!-- offer amount -->
-                                    <div class="mb-4">
-                                        <label for="offerAmount" class="block text-gray-700">Offer Amoount</label>
-                                        <input type="text" id="offerAmount" name="offerAmount" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->offerAmount }}" required>
-                                    </div>
-                                    
-                                    <!-- Submit Button -->
-                                    <div class="flex justify-end">
-                                        <button type="button" id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
-                                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                                </div>
+                            @endif
+                        @else
+                            <!-- If the user is not the sender, show Proceed to Payment Button -->
+                            <a href="{{ route('business.proceedToPayment', ['negotiationID' => $negotiation->negotiationID]) }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center block">
+                                Proceed to Payment
+                            </a>
                         @endif
-                        @elseif(Auth::id() == $negotiation->senderID) <!-- If BO has not filled it out yet -->
-                        <!-- Form Section for Rental Term, Start Date, End Date -->
-                        <form action="{{ route('negotiation.rentAgree', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="ownerID" value="{{ $negotiation->listing->ownerID }}">
-                            <input type="hidden" name="renterID" value="{{ $negotiation->senderID }}">
-                            <input type="hidden" name="listingID" value="{{ $negotiation->listingID }}">
+                    @else <!-- Form Section for Rental Term, Start Date, End Date -->
+                                <form action="{{ route('negotiation.rentAgree', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="ownerID" value="{{ $negotiation->listing->ownerID }}">
+                                    <input type="hidden" name="renterID" value="{{ $negotiation->senderID }}">
+                                    <input type="hidden" name="listingID" value="{{ $negotiation->listingID }}">
 
-                            <!-- Rental Term -->
-                            <div class="flex flex-col">
-                                <label for="rentalTerm" class="block font-semibold text-gray-700">Rental Term:</label>
-                                <select class="p-2 border border-gray-300 rounded-lg" name="rentalTerm" id="rentalTerm">
-                                    <option value="">Choose...</option>
-                                    <option value="weekly">Weekly</option>
-                                    <option value="monthly">Monthly</option>
-                                    <option value="yearly">Yearly</option>
-                                </select>
-                            </div>
+                                    <!-- Rental Term -->
+                                    <div class="flex flex-col">
+                                        <label for="rentalTerm" class="block font-semibold text-gray-700">Rental Term:</label>
+                                        <select class="p-2 border border-gray-300 rounded-lg" name="rentalTerm" id="rentalTerm" required>
+                                            <option value="">Choose...</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+                                    </div>
 
-                            <!-- Start Date -->
-                            <div class="flex flex-col mt-2">
-                                <label for="startDate" class="block mb-2 font-semibold text-gray-700">Start Date:</label>
-                                <input type="date" name="startDate" id="startDate" class="p-2 border border-gray-300 rounded-lg" required>
-                            </div>
+                                    <!-- Start Date -->
+                                    <div class="flex flex-col mt-2">
+                                        <label for="startDate" class="block mb-2 font-semibold text-gray-700">Start Date:</label>
+                                        <input type="date" name="startDate" id="startDate" class="p-2 border border-gray-300 rounded-lg" required>
+                                    </div>
 
-                            <!-- End Date -->
-                            <div class="flex flex-col mt-2">
-                                <label for="endDate" class="block mb-2 font-semibold text-gray-700">End Date:</label>
-                                <input type="date" name="endDate" id="endDate" class="mb-2 p-2 border border-gray-300 rounded-lg" required>
-                            </div>
+                                    <!-- End Date -->
+                                    <div class="flex flex-col mt-2">
+                                        <label for="endDate" class="block mb-2 font-semibold text-gray-700">End Date:</label>
+                                        <input type="date" name="endDate" id="endDate" class="mb-2 p-2 border border-gray-300 rounded-lg" required>
+                                    </div>
 
-                            <!-- Hidden Fields for offerAmount -->
-                            <input type="hidden" name="offerAmount" value="{{ $negotiation->offerAmount }}">
+                                    <!-- Hidden Fields for offerAmount -->
+                                    <input type="hidden" name="offerAmount" value="{{ $negotiation->offerAmount }}">
 
-                            <!-- Submit Button -->
-                            <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
-                        </form>
-                    @else
-                        <!-- Proceed to Payment Button -->
-                        <a href="{{ route('business.proceedToPayment', ['negotiationID' => $negotiation->negotiationID]) }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center block">
-                            Proceed to Payment
-                        </a>
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
+                                </form>
                     @endif
                 </div>
             </div>
@@ -309,7 +308,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const editModal = document.getElementById('editModal');
         const editModalButton = document.getElementById('editModalButton');
-        const closeModalButton = document.getElementById('closeModal');
+        const closeModalButton = document.getElementById('closeModal'); 
 
         // Open the modal when the "Edit" button is clicked
         editModalButton.addEventListener('click', function () {
@@ -329,13 +328,8 @@
         });
     });
 </script>
-
-
-
-
-
     <!-- Image Modal -->
-    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">
         <div class="relative max-w-full max-h-full">
             <!-- Close Button with Circular Gray Background -->
             <button onclick="closeModal()" 

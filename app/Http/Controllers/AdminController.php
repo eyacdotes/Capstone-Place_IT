@@ -117,7 +117,7 @@ class AdminController extends Controller
 
     public function payment() {
         // Fetch all payments with related details
-        $payments = Payment::with(['renter', 'listing', 'rentalAgreement', 'spaceOwner','sender'])
+        $payments = Payment::with(['renter', 'listing', 'rentalAgreement', 'spaceOwner','sender', 'billing'])
             ->get();
     
         $userCount = User::where('role', '!=', 'admin')->count();
@@ -181,10 +181,12 @@ class AdminController extends Controller
 
     // Check if the space owner exists
     if ($spaceOwner) {
+
+        $businessOwner = $payment->renter;
         // Create the notification for the space owner
         Notification::create([
             'n_userID' => $spaceOwner->userID,  // The space owner's user ID
-            'data' => $spaceOwner->firstName . ' ' . $spaceOwner->lastName,  // Store the title in the notification's data field as JSON
+            'data' => $businessOwner->firstName . ' ' . $businessOwner->lastName,   // Store the title in the notification's data field as JSON
             'type' => 'payment_confirmed',  // Notification type
             ]);
         }

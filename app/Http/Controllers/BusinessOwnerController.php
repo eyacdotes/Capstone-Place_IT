@@ -76,6 +76,13 @@ class BusinessOwnerController extends Controller
             'status' => 'Pending',
         ]);
 
+        $rentalAgreement = RentalAgreement::where('rentalAgreementID', $negotiationID)->first();
+    
+        if ($rentalAgreement) {
+            $rentalAgreement->isPaid = true; // Mark as paid
+            $rentalAgreement->save(); // Save the changes
+        }
+
         $this->notifyAdminPayment($payment);
 
         // Redirect back with a success message

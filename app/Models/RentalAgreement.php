@@ -23,6 +23,7 @@ class RentalAgreement extends Model
     'dateStart',
     'dateEnd',
     'status',
+    'isPaid',
     ];
 
     public function listing() {

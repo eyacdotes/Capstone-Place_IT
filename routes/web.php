@@ -117,10 +117,10 @@ Route::middleware(['auth', 'verified', 'role:business_owner'])->group(function (
     Route::get('/business/feedback/{rentalAgreementID}', [BusinessOwnerController::class, 'action'])->name('business.action');
     Route::post('/business/feedback/submit', [BusinessOwnerController::class, 'submit'])->name('business.submit');
     Route::post('/business/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name('bnegotiation.reply');
-    Route::post('business/negotiations/{negotiationID}/{rentalAgreementID}/edit', [App\Http\Controllers\NegotiationController::class, 'edit'])->name('rentalAgreement.edit');
-    Route::put('business/negotiations/{negotiationID}/{rentalAgreementID}/update', [App\Http\Controllers\NegotiationController::class, 'update'])->name('rentalagreement.update');
-    Route::post('business/negotiations/{negotiationID}/rent-agreement', [App\Http\Controllers\NegotiationController::class, 'rentAgree'])->name('negotiation.rentAgree');
-    Route::post('business/negotiations/store', [App\Http\Controllers\NegotiationController::class, 'store'])->name('negotiation.store');
+    Route::post('/business/negotiations/{negotiationID}/{rentalAgreementID}/edit', [App\Http\Controllers\NegotiationController::class, 'edit'])->name('rentalAgreement.edit');
+    Route::put('/business/negotiations/{negotiationID}/{rentalAgreementID}/update', [App\Http\Controllers\NegotiationController::class, 'update'])->name('rentalagreement.update');
+    Route::post('/business/negotiations/{negotiationID}/rent-agreement', [App\Http\Controllers\NegotiationController::class, 'rentAgree'])->name('negotiation.rentAgree');
+    Route::post('/business/negotiations/store', [App\Http\Controllers\NegotiationController::class, 'store'])->name('negotiation.store');
 });
 
 // Space Owner Routes
