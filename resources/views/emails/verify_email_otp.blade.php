@@ -12,107 +12,65 @@
     <script src="{{ asset('jquery.js') }}"></script>    
 </head>
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 font-medium">
-        {{ __('Before you get started, please verify your email address. Click the "Send OTP" button below to receive your One-Time Passcode (OTP) via email. Once you\'ve received the OTP, enter it to complete the verification process.') }}
-    </div>
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Email Verification</h2>
+        <p class="text-sm text-gray-600 mb-6">
+            {{ __('Before you get started, please verify your email address. Click the "Send OTP" button below to receive your One-Time Passcode (OTP) via email. Once you\'ve received the OTP, enter it to complete the verification process.') }}
+        </p>
 
-    @if(session('status'))
-        <div id="statusMessage" class="mb-4 text-sm text-green-600 font-medium">{{ session('status') }}</div>
-    @endif
+        <!-- Status and Error Messages -->
+        @if(session('status'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
+                {{ session('status') }}
+            </div>
+        @endif
 
-    @if(session('error'))
-        <div id="errorMessage" class="mb-4 text-sm text-red-600 font-medium">{{ session('error') }}</div>
-    @endif
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
 
-    <!-- OTP Input with Verify OTP button below -->
-    <form method="POST" action="{{ route('otp.verify.submit') }}">
-        @csrf
-        <input type="text" name="otp" id="otp" class="border-2 p-2 rounded-md" placeholder="Enter OTP">
-        <button class="border-2 p-2 rounded-lg bg-green-400 hover:bg-green-700 font-semibold" type="submit">Verify OTP</button>
-    </form>
+        <!-- OTP Verification Form -->
+        <form method="POST" action="{{ route('otp.verify.submit') }}" class="mb-6">
+            @csrf
+            <label for="otp" class="block text-sm font-medium text-gray-600 mb-2">Enter OTP</label>
+            <input 
+                type="text" 
+                name="otp" 
+                id="otp" 
+                required 
+                class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Enter your OTP"
+            >
+            <button 
+                type="submit" 
+                class="w-full mt-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            >
+                Verify OTP
+            </button>
+        </form>
 
-    <!-- Send OTP with AJAX -->
-    <form id="sendOtpForm" method="POST">
-        @csrf
-        <div class="mt-4">
-            <x-primary-button id="sendOtpButton">
-                {{ __('Send OTP') }}
-            </x-primary-button>
-        </div>
-    </form>
+        <!-- Send OTP Button -->
+        <form method="POST" action="{{ route('email.send') }}" class="mb-6">
+            @csrf
+            <button 
+                type="submit" 
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+                Send OTP
+            </button>
+        </form>
 
-    <!-- Logout form -->
-    <form method="POST" action="{{ route('logout') }}" class="mt-4">
-        @csrf
-        <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {{ __('Log Out') }}
-        </button>
-    </form>
-
-    <!-- jQuery (make sure you have it loaded in your app.js) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            const cooldownKey = 'otpCooldown';
-            const cooldownTimeKey = 'otpCooldownTime';
-
-            // Check if there's a cooldown in localStorage
-            if (localStorage.getItem(cooldownKey) === 'true') {
-                const remainingTime = localStorage.getItem(cooldownTimeKey);
-                startCooldown(remainingTime);
-            }
-
-            $('#sendOtpForm').on('submit', function(event) {
-                event.preventDefault(); // Prevent form submission and page reload
-
-                let sendOtpButton = $('#sendOtpButton');
-                sendOtpButton.prop('disabled', true); // Disable button while processing
-                sendOtpButton.text('Sending...');
-
-                $.ajax({
-                    url: "{{ route('email.send') }}", // Send OTP route
-                    method: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}" // Include CSRF token
-                    },
-                    success: function(response) {
-                        // Handle success
-                        $('#statusMessage').text('OTP has been sent to your email address.').show();
-                        sendOtpButton.text('Sent');
-                        localStorage.setItem(cooldownKey, 'true'); // Set cooldown active
-                        startCooldown(60); // Start cooldown
-                    },
-                    error: function(xhr) {
-                        // Handle error
-                        $('#errorMessage').text('There was an error sending the OTP. Please try again later.').show();
-                        sendOtpButton.prop('disabled', false); // Re-enable button on error
-                        sendOtpButton.text('Send OTP');
-                    }
-                });
-            });
-
-            // Function to start a cooldown timer
-            function startCooldown(duration) {
-                let cooldownTime = duration; // Use the passed duration
-                const button = $('#sendOtpButton');
-                
-                button.prop('disabled', true); // Disable the button
-                let interval = setInterval(function() {
-                    if (cooldownTime > 0) {
-                        button.text('Resend in ' + cooldownTime + 's');
-                        cooldownTime--;
-                        localStorage.setItem(cooldownTimeKey, cooldownTime); // Store remaining time
-                    } else {
-                        clearInterval(interval);
-                        button.prop('disabled', false);
-                        button.text('Send OTP');
-                        localStorage.removeItem(cooldownKey); // Remove cooldown flag
-                        localStorage.removeItem(cooldownTimeKey); // Clear remaining time
-                    }
-                }, 1000);
-            }
-        });
-    </script>
+        <!-- Logout Button -->
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button 
+                type="submit" 
+                class="w-full underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+                Log Out
+            </button>
+        </form>
 </x-guest-layout>
+
 
