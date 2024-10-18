@@ -65,12 +65,10 @@ class NegotiationController extends Controller
         return view('rental_agreements.edit', compact('rentalAgreement'));
     }
 
-    public function update(Request $request, $rentalAgreementID)
+    public function update(Request $request, $negotiationID, $rentalAgreementID)
     {
-        
         $validated = $request->validate([
             'rentalTerm' => 'required|in:weekly,monthly,yearly',
-            'offerAmount' => 'required|numeric',
             'dateStart' => 'required|date',
             'dateEnd' => 'required|date|after_or_equal:dateStart',
         ]);
@@ -79,7 +77,6 @@ class NegotiationController extends Controller
 
         $rentalAgreement->update([
             'rentalTerm' => $validated['rentalTerm'],
-            'offerAmount' => $validated['offerAmount'],
             'dateStart' => $validated['dateStart'],
             'dateEnd' => $validated['dateEnd'],
         ]);
@@ -192,21 +189,21 @@ class NegotiationController extends Controller
     }
     public function storeDB(Request $request, $negotiationID)
     {
-    // Validate the incoming request data
-    $validatedData = $request->validate([
-        'gcashNumber' => 'required|unique:billing_details,gcash_number|max:255',
-        'myCheckbox' => 'required'
-    ]);
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'gcashNumber' => 'required|unique:billing_details,gcash_number|max:255',
+            'myCheckbox' => 'required'
+        ]);
 
-    // Create a new billing detail
-    BillingDetail::create([
-        'user_id' => Auth::id(),
-        'rental_agreement_id' => $negotiationID,  
-        'gcash_number' => $validatedData['gcashNumber'],
-    ]);
+        // Create a new billing detail
+        BillingDetail::create([
+            'user_id' => Auth::id(),
+            'rental_agreement_id' => $negotiationID,  
+            'gcash_number' => $validatedData['gcashNumber'],
+        ]);
 
-    // Redirect or send back a response after successful creation
-    return redirect()->route('space.business_details')->with('success', 'Billing details have been saved successfully.');
+        // Redirect or send back a response after successful creation
+        return redirect()->route('space.business_details')->with('success', 'Billing details have been saved successfully.');
     }
 
     public function updateStatus(Request $request, $negotiationID)
@@ -264,11 +261,11 @@ class NegotiationController extends Controller
             'offerAmount' => $request->input('offerAmount'),
             'dateStart' => $request->input('startDate'),
             'dateEnd' => $request->input('endDate'),
-            'status' => 'Ongoing', // Set status to 'Ongoing' by default
+            'status' => 'pending', // Set status to 'Ongoing' by default
         ]);
 
         // Redirect to the business owner dashboard after successful insert
-        return redirect()->route('business.dashboard')->with('success', 'Rental agreement created successfully.');
+        return redirect()->back()->with('success', 'Rental Agreement created successfully.');
     }
 
     public function approveRentalAgreement($rentalAgreementID)

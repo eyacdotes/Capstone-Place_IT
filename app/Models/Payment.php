@@ -59,4 +59,8 @@ class Payment extends Model
     {
         return $this->belongsTo(Negotiation::class, 'rentalAgreementID', 'listingID'); // Assuming rentalAgreementID relates to the listingID in Negotiation
     }
+
+    public function billing() {
+        return $this->hasOne(BillingDetail::class, 'rental_agreement_id', 'rentalAgreementID');
+    }
 }

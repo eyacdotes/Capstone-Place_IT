@@ -67,7 +67,7 @@
                                         @if ($listing->status === 'Deactivated')
                                         <form action="{{ route('listings.restore', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to restore this listing?');" class="inline-block">
                                             @csrf
-                                            <button type="submit" class="bg-orange-500 text-white px-4 py-2 w-40 rounded-lg hover:bg-green-700 text-center">
+                                            <button type="submit" class="bg-green-500 text-white px-4 py-2 w-40 rounded-lg hover:bg-green-700 text-center">
                                                 Restore
                                             </button>
                                         </form>
@@ -86,7 +86,7 @@
                                 @if (!$found)
                                 <tr>
                                     <td colspan="6" class="text-lg text-center py-4 bg-gray-100">
-                                        No Space Found 
+                                        No Space Posted. 
                                         <a href="{{ route('space.newspaces') }}" class="text-blue-500 hover:text-blue-700">Post a space</a>
                                     </td>
                                 </tr>
