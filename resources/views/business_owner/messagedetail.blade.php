@@ -119,6 +119,27 @@
                             @elseif($rentalAgreement->isPaid)
                                 <!-- Payment Confirmation Message -->
                                 <p class="text-green-600 mt-4">Payment sent, wait for confirmation.</p>
+                                <!-- Payment Status Display -->
+                                @if($rentalAgreement->payments->isNotEmpty())
+                                    @foreach($rentalAgreement->payments as $payment)
+                                        <p class="text-gray-600">Payment Status: 
+                                            @if($payment->status == 'pending')
+                                                <span class="text-yellow-500">Pending</span>
+                                            @elseif($payment->status == 'confirmed')
+                                                <span class="text-green-500">Confirmed</span>
+                                            @elseif($payment->status == 'transferred')
+                                                <span class="text-red-500">Sent to Space Owner</span>
+                                            @elseif($payment->status == 'received')
+                                                <span class="text-red-500">Received by Space Owner</span>
+                                            @else
+                                                <span class="text-gray-500">Unknown</span>
+                                            @endif
+                                        </p>
+                                    @endforeach
+                                @else
+                                    <p class="text-red-600">No payments found for this rental agreement.</p>
+                                @endif
+
                             @else <!-- Check if rental agreement was submitted -->
                                 <!-- Allow Business Owner to Edit if not confirmed -->
                                 <button id="editModalButton" data-id="{{ $rentalAgreement->rentalAgreementID }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">

@@ -41,11 +41,13 @@ class NegotiationController extends Controller
 
         $rentalAgreement = $negotiation->rentalAgreement;
 
+        $billing = BillingDetail::where('rental_agreement_id', $rentalAgreement->negotiationID)->first();
+
         // Conditionally return the correct view based on the user's role
         if (Auth::user()->role === 'business_owner') {
-            return view('business_owner.messagedetail', compact('negotiation', 'rentalAgreement'));
+            return view('business_owner.messagedetail', compact('negotiation', 'rentalAgreement','billing'));
         } elseif (Auth::user()->role === 'space_owner') {
-            return view('space_owner.messagedetail', compact('negotiation', 'rentalAgreement'));
+            return view('space_owner.messagedetail', compact('negotiation', 'rentalAgreement', 'billing'));
         }
 
         abort(403, 'Unauthorized access');
@@ -281,6 +283,7 @@ class NegotiationController extends Controller
 
         // Update the rental agreement status to approved
         $rentalAgreement->status = 'approved';
+        $this->notifyBusinessOwnerAgreement($rentalAgreement);
         $rentalAgreement->save();
 
         return redirect()->back()->with('success', 'Rental Agreement approved successfully.');
@@ -321,6 +324,28 @@ class NegotiationController extends Controller
                 'n_userID' => $businessOwner->userID,  // The business owner's user ID
                 'data' => $negotiation->listing->title,  // Custom message
                 'type' => 'negotiation_status_update',  // Define the type of notification
+            ]);
+        }
+    }
+    protected function notifyBusinessOwnerAgreement($rentalAgreement)
+    {
+        // Find the business owner (sender of the negotiation)
+        $negotiation = Negotiation::where('negotiationID', $rentalAgreement->rentalAgreementID)
+                              ->with('sender', 'receiver') // Include sender and receiver for notification
+                              ->firstOrFail();
+
+        // Find the business owner (sender of the negotiation)
+        $businessOwner = $negotiation->sender;
+
+        // Check if the business owner exists
+        if ($businessOwner) {
+
+            $spaceOwner = $negotiation->receiver;
+            // Create a notification for the business owner
+            Notification::create([
+                'n_userID' => $businessOwner->userID,  // The business owner's user ID
+                'data' =>   $spaceOwner->firstName . ' ' . $spaceOwner->lastName,// Custom message
+                'type' => 'agreement_approved',  // Define the type of notification
             ]);
         }
     }

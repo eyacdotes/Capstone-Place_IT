@@ -170,6 +170,10 @@
                             notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
                         } else if (notification.type === 'negotiation_status_update') {
                             notificationMessage.innerHTML = 'Your negotiation for ' + '<strong>' + notification.data + '</strong>' + ' has been approved!';
+                        } else if (notification.type === 'payment_confirmed') {
+                            notificationMessage.innerHTML = 'Your ' + '<strong>' + notification.data + '</strong>' + ' has been confirmed by the admin.';
+                        } else if (notification.type === 'agreement_approved') {
+                            notificationMessage.innerHTML = 'Your rental agreement has been approved by ' + '<strong>' + notification.data + '</strong>.';
                         } else if (notification.type === 'maintenance') {
                             notificationMessage.innerHTML = notification.data;
                         } else {
@@ -212,6 +216,8 @@
             } else if (notification.type === 'payment') {
                 return '/business/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'negotiation') {
+                return '/business/negotiations';
+            } else if (notification.type === 'agreement_approved') {
                 return '/business/negotiations';
             } else if (notification.type === 'negotiation_status_update') {
                 return '/business/negotiations';

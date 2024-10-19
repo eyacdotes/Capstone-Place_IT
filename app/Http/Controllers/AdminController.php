@@ -136,6 +136,7 @@ class AdminController extends Controller
         // Save the updated payment
         $payment->save();
         $this->notifyOwnerPayment($payment);
+        $this->notifyBusinessOwnerPayment($payment);
 
         return redirect()->back()->with('success', 'Payment status updated successfully!');
     }
@@ -187,6 +188,24 @@ class AdminController extends Controller
         Notification::create([
             'n_userID' => $spaceOwner->userID,  // The space owner's user ID
             'data' => $businessOwner->firstName . ' ' . $businessOwner->lastName,   // Store the title in the notification's data field as JSON
+            'type' => 'payment_confirmed',  // Notification type
+            ]);
+        }
+    }
+
+    protected function notifyBusinessOwnerPayment(Payment $payment)
+    {
+    // Find the space owner based on the ownerID in the Listing model
+    $renter = $payment->renter;  // Assuming ownerID is the space owner's user ID
+
+    // Check if the space owner exists
+    if ($renter) {
+
+        $businessOwner = $payment->renter;
+        // Create the notification for the space owner
+        Notification::create([
+            'n_userID' => $renter->userID,  // The space owner's user ID
+            'data' => 'Payment',   // Store the title in the notification's data field as JSON
             'type' => 'payment_confirmed',  // Notification type
             ]);
         }
