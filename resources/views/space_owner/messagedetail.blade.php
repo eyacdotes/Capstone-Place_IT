@@ -112,16 +112,21 @@
                                         @else
                                             <!-- Guide Message -->
                                             <p class="text-green-600 font-light mb-2">Rental Agreement has been approved. You may now proceed with the next steps.</p>
-                                            <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
-                                                Click here to send details
-                                            </button>
+                                            @if($billing)
+                                                <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
+                                                    Click to send gcash details
+                                                </button>
+                                            @else
+                                                    <button id="openProofButton" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
+                                                        Click to send proof of meetup
+                                                    </button>
+                                            @endif
                                         @endif
                                     </div>
                                 @else
                                     <p class="text-red-500">No rental agreement submitted yet.</p>
                                 @endif
                             </div>
-
                             @if($negotiation->negoStatus !== 'Approved')
                                 <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                                     @csrf
@@ -177,12 +182,57 @@
                             </div>
                         </div>
                         </form>
+                        <!-- Modal Structure -->
+                        <div id="proofModal" class="hidden fixed z-50 inset-0 items-center justify-center bg-gray-900 bg-opacity-75">
+                            <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+                                <!-- Modal Header -->
+                                <div class="flex justify-between items-center pb-2 border-b">
+                                    <h2 class="text-lg font-semibold">Send Proof of Meetup</h2>
+                                    <button id="closeModalButton" class="text-gray-500 hover:text-gray-700">X</button>
+                                </div>
+                                
+                                <!-- Modal Body -->
+                                <div class="mt-4">
+                                    <form id="proofForm" action="/submit-proof" method="POST" enctype="multipart/form-data">
+                                        <label for="proofFile" class="block text-sm font-medium text-gray-700">Upload Proof (image)</label>
+                                        <input type="file" name="proofFile" id="proofFile" accept="image/*" class="mt-2 w-full border border-gray-300 rounded-md p-2">
+                                        <div class="mt-4">
+                                            <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">
+                                                Submit Proof
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
             </div>
         </div>
     </div>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
+    const proofModal = document.getElementById("proofModal");
+    const openProofButton = document.getElementById("openProofButton");
+    const closeModalButton = document.getElementById("closeModalButton");
+
+    openProofButton.addEventListener("click", () => {
+        proofModal.classList.remove("hidden");
+        proofModal.classList.add("flex");
+    });
+
+    // Close the modal when the close button is clicked
+    closeModalButton.addEventListener("click", () => {
+        proofModal.classList.add("hidden");
+        proofModal.classList.remove("flex");
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === proofModal) {
+            proofModal.classList.add("hidden");
+            proofModal.classList.remove("flex");
+        }
+    });
+    
     let userScrolledUp = false;
 
     function fetchMessages() {
@@ -288,7 +338,6 @@
         function closeModal() {
             document.getElementById('imageModal').classList.add('hidden');
         }
-
         
     </script>
     <!-- Image Modal -->
@@ -304,4 +353,5 @@
             <img id="modalImage" src="" alt="Modal Image" class="rounded-lg" style="max-width: 90vw; max-height: 90vh; object-fit: contain;">
         </div>
     </div>
+
 </x-app-layout>

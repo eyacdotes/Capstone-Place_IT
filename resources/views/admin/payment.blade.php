@@ -60,7 +60,7 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4">
-                                    @if($payment->status === 'Pending')
+                                    @if($payment->status === 'pending')
                                         <form action="{{ route('admin.payments.update', $payment->paymentID) }}" method="POST">
                                             @csrf
                                             @method('PUT')
@@ -69,12 +69,12 @@
                                         </form>
                                     @elseif($payment->status === 'confirmed')
                                         @if ($payment->billing)
-                                        <button type="button" class="bg-blue-500 text-white rounded px-2 py-1 hover:bg-blue-600 transition" 
-                                            onclick="openModal({{ $payment->paymentID }}, {{ $payment->amount }}, '{{ $payment->billing->gcash_number ?? '' }}')">
-                                            Transfer to Space Owner
-                                        </button>
+                                            <button type="button" class="bg-blue-500 text-white rounded px-2 py-1 hover:bg-blue-600 transition" 
+                                                onclick="openModal({{ $payment->paymentID }}, {{ $payment->amount }}, '{{ $payment->billing->gcash_number ?? '' }}')">
+                                                Transfer to Space Owner
+                                            </button>
                                         @else
-                                            <h4>Loso ka</h4>
+                                            <span class="text-muted">No payment was made.</span>
                                         @endif
                                     @elseif($payment->status === 'transferred')
                                         <span class="text-muted">Waiting for Space Owner Approval</span>
