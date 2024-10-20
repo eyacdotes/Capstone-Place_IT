@@ -50,7 +50,8 @@
                                                 {{ $listing->status === 'Vacant' ? 'text-green-500' : '' }}
                                                 {{ $listing->status === 'Pending' ? 'text-gray-400' : '' }}
                                                 {{ $listing->status === 'Disapproved' ? 'text-red-500' : '' }}
-                                                {{ $listing->status === 'Deactivated' ? 'text-red-500' : '' }}">
+                                                {{ $listing->status === 'Deactivated' ? 'text-red-500' : '' }}
+                                                {{ $listing->status === 'Occupied' ? 'text-red-500' : '' }}">
                                                 {{ $listing->status }}
                                             </p>
                                             

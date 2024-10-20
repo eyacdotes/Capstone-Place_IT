@@ -36,7 +36,7 @@
                         <h4 class="font-semibold mt-2 text-lg">Status</h4>
                         <span class="
                             {{ $listing->status === 'Vacant' ? 'text-green-600' : '' }}
-                            {{ $listing->status === 'Occupied' ? 'text-blue-600' : '' }}
+                            {{ $listing->status === 'Occupied' ? 'text-red-600' : '' }}
                             {{ $listing->status === 'Deactivated' || $listing->status === 'Another Term' ? 'text-red-600' : '' }}
                             font-bold">
                             {{ $listing->status }}
@@ -107,7 +107,7 @@
     </div>
 
     <!-- Negotiation Modal -->
-    <div id="negotiationModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+    <div id="negotiationModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">
         <div class="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
             <!-- Close Button -->
             <button onclick="closeNegotiationModal()" 
@@ -115,11 +115,12 @@
                            bg-gray-300 hover:bg-gray-400 rounded-full h-8 w-8 flex items-center justify-center">
                 &times;
             </button>
-
-            <h2 class="text-xl font-semibold mb-4">Negotiate This Space</h2>
-
-            <!-- Negotiation Form -->
-            <form action="{{ route('negotiation.store') }}" method="POST">
+            @if ($listing->status == 'Occupied' || $listing->status == 'Deactivated')
+                <h2 class="text-lg font-semibold mb-2">Negotiation Unavailable</h2>
+                <p class="text-gray-600">This space is currently {{ strtolower($listing->status) }}. You cannot negotiate for it.</p>
+            @else
+                <h2 class="text-lg font-semibold mb-2">Negotiate for {{ $listing->title }}</h2>
+                <form action="{{ route('negotiation.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="listingID" value="{{ $listing->listingID }}">
                 <input type="hidden" name="receiverID" value="{{ $listing->owner->userID }}">
@@ -133,7 +134,7 @@
                 <!-- Offer Amount -->
                 <div class="mb-4">
                     <label class="block text-gray-700">Offer Amount</label>
-                    <input type="number" name="offerAmount" class="w-full p-3 border rounded-md" required>
+                    <input type="text" name="offerAmount" placeholder="e.g. ₱000.00" class="w-full p-3 border rounded-md" required>
                 </div>
 
                 <!-- Submit Button -->
@@ -141,6 +142,7 @@
                     <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-full hover:bg-green-700">Send Offer</button>
                 </div>
             </form>
+            @endif
         </div>
     </div>
 
@@ -156,7 +158,7 @@
     </script>
 
     <!-- Image Modal -->
-    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">
         <div class="relative max-w-full max-h-full">
             <!-- Close Button with Circular Gray Background -->
             <button onclick="closeModal()" 

@@ -9,6 +9,7 @@ use App\Models\RentalAgreement;
 use App\Models\BillingDetail;
 use App\Models\Notification;
 use App\Models\Payment;
+use App\Models\Listing;
 use Illuminate\Support\Facades\Auth;
 
 class NegotiationController extends Controller
@@ -37,7 +38,7 @@ class NegotiationController extends Controller
      */
     public function show($negotiationID)
     {
-        $negotiation = Negotiation::with('listing', 'sender', 'receiver', 'replies')->findOrFail($negotiationID);
+        $negotiation = Negotiation::with('listing', 'sender', 'receiver', 'replies', 'meetupProof')->findOrFail($negotiationID);
 
         $rentalAgreement = $negotiation->rentalAgreement;
 
@@ -227,6 +228,10 @@ class NegotiationController extends Controller
         $negotiation->negoStatus = $request->input('status');
         $negotiation->save();
 
+        if ($negotiation->negoStatus === 'Approved') {
+            $this->updateSpaceStatus($negotiation->listingID);
+        }
+
         // Notify the Business Owner
         $this->notifyBusinessOwner($negotiation, $request->input('status'));
 
@@ -237,6 +242,19 @@ class NegotiationController extends Controller
             return redirect()->route('space.negotiation.show', ['negotiationID' => $negotiationID]);
         } else {
             abort(403, 'Unauthorized'); // If role is not authorized
+        }
+    }
+
+    public function updateSpaceStatus($listingID)
+    {
+        // Find the listing (space) by its ID
+        $listing = Listing::findOrFail($listingID);
+
+        // Ensure the listing is currently Vacant before changing the status
+        if ($listing->status === 'Vacant') {
+            // Update the space status to "Occupied"
+            $listing->status = 'Occupied';
+            $listing->save();
         }
     }
 

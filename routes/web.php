@@ -143,7 +143,8 @@ Route::middleware(['auth', 'verified', 'role:space_owner'])->group(function () {
     Route::post('/space/negotiations/{negotiationID}/reply', [App\Http\Controllers\NegotiationController::class, 'reply'])->name(name: 'negotiation.reply');
     Route::post('/space/negotiations/{negotiationID}/status', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');
     Route::post('/space/negotiations/{negotiationID}/billingStore', [NegotiationController::class, 'storeDB'])->name('billing.store');
-    Route::post('/space/negotiations/{negotiationID}/meetup_store', [SpaceOwnerController::class, 'storeProofOfMeetup'])->name('spaceOwner.storeProofOfMeetup');
+    Route::post('/space/negotiations/{negotiationID}/meetup_store', [SpaceOwnerController::class, 'storeProofOfMeetup'])->name('meetup.store');
+    Route::post('/space/negotiations/{negotiationID}/updateStatus', [App\Http\Controllers\NegotiationController::class, 'updateStatus'])->name('negotiation.updateStatus');
 });
 
 Route::post('/terms/accept', [UserController::class, 'acceptTerms'])->name('terms.accept');

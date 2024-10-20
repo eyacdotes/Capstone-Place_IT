@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Listing;
 use App\Models\ListingImages;
 use App\Models\Reviews;
+use App\Models\MeetUpProof;
+
 
 class SpaceOwnerController extends Controller
 {
@@ -145,5 +147,23 @@ class SpaceOwnerController extends Controller
 
         // Redirect with a success message
         return redirect()->route('space.dashboard')->with('success', 'Feedback submitted successfully.');
+    }
+    public function storeProofOfMeetup(Request $request, $negotiationID)
+    {
+        $request->validate([
+            'proofFile' => 'required|image|mimes:jpg,jpeg,png|max:2048', // Validate image
+        ]);
+
+        // Store the image in storage
+        $path = $request->file('proofFile')->store('meetup_proofs', 'public');
+
+        // Create a new MeetupProof entry
+        MeetupProof::create([
+            'rental_agreement_id' => $negotiationID,
+            'proof_image' => $path,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->back()->with('success', 'Proof of meetup sent successfully.');
     }
 }
