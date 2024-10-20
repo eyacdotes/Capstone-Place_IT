@@ -117,9 +117,13 @@
                                                     Click to send gcash details
                                                 </button>
                                             @else
+                                                @if($negotiation->meetupProof)  <!-- Check if proof of meetup is uploaded -->
+                                                    <p class="text-blue-600 font-light mb-2">Proof of meetup was sent/uploaded. Wait for confirmation of the admin.</p>
+                                                @else
                                                     <button id="openProofButton" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
                                                         Click to send proof of meetup
                                                     </button>
+                                                @endif
                                             @endif
                                         @endif
                                     </div>
@@ -140,6 +144,8 @@
                                     </div>
                                     <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
                                 </form>
+                            @else
+                                <p class="text-blue-600 font-light mb-2">Negotiation has been approved. The space is now occupied and cannot be rented by others. Please wait for further instructions from the admin.</p>
                             @endif
                         </div>
 
@@ -193,7 +199,8 @@
                                 
                                 <!-- Modal Body -->
                                 <div class="mt-4">
-                                    <form id="proofForm" action="/submit-proof" method="POST" enctype="multipart/form-data">
+                                    <form id="proofForm" action="{{ route('meetup.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf    
                                         <label for="proofFile" class="block text-sm font-medium text-gray-700">Upload Proof (image)</label>
                                         <input type="file" name="proofFile" id="proofFile" accept="image/*" class="mt-2 w-full border border-gray-300 rounded-md p-2">
                                         <div class="mt-4">

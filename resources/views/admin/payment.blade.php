@@ -21,6 +21,7 @@
                             <th class="py-3 px-4 text-left">Date</th>
                             <th class="py-3 px-4 text-left">Status</th>
                             <th class="py-3 px-4 text-left">Proof of Payment</th>
+                            <th class="py-3 px-4 text-left">Proof of Meetup</th>
                             <th class="py-3 px-4 text-left">Space Owner Gcash #</th>
                             <th class="py-3 px-4 text-left">Action</th>
                         </tr>
@@ -47,6 +48,15 @@
                                     @if($payment->proof)
                                         <a href="{{ asset('storage/' . $payment->proof) }}" target="_blank">
                                             <img src="{{ asset('storage/' . $payment->proof) }}" alt="Proof of Payment" class="w-16 h-16 object-cover rounded" />
+                                        </a>
+                                    @else
+                                        <span class="text-red-600">No proof uploaded</span>
+                                    @endif
+                                </td>
+                                <td class="py-3 px-4">
+                                    @if($payment->meetupProof)
+                                        <a href="{{ asset('storage/' . $payment->meetupProof->proof_image) }}" target="_blank">
+                                            <img src="{{ asset('storage/' . $payment->meetupProof->proof_image) }}" alt="Proof of Meetup" class="w-16 h-16 object-cover rounded" />
                                         </a>
                                     @else
                                         <span class="text-red-600">No proof uploaded</span>

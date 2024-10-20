@@ -56,6 +56,8 @@ class Listing extends Model
             'rentalAgreementID' // Local key on RentalAgreement table
         );
     }
-    
+    public function negotiations() {
+        return $this->hasMany(Negotiation::class, 'listingID', 'listingID');
+    }
     
 }

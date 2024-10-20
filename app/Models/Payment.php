@@ -63,4 +63,8 @@ class Payment extends Model
     public function billing() {
         return $this->hasOne(BillingDetail::class, 'rental_agreement_id', 'rentalAgreementID');
     }
+    public function meetupProof()
+    {
+        return $this->hasOne(MeetupProof::class, 'rental_agreement_id', 'rentalAgreementID');
+    }
 }

@@ -39,4 +39,8 @@ class Negotiation extends Model
     public function payment() {
         return $this->hasOne(Payment::class, 'rentalAgreementID', 'rentalAgreementID'); // Ensure this matches your foreign keys
     }
+    public function meetupProof()
+    {
+        return $this->hasOne(MeetupProof::class, 'rental_agreement_id', 'negotiationID');
+    }
 }
