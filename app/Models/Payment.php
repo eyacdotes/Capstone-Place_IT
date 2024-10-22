@@ -47,12 +47,12 @@ class Payment extends Model
     public function spaceOwner()
     {
         return $this->hasOneThrough(
-            User::class,
-            Listing::class,
-            'listingID', // Foreign key on the listings table
-            'userID',    // Foreign key on the users table
-            'rentalAgreementID', // Local key on the payments table
-            'ownerID'    // Local key on the listings table
+            User::class,  // The final model (User) you want to retrieve
+            RentalAgreement::class,  // The intermediary model (RentalAgreement) between Payment and User
+            'rentalAgreementID',  // Foreign key on the RentalAgreement table
+            'userID',  // Foreign key on the User table
+            'rentalAgreementID',  // Local key on the Payment table
+            'ownerID'  // Local key on the RentalAgreement table (make sure this is correctly named)
         );
     }
     public function negotiation()

@@ -117,7 +117,7 @@ class AdminController extends Controller
 
     public function payment() {
         // Fetch all payments with related details
-        $payments = Payment::with(['renter', 'listing', 'rentalAgreement', 'spaceOwner','sender', 'billing'])
+        $payments = Payment::with(['renter', 'rentalAgreement.listing.owner', 'spaceOwner', 'billing', 'negotiation'])
             ->get();
     
         $userCount = User::where('role', '!=', 'admin')->count();

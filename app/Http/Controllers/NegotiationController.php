@@ -42,7 +42,7 @@ class NegotiationController extends Controller
 
         $rentalAgreement = $negotiation->rentalAgreement;
 
-        $billing = BillingDetail::where('rental_agreement_id', $rentalAgreement->negotiationID)->first();
+        $billing = BillingDetail::where('rental_agreement_id', $negotiation->negotiationID)->first();
 
         // Conditionally return the correct view based on the user's role
         if (Auth::user()->role === 'business_owner') {
@@ -103,8 +103,13 @@ class NegotiationController extends Controller
         ]);
 
         $negotiation = Negotiation::findOrFail($negotiationID);
+        $rentalAgreement = RentalAgreement::where('rentalAgreementID', $negotiationID)->firstOrFail();
         $negotiation->offerAmount = $request->input('offerAmount');
+        $rentalAgreement->offerAmount = $request->input('offerAmount');
+
+        // Save both updates
         $negotiation->save();
+        $rentalAgreement->save();
 
         return redirect()->back()->with('success', 'Offer amount updated successfully.');
     }

@@ -112,18 +112,17 @@
                                         @else
                                             <!-- Guide Message -->
                                             <p class="text-green-600 font-light mb-2">Rental Agreement has been approved. You may now proceed with the next steps.</p>
-                                            @if($billing)
+                                            @if(!$billing)  <!-- Check if GCash details have NOT been submitted -->
                                                 <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
-                                                    Click to send gcash details
+                                                    Click to send GCash details
                                                 </button>
-                                            @else
-                                                @if($negotiation->meetupProof)  <!-- Check if proof of meetup is uploaded -->
-                                                    <p class="text-blue-600 font-light mb-2">Proof of meetup was sent/uploaded. Wait for confirmation of the admin.</p>
-                                                @else
-                                                    <button id="openProofButton" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
-                                                        Click to send proof of meetup
-                                                    </button>
-                                                @endif
+                                            @elseif($billing && !isset($negotiation->meetupProof))  <!-- Check if GCash details were submitted but proof of meetup NOT uploaded -->
+                                                <p class="text-blue-600 font-light mb-2">GCash details submitted. Please send proof of meetup.</p>
+                                                <button id="openProofButton" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
+                                                    Click to send proof of meetup
+                                                </button>
+                                            @elseif(isset($negotiation->meetupProof))  <!-- Check if proof of meetup has been uploaded -->
+                                                <p class="text-blue-600 font-light mb-2">Proof of meetup was sent/uploaded. Wait for confirmation of the admin.</p>
                                             @endif
                                         @endif
                                     </div>
@@ -152,7 +151,7 @@
 
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                         @csrf
-                        <div id="detailsModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 items-center justify-center hidden">
+                        <div id="detailsModal" class="fixed inset-0 bg-gray-500 flex bg-opacity-75 items-center justify-center hidden">
                             <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative">
                                 <button onclick="closeDetailsModal()" 
                                         class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 text-xl z-10 
@@ -189,7 +188,7 @@
                         </div>
                         </form>
                         <!-- Modal Structure -->
-                        <div id="proofModal" class="hidden fixed z-50 inset-0 items-center justify-center bg-gray-900 bg-opacity-75">
+                        <div id="proofModal" class="hidden flex fixed z-50 inset-0 items-center justify-center bg-gray-900 bg-opacity-75">
                             <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
                                 <!-- Modal Header -->
                                 <div class="flex justify-between items-center pb-2 border-b">
@@ -218,17 +217,48 @@
     </div>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Gcash Modal
+    const gcashModal = document.getElementById("detailsModal");
+    const openModalButton = document.getElementById("openModalButton");
+    const offerAmountInput = document.getElementById("amountSent");
+    const taxPaymentInput = document.getElementById("taxPayment");
+    const totalInput = document.getElementById("total");
+
+    openModalButton?.addEventListener("click", function () {
+        const offerAmount = this.getAttribute("data-offer-amount");
+        const taxAmount = (offerAmount * 0.1).toFixed(2);
+        const totalAmount = (offerAmount - taxAmount).toFixed(2);
+
+        offerAmountInput.value = `₱${offerAmount}`;
+        taxPaymentInput.value = `₱${taxAmount}`;
+        totalInput.value = `₱${totalAmount}`;
+
+        gcashModal.classList.remove("hidden");
+    });
+
+    // Close Gcash Modal on clicking outside or using close button
+    window.addEventListener("click", function (event) {
+        if (event.target === gcashModal) {
+            closeDetailsModal();
+        }
+    });
+
+    function closeDetailsModal() {
+        gcashModal.classList.add("hidden");
+    }
+
+    // Proof Modal logic remains the same
     const proofModal = document.getElementById("proofModal");
     const openProofButton = document.getElementById("openProofButton");
     const closeModalButton = document.getElementById("closeModalButton");
 
-    openProofButton.addEventListener("click", () => {
+    openProofButton?.addEventListener("click", () => {
         proofModal.classList.remove("hidden");
         proofModal.classList.add("flex");
     });
 
-    // Close the modal when the close button is clicked
-    closeModalButton.addEventListener("click", () => {
+    closeModalButton?.addEventListener("click", () => {
         proofModal.classList.add("hidden");
         proofModal.classList.remove("flex");
     });
@@ -239,6 +269,7 @@
             proofModal.classList.remove("flex");
         }
     });
+});
     
     let userScrolledUp = false;
 
@@ -314,18 +345,6 @@
 
     // Fetch messages every 1 second
     setInterval(fetchMessages, 1000);
-    
-        document.getElementById('openModalButton').addEventListener('click', function() {
-            const offerAmount = this.getAttribute('data-offer-amount');
-            document.getElementById('amountSent').value = offerAmount;
-            document.getElementById('taxPayment').value = (offerAmount * 0.10).toFixed(2);
-            document.getElementById('total').value = (parseFloat(offerAmount) + parseFloat(offerAmount * 0.10)).toFixed(2);
-            document.getElementById('detailsModal').classList.remove('hidden');
-        });
-
-        function closeDetailsModal() {
-            document.getElementById('detailsModal').classList.add('hidden');
-        }
 
         function showFileName() {
             const input = document.getElementById('aImage');
