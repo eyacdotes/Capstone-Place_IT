@@ -107,7 +107,7 @@
     </div>
 
     <!-- Negotiation Modal -->
-    <div id="negotiationModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">
+    <div id="negotiationModal" class="fixed inset-0 z-50 flex bg-black bg-opacity-75 items-center justify-center hidden">
         <div class="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
             <!-- Close Button -->
             <button onclick="closeNegotiationModal()" 

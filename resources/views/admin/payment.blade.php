@@ -66,7 +66,7 @@
                                     @if($payment->billing)
                                         {{ $payment->billing->gcash_number }}
                                     @else
-                                        <span class="text-red-600">No Space Owner</span>
+                                        <span class="text-red-600">Gcash # Not submitted yet.</span>
                                     @endif
                                 </td>
                                 <td class="py-3 px-4">

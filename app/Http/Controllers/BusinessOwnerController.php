@@ -73,7 +73,7 @@ class BusinessOwnerController extends Controller
             'date' => now(),
             'proof' => $proofPath, // Save the proof path
             'details' => $request->details ?? '',
-            'status' => 'Pending',
+            'status' => 'pending',
         ]);
 
         $rentalAgreement = RentalAgreement::where('rentalAgreementID', $negotiationID)->first();
