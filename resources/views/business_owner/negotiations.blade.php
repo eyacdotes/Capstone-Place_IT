@@ -9,6 +9,19 @@
     <div class="w-full py-6 flex justify-center">
         <div class="max-w-auto mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
+            @if(session('success'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: '{{ session('success') }}',
+                            timer: 3000, // The alert will auto-close after 5 seconds
+                            showConfirmButton: false
+                        });
+                    });
+                </script>
+            @endif
                 <div>
                     <h3 class="text-lg font-bold mb-4">Sent Negotiations</h3>
                     <table class="w-full border-collapse">

@@ -87,7 +87,7 @@ class AdminController extends Controller
         }
     
         // Redirect back to the listing management page with success message
-        return redirect()->route('admin.listingmanagement')->with('status', 'Listing approved successfully!');
+        return redirect()->route('admin.listingmanagement')->with('success', 'Listing approved successfully!');
     }
     
     public function disapproveListing($listingID) {
@@ -99,7 +99,7 @@ class AdminController extends Controller
             $this->notifySpaceOwner($listing);
         }
     
-        return redirect()->route('admin.listingmanagement')->with('status', 'Listing disapproved!');
+        return redirect()->route('admin.listingmanagement')->with('success', 'Listing disapproved!');
     }
     
     public function viewListing($listingID) {
@@ -170,7 +170,7 @@ class AdminController extends Controller
         Notification::create([
             'n_userID' => $spaceOwner->userID,  // The space owner's user ID
             'data' => $listing->title,  // Store the title in the notification's data field as JSON
-            'type' => 'listing_approved',  // Notification type
+            'type' => 'listing_disapproved',  // Notification type
             ]);
         }
     }

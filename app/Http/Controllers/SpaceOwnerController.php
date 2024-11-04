@@ -60,7 +60,7 @@ class SpaceOwnerController extends Controller
         $listing->save();
 
         // Redirect back with a success message or JSON response
-        return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
+        return redirect()->route('space.dashboard')->with('success', 'Listing deactivated successfully.');
     }
 
     public function restore($listingID) 
@@ -70,7 +70,7 @@ class SpaceOwnerController extends Controller
             // Update status to 'Vacant' before soft delete
             $listing->status = 'Vacant';
             $listing->save();
-            return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
+            return redirect()->route('space.dashboard')->with('success', 'Listing Restored successfully.');
     }
 
     public function update(Request $request, $listingID)

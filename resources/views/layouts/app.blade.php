@@ -3,7 +3,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <link rel="icon" href="{{ asset('storage/images/placeholder.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('storage/images/favicon.png') }}" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -12,10 +12,11 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="{{ asset('jquery.js') }}"></script>
+    <script src="{{ asset('sweetalert2.js') }}"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-gray-100 ">
         <!-- Include navigation based on user role -->
         @if (auth()->check() && auth()->user()->role === 'space_owner')
             @include('layouts.space-navigation')
@@ -34,7 +35,19 @@
                 </div>
             </header>
         @endif
-
+        @if(session('success'))
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: '{{ session('success') }}',
+                                    timer: 2000, // The alert will auto-close after 5 seconds
+                                    showConfirmButton: false
+                                });
+                            });
+                        </script>
+                    @endif
         <main id="content-area">
             {{ $slot }}
         </main>

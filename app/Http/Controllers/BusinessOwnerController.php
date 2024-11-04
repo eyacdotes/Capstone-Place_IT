@@ -21,31 +21,32 @@ class BusinessOwnerController extends Controller
      * @return \Illuminate\View\View
      */
     public function index()
-    {
-        // Define the locations you want to filte
-        $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Lapu-Lapu City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
-        
-        // Initialize an array to store the counts
-        $listingsCount = [];
+{
+    // Define the locations you want to filter
+    $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Lapu-Lapu City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
+    
+    // Initialize an array to store the counts
+    $listingsCount = [];
 
-        // Loop through the locations and get the count for each
-        foreach ($locations as $location) {
-            // Count listings for the current location
-            $listingsCount[$location] = Listing::where('location', 'LIKE', '%' . $location . '%')
-                                                ->where('status', '!=', 'Deactivated')
-                                                ->count();
-        }
-
-         // Return the count to the view
-        return view('dashboard.business', compact('listingsCount'));
+    // Loop through the locations and get the count for each
+    foreach ($locations as $location) {
+        // Count listings for the current location, excluding Pending and Deactivated statuses
+        $listingsCount[$location] = Listing::where('location', 'LIKE', '%' . $location . '%')
+                                            ->whereNotIn('status', ['Deactivated', 'Pending', 'Disapproved'])
+                                            ->count();
     }
+
+    // Return the count to the view
+    return view('dashboard.business', compact('listingsCount'));
+}
+
 
     public function showByLocation($location)
     {
         // Fetch all listings for the specific location
         $listings = Listing::with('owner')
                           ->where('location', 'LIKE', '%' . $location . '%')
-                          ->where('status', '!=', 'Deactivated')
+                          ->whereNotIn('status', ['Deactivated', 'Pending', 'Disapproved'])
                           ->get();
 
         // Pass the listings and the location to the view
