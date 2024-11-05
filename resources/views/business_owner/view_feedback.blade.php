@@ -12,9 +12,8 @@
                 <div class="p-6 bg-white border-b border-gray-200">
 
                     <h3 class="text-lg font-bold mb-4">Rental Agreements</h3>
-
-                    <table class="table-auto w-full text-left">
-                        <thead>
+                    <table class="table-auto w-full text-left rounded-lg">
+                        <thead class="text-md text-black bg-orange-400 dark:bg-gray-500 dark:text-gray-400 text-center">
                             <tr>
                                 <th class="px-4 py-2">Space Name</th>
                                 <th class="px-4 py-2">Owner</th>
@@ -22,24 +21,26 @@
                                 <th class="px-4 py-2">Rental Term</th>
                                 <th class="px-4 py-2">Date Start</th>
                                 <th class="px-4 py-2">Date End</th>
-                                <th class="px-4 py-2">Status</th>
                                 <th class="px-4 py-2">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($rentalAgreements as $agreement)
-                                <tr>
+                                <tr class="text-center">
                                     <td class="border px-4 py-2">{{ $agreement->listing->title }}</td>
                                     <td class="border px-4 py-2">{{ ucwords($agreement->owner->firstName) }} {{ ucwords($agreement->owner->lastName) }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->offerAmount }}</td>
                                     <td class="border px-4 py-2">{{ ucwords($agreement->rentalTerm) }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->dateStart }}</td>
                                     <td class="border px-4 py-2">{{ $agreement->dateEnd }}</td>
-                                    <td class="border px-4 py-2">{{ $agreement->status }}</td>
                                     <td class="border px-4 py-2">
-                                        <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="text-blue-500">
+                                    @if (isset($feedbacks[$agreement->rentalAgreementID]))
+                                        <span colspan="7" class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200">Done feedback idiot.</span>
+                                    @else
+                                        <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                             Give Feedback
                                         </a>
+                                    @endif
                                     </td>
                                 </tr>
                             @empty

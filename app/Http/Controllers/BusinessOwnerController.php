@@ -130,14 +130,21 @@ class BusinessOwnerController extends Controller
 
         if ($rentalAgreementID) {
             $selectedAgreement = RentalAgreement::findOrFail($rentalAgreementID);
-            return view('business_owner.dashboard', compact('rentalAgreements', 'selectedAgreement'));
+            
+            // Check for feedback for the selected rental agreement
+            $feedbackExists = Reviews::where('renterID', auth()->id())
+                ->where('rentalAgreementID', $rentalAgreementID)
+                ->exists();
+
+            return view('business_owner.dashboard', compact('rentalAgreements', 'selectedAgreement', 'feedbackExists'));
         }
 
         $feedbacks = Reviews::where('renterID', auth()->id())->get()->keyBy('rentalAgreementID');
 
-        // Pass the rental agreements to the view
-        return view('business_owner.view_feedback', compact('rentalAgreements'));
+        // Pass the rental agreements and feedbacks to the view
+        return view('business_owner.view_feedback', compact('rentalAgreements', 'feedbacks'));
     }
+
 
     public function action($negotiationID) {
         $rentalAgreement = RentalAgreement::findOrFail($negotiationID);

@@ -6,6 +6,7 @@
     <link rel="icon" href="{{ asset('storage/images/placeholder.png') }}" type="image/png">
     <title>PlaceIt - Monetize Your Empty Spaces</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-nmkRI2k3l2GKtWo8ZxLpW2VfZHRlXYWnPbm2LFl9hAL5ZtntF7D1h6jcNcdEHOo5AC5f5E3i6fq4+Qkv3DdOdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js']) <!-- Ensure Tailwind is loaded -->
     
@@ -15,7 +16,7 @@
     <nav class="p-4 bg-white shadow md:flex md:justify-between md:items-center border-b-2 border-orange-500">
         <!-- Logo Section -->
         <div class="flex justify-between items-center">
-            <a href="{{ url('/') }}" class="hover:text-red-800 text-orange-600 text-3xl font-bold">place.it</a>
+            <a href="{{ url('/') }}" class="hover:text-red-800 text-orange-600 text-3xl" style="font-family: 'Fredoka', sans-serif;">place.it</a>
             <!-- Hamburger Icon for Mobile -->
             <div class="md:hidden">
                 <button class="text-gray-700 focus:outline-none" id="menu-btn">
@@ -29,8 +30,8 @@
         <!-- Navigation Links -->
         <div class="hidden md:flex md:flex-grow justify-center space-y-4 md:space-y-0 md:space-x-8 mt-4 md:mt-0" id="menu">
             <a href="#top" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">HOME</a>
-            <a href="#about-us" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">ABOUT US</a>
-            <a href="#contacts" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">CONTACT US</a>
+            <a href="#about-us" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">ABOUT</a>
+            <a href="#contacts" class="text-red-600 hover:text-red-800 uppercase block md:inline-block font-bold">CONTACT</a>
 
             <!-- Mobile Login and Get Started Buttons -->
             <div class="block md:hidden space-y-4">
@@ -59,21 +60,41 @@
         <div class="container mx-auto flex flex-col-reverse lg:flex-row items-center -mt-9">
             <!-- Left Content -->
             <div class="lg:w-1/2 text-center lg:text-left mt-8 lg:mt-0">
-                <h1 class="text-4xl md:text-8xl font-bold text-orange-600 leading-tight mb-4">PlaceIt</h1>
-                <h2 class="text-3xl md:text-4xl font-bold text-red-600 mb-4">Monetize your empty spaces!</h2>
-                <p class="text-gray-600 text-base md:text-lg mb-6">Transforming spaces, maximizing potential. PlaceIt — where opportunities meet visibility.</p>
-                <a href="{{ url('/register') }}" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-md text-lg">Learn More</a>
+                <!--h1 class="text-9xl md:text-9xl font-bold text-orange-600 leading-tight mb-4" style="font-family: 'Fredoka', sans-serif;">PlaceIt</h1-->
+                <h1 class="text-2xl md:text-6xl font-bold text-red-600 mb-4" style="font-family: 'Fredoka', sans-serif;">Monetize Your Empty Spaces with PlaceIt!</h1>
+                <h2 class="text-gray-600 text-base md:text-2xl mb-6">Transform spaces, maximizing potential — where opportunities meet visibility.</>
+                <h3 class="text-gray-600 text-base md:text-lg mb-6">Welcome to the ultimate platform for turning your unused spaces into a source of revenue. Whether it’s a blank wall, a billboard, or any available area, we connect space owners with businesses looking to advertise. Let your empty spaces work for you!</h3>
+                <a href="{{url(path: '/register') }}" class="bg-red-500 hover:bg-red-700 text-white py-3 px-6 rounded-md text-lg">Learn More</a>
             </div>
 
-            <!-- Right Image -->
-            <div class="lg:w-1/2">
-                <img src="https://freemockup.net/wp-content/uploads/2021/01/Free-Vertical-Building-Billboard-Mockup-PSD.jpg" alt="Building Image" class="w-full h-auto rounded-md shadow-lg">
+            <!-- Carousel Section -->
+            <div class="lg:w-1/2 relative">
+                <div id="carousel" class="relative w-full overflow-hidden rounded-md shadow-lg">
+                    <div id="carousel-images" class="relative w-full h-full flex transition-all duration-500">
+                    <img src="{{ asset('storage/images/billboardss.jpg') }}" alt="Image 1" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/Jeepneysss.jpg') }}" alt="Image 3" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/taxi.jpg') }}" alt="Image 4" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/tricycle.jpg') }}" alt="Image 5" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/billboards.jpg') }}" alt="Image 6" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/jeeps.png') }}" alt="Image 7" class="w-full h-67">
+                    </div>
+
+                    <!-- Previous/Next Buttons -->
+                    <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 opacity-50 hover:opacity-100">
+                        &#10094;
+                    </button>
+                    <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 opacity-50 hover:opacity-100">
+                        &#10095;
+                    </button>
+                </div>
             </div>
+
         </div>
     </section>
 
 <!-- About Us Section -->
 <section id="about-us" class="bg-gray-100 py-12">
+
     <div class="container mx-auto text-center">
         <h2 class="text-3xl font-bold text-red-600 mb-4">Our Team</h2>
         <p class="text-gray-600 text-lg mb-6">Meet the PlaceIt Team.</p>
@@ -82,7 +103,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Top Row - 3 Team Members -->
             <div class="text-center">
-                <img src="{{ asset('storage/images/Ballesteros.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('storage/images/perod.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
                 <p class="text-orange-600 mb-2 font-bold">SOFTWARE ENGINEER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -140,7 +161,7 @@
                     <a href="https://www.facebook.com/shyrelle.managaytay"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.instagram.com/__s12u/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="404 | Not Found"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="linkedin.com/in/shyrelle-managaytay-398864283"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
         </div>
@@ -216,6 +237,38 @@
                 behavior: 'smooth'
             });
         });
+
+        //carousel-images
+        const images = document.querySelectorAll('#carousel-images img');
+        let currentIndex = 0;
+
+        function showImage(index) {
+            images.forEach((img, i) => {
+                img.classList.add('hidden');
+                if (i === index) {
+                    img.classList.remove('hidden');
+                }
+            });
+        }
+
+        document.getElementById('prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage(currentIndex);
+        });
+
+        document.getElementById('next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        });
+
+        // Auto-rotate images every 3 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        }, 3000);
+
+        // Show the first image initially
+        showImage(currentIndex);
     </script>
 </body>
 </html>
