@@ -36,7 +36,7 @@
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
                     <!-- Notification Dropdown (initially hidden) -->
                     <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
-                        <div id="notification-list">
+                        <div id="notification-list" class="max-h-80 overflow-y-auto">
                             <p class="px-4 py-2 text-gray-800">No new notifications.</p>
                         </div>
                     </div>
@@ -163,6 +163,8 @@
                         const notificationMessage = document.createElement('div');
                         if (notification.type === 'listing_approved') {
                             notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved';
+                        } else if (notification.type === 'listing_disapproved') {
+                            notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved';
                         } else if (notification.type === 'payment') {
                             notificationMessage.textContent = 'You received a payment';
                         } else if (notification.type === 'maintenance') {
@@ -218,6 +220,8 @@
                 return '/space/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'negotiation') {
                 return '/space/negotiations';
+            } else if (notification.type === 'listing_disapproved') {
+                return '/space/dashboard';
             }
             return '#';  // Default URL
         }

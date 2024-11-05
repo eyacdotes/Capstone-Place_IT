@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white">
                     <!-- Title and Owner -->
@@ -124,13 +124,6 @@
                 @csrf
                 <input type="hidden" name="listingID" value="{{ $listing->listingID }}">
                 <input type="hidden" name="receiverID" value="{{ $listing->owner->userID }}">
-
-                <!-- Message -->
-                <div class="mb-4">
-                    <label class="block text-gray-700">Message</label>
-                    <textarea name="message" class="w-full p-3 border rounded-md" rows="4" required>I want to negotiate this space!</textarea>
-                </div>
-
                 <!-- Offer Amount -->
                 <div class="mb-4">
                     <label class="block text-gray-700">Offer Amount</label>

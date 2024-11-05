@@ -173,15 +173,13 @@ class NegotiationController extends Controller
         $request->validate([
             'listingID' => 'required|exists:listing,listingID',
             'receiverID' => 'required|exists:users,userID',
-            'message' => 'required|string',
             'offerAmount' => 'required|numeric',
         ]);
 
         $negotiation = Negotiation::create([
             'listingID' => $request->listingID,
             'senderID' => Auth::id(),
-            'receiverID' => $request->receiverID,
-            'message' => $request->message, 
+            'receiverID' => $request->receiverID, 
             'negoStatus' => 'Pending',
             'offerAmount' => $request->offerAmount,
         ]);

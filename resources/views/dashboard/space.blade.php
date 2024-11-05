@@ -62,25 +62,43 @@
 
                                     <!-- Edit and Delete Button Section (placed below details) -->
                                     <div class="flex w-full space-x-2 justify-end">
-                                            <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-orange-500 text-white px-4 py-2 w-40 h-10 rounded-lg hover:bg-orange-400 text-center">
+                                        <a href="{{ route('space_owner.edit', ['listingID' => $listing->listingID]) }}" class="bg-orange-500 text-white px-4 py-2 w-40 h-10 rounded-lg hover:bg-orange-400 text-center">
                                             Edit
                                         </a>
                                         @if ($listing->status === 'Deactivated')
-                                        <form action="{{ route('listings.restore', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to restore this listing?');" class="inline-block">
+                                        <form action="{{ route('listings.restore', ['listingID' => $listing->listingID]) }}" method="POST" class="inline-block">
                                             @csrf
                                             <button type="submit" class="bg-green-500 text-white px-4 py-2 w-40 rounded-lg hover:bg-green-700 text-center">
                                                 Restore
                                             </button>
                                         </form>
                                         @else
-                                        <form action="{{ route('listings.destroy', ['listingID' => $listing->listingID]) }}" method="POST" onsubmit="return confirm('Are you sure you want to deactivate this listing?');" class="inline-block">
+                                        <form action="{{ route('listings.destroy', ['listingID' => $listing->listingID]) }}" method="POST" class="inline-block" id="deactivate-form-{{ $listing->listingID }}">
                                             @csrf
-                                            <button type="submit" class="bg-red-700 text-white px-4 py-2 w-40 rounded-lg hover:bg-red-500 text-center">
+                                            <button type="button" class="bg-red-700 text-white px-4 py-2 w-40 rounded-lg hover:bg-red-500 text-center" onclick="confirmDeactivation('{{ $listing->listingID }}', '{{ $listing->title }}')">
                                                 Deactivate
                                             </button>
                                         </form>
                                         @endif
                                     </div>
+
+                                    <script>
+                                    function confirmDeactivation(listingID, listingTitle) {
+                                        Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: "Deactivate " + listingTitle + "?",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#d33',
+                                            cancelButtonColor: '#3085d6',
+                                            confirmButtonText: 'Yes, deactivate it!'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('deactivate-form-' + listingID).submit();
+                                            }
+                                        });
+                                    }
+                                    </script>
                                 </div>
                             @endif
                         @endforeach
@@ -99,28 +117,4 @@
             </div>
         </div>
     </div>
-    <script>
-    function deleteListing(id) {
-        if (confirm('Are you sure you want to delete this listing?')) {
-            fetch(`/listings/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Remove listing from the DOM or refresh the page
-                    alert('Listing deleted successfully!');
-                    location.reload(); // Optional: Reload page
-                }
-            })
-            .catch(error => console.error('Error deleting listing:', error));
-        }
-    }
- 
-    
-
-</script>
 </x-app-layout>
