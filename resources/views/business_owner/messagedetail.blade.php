@@ -147,7 +147,7 @@
                                 </button>
 
                                 <!-- Modal Background -->
-                                <div id="editModal" class="fixed inset-0 items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                                <div id="editModal" class="fixed inset-0 items-center justify-center bg-gray-900 bg-opacity-50 hidden flex">
                                     <!-- Modal Content -->
                                     <div class="bg-white rounded-lg w-full max-w-lg p-6">
                                         <h2 class="text-xl font-bold mb-4">Edit Rental Agreement</h2>
@@ -157,9 +157,13 @@
                                             @csrf
                                             @method('PUT')
                                             <!-- term -->
-                                            <div class="mb-4">
+                                            <div class="mb-4"> 
                                                 <label for="rentalTerm" class="block text-gray-700">Rental Term</label>
-                                                <input type="text" id="rentalTerm" name="rentalTerm" class="w-full border-gray-300 rounded-lg" value="{{ $rentalAgreement->rentalTerm }}" required>
+                                                <select class="w-full border-gray-300 rounded-lg" name="rentalTerm" id="rentalTerm" required>
+                                                    <option value="weekly" {{ $rentalAgreement->rentalTerm === 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                                    <option value="monthly" {{ $rentalAgreement->rentalTerm === 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                                    <option value="yearly" {{ $rentalAgreement->rentalTerm === 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                                </select>
                                             </div>
 
                                             <!-- start date -->

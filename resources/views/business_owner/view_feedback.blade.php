@@ -11,7 +11,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                    <h3 class="text-lg font-bold mb-4">Rental Agreements</h3>
+                    <h3 class="text-lg font-bold mb-4">Provide Feedback</h3>
                     <table class="table-auto w-full text-left rounded-lg">
                         <thead class="text-md text-black bg-orange-400 dark:bg-gray-500 dark:text-gray-400 text-center">
                             <tr>

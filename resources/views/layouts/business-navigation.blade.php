@@ -30,14 +30,15 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <!-- Notification Bell Icon -->
                 <div class="relative">
-                    <i class="fa-regular fa-bell text-gray-500 hover:text-gray-700 cursor-pointer"></i>
+                    <i class="fa-regular fa-bell font-semibold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
                     <!-- Red dot for new notifications -->
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
                     <!-- Notification Dropdown -->
                     <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
-                        <div id="notification-list">
+                        <div id="notification-list" class="max-h-80">
                             <p class="px-4 py-2 text-gray-800">No new notifications.</p>
                         </div>
+                        <button id="see-previous-btn" class="px-4 py-2 w-full text-center text-blue-600 hover:bg-gray-100 hidden">See previous notifications</button>
                     </div>
                 </div>
                 <!-- Settings Dropdown -->
@@ -125,89 +126,107 @@
         const notificationDropdown = document.getElementById('notification-dropdown');
         const notificationDot = document.getElementById('notification-dot');
         const notificationList = document.getElementById('notification-list');
+        const seePreviousBtn = document.getElementById('see-previous-btn');
 
-        // Fetch notifications via AJAX
-        fetch('/notifications')  // Adjust the URL based on your route
-            .then(response => response.json())
-            .then(notifications => {
-                // Filter for unread notifications (those with read_at === null)
-                const unreadNotifications = notifications.filter(notification => notification.read_at === null);
+        let offset = 0;
+        let hasPrevious = false;
 
-                // Show or hide red dot based on unread notifications
-                if (unreadNotifications.length > 0) {
-                    notificationDot.style.display = 'inline-block';  // Show the red dot
-                } else {
-                    notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
-                }
+        function loadNotifications() {
+                fetch(`/notifications?offset=${offset}&limit=8`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            if (offset === 0) {
+                                notificationList.innerHTML = ''; // Clear placeholder on first load
+                            }
 
-                if (notifications.length > 0) {
-                    notificationList.innerHTML = '';  // Clear any placeholder text
+                            data.forEach(notification => {
+                                const notificationLink = document.createElement('a');
+                                notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+                                notificationLink.href = getNotificationUrl(notification);
+                                notificationLink.setAttribute('data-id', notification.notificationID);
 
-                    // Append each notification to the list
-                    notifications.forEach(notification => {
-                        const notificationLink = document.createElement('a');
-                        notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
-                        notificationLink.href = getNotificationUrl(notification);  // Set the notification URL
-                        notificationLink.setAttribute('data-id', notification.notificationID);  // Add a data-id attribute for AJAX
+                                // Add click event for marking as read and redirect
+                                notificationLink.addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    const url = this.href;
+                                    const notificationId = this.getAttribute('data-id');
+                                    markAsRead(notificationId, url);
+                                });
+                                const notificationMessage = document.createElement('div');
+                                if (notification.type === 'listing_approved') {
+                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data + '</strong> was approved';
+                                } else if (notification.type === 'payment') {
+                                    notificationMessage.textContent = 'You received a payment';
+                                } else if (notification.type === 'negotiation') {
+                                    notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
+                                } else if (notification.type === 'negotiation_status_update') {
+                                    notificationMessage.innerHTML = 'Your negotiation for ' + '<strong>' + notification.data + '</strong>' + ' has been approved!';
+                                } else if (notification.type === 'payment_confirmed') {
+                                    notificationMessage.innerHTML = 'Your ' + '<strong>' + notification.data + '</strong>' + ' has been confirmed by the admin.';
+                                } else if (notification.type === 'agreement_approved') {
+                                    notificationMessage.innerHTML = 'Your rental agreement has been approved by ' + '<strong>' + notification.data + '</strong>.';
+                                } else if (notification.type === 'maintenance') {
+                                    notificationMessage.innerHTML = notification.data;
+                                } else {
+                                    notificationMessage.textContent = notification.description;  // Default message
+                                }
 
-                        // Event listener for marking notification as read and redirecting
-                        notificationLink.addEventListener('click', function (event) {
-                            event.preventDefault();  // Prevent default to handle mark-as-read first
+                                const notificationDate = document.createElement('span');
+                                notificationDate.classList.add('text-gray-400', 'text-sm');
+                                notificationDate.textContent = new Date(notification.created_at).toLocaleString();
 
-                            const url = this.href;  // Capture the target URL
-                            const notificationId = this.getAttribute('data-id');  // Get notification ID
+                                notificationLink.appendChild(notificationMessage);
+                                notificationLink.appendChild(notificationDate);
 
-                            // Mark as read
-                            markAsRead(notificationId, url);  // Pass the URL for redirect after marking
-                        });
-                        
-                        const notificationMessage = document.createElement('div');
-                        if (notification.type === 'listing_approved') {
-                            notificationMessage.innerHTML = 'Your listing <strong>' + notification.data + '</strong> was approved';
-                        } else if (notification.type === 'payment') {
-                            notificationMessage.textContent = 'You received a payment';
-                        } else if (notification.type === 'negotiation') {
-                            notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
-                        } else if (notification.type === 'negotiation_status_update') {
-                            notificationMessage.innerHTML = 'Your negotiation for ' + '<strong>' + notification.data + '</strong>' + ' has been approved!';
-                        } else if (notification.type === 'payment_confirmed') {
-                            notificationMessage.innerHTML = 'Your ' + '<strong>' + notification.data + '</strong>' + ' has been confirmed by the admin.';
-                        } else if (notification.type === 'agreement_approved') {
-                            notificationMessage.innerHTML = 'Your rental agreement has been approved by ' + '<strong>' + notification.data + '</strong>.';
-                        } else if (notification.type === 'maintenance') {
-                            notificationMessage.innerHTML = notification.data;
-                        } else {
-                            notificationMessage.textContent = notification.description;  // Default message
+                                notificationList.appendChild(notificationLink);
+                            });
+
+                            // Show "See previous notifications" button if there are more notifications
+                            if (data.length === 8) {
+                                seePreviousBtn.style.display = 'block';
+                                hasPrevious = true; // Previous notifications exist
+                            } else {
+                                seePreviousBtn.style.display = 'none';
+                                hasPrevious = false; // No previous notifications
+                            }
+
+                            offset += data.length; // Increase the offset
+                        } else if (offset === 0) {
+                            notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
                         }
+                    })
+                    .catch(error => console.error('Error loading notifications:', error));
+            }
 
-                        const notificationDate = document.createElement('span');
-                        notificationDate.classList.add('text-gray-400', 'text-sm');
-                        notificationDate.textContent = new Date(notification.created_at).toLocaleString();
-
-                        notificationLink.appendChild(notificationMessage);
-                        notificationLink.appendChild(notificationDate);
-
-                        notificationList.appendChild(notificationLink);
-                    });
-                } else {
-                    notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching notifications:', error);
+            // Event listener for "See previous notifications" button
+            seePreviousBtn.addEventListener('click', function () {
+                // Enable scrolling when this button is clicked
+                notificationList.classList.add('max-h-96');
+                notificationList.style.overflowY = 'auto'; // Allow scrolling
+                loadNotifications();
             });
 
-        // Toggle the visibility of the dropdown when the notification icon is clicked
-        notificationIcon.addEventListener('click', function () {
-            notificationDropdown.classList.toggle('hidden');
-        });
+            // Show/hide the dropdown on bell icon click
+            notificationIcon.addEventListener('click', function () {
+                notificationDropdown.classList.toggle('hidden');
+                // Reset icon color if dropdown is closed
+                if (notificationDropdown.classList.contains('hidden')) {
+                    notificationIcon.classList.remove('text-orange-500'); // Remove highlight if dropdown is closed
+                } else if (hasPrevious) {
+                    // Reset the overflow property when dropdown is opened again
+                    notificationList.classList.remove('max-h-96');
+                    notificationList.style.overflowY = 'hidden'; // Disable scrolling until button is clicked
+                }
+            });
 
-        // Optional: Hide the dropdown if clicked outside
-        document.addEventListener('click', function (event) {
-            if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
-                notificationDropdown.classList.add('hidden');
-            }
-        });
+            // Hide dropdown on outside click
+            document.addEventListener('click', function (event) {
+                if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                    notificationDropdown.classList.add('hidden');
+                    notificationIcon.classList.remove('text-orange-500'); // Remove highlight if clicked outside
+                }
+            });
 
         // Function to generate the notification URL based on type
         function getNotificationUrl(notification) {
@@ -245,5 +264,6 @@
                 console.error('Error marking notification as read:', error);
             });
         }
+        loadNotifications();
     });
 </script>

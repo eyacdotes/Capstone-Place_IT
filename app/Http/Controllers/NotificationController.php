@@ -55,8 +55,15 @@ class NotificationController extends Controller
     // Fetch all notifications for the authenticated user
     public function getNotifications(Request $request)
     {
+        // Define the number of notifications to load at a time
+        $limit = $request->input('limit', 8);
+        $offset = $request->input('offset', 0);
+
+        // Retrieve notifications with offset
         $notifications = Notification::where('n_userID', auth()->id())
             ->orderBy('created_at', 'desc')
+            ->skip($offset)
+            ->take($limit)
             ->get();
 
         return response()->json($notifications);
