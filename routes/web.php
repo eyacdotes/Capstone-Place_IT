@@ -12,7 +12,7 @@ use App\Http\Controllers\CreateListingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\Auth\EmailVerifyController;
+use App\Http\Controllers\SystemFeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -135,8 +135,8 @@ Route::middleware(['auth', 'verified', 'role:space_owner'])->group(function () {
     Route::post('/spaces/{listingID}/add_image', [  SpaceOwnerController::class, 'addImage'])->name('space_owner.add_image');
     Route::get('/space/negotiations', [NegotiationController::class, 'index'])->name('space.negotiations');
     Route::get('/space/negotiations/{negotiationID}', [NegotiationController::class, 'show'])->name('space.negotiation.show');
-    Route::get('/space/reviews', [SpaceOwnerController::class, 'reviews'])->name('space.reviews');
-    Route::post('/space/reviews.submit', [SpaceOwnerController::class, 'submit'])->name('space.submit');
+    Route::get('/space/reviews', [SystemFeedbackController::class, 'index'])->name('space.reviews');
+    Route::post('/space/reviews/submit', [SystemFeedbackController::class, 'store'])->name('space.submit');
     Route::get('/space/payment', [NegotiationController::class, 'showPaymentDetails'])->name('space.business_details');
     Route::put('/space/payment/{payment}/approve', [NegotiationController::class, 'approve'])->name('payments.approve');
     Route::post('space/rentalagreement/{rentalAgreementID}/approve', [NegotiationController::class, 'approveRentalAgreement'])->name('rentalagreement.approve');

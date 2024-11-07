@@ -77,6 +77,7 @@
                         <img src="{{ asset('storage/images/p4.jpg') }}" alt="Image 4" class="w-full h-67 hidden">
                         <img src="{{ asset('storage/images/p5.jpg') }}" alt="Image 5" class="w-full h-67 hidden">
                         <img src="{{ asset('storage/images/p6.jpg') }}" alt="Image 6" class="w-full h-67">
+
                     </div>
 
                     <!-- Previous/Next Buttons -->

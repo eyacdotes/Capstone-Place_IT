@@ -101,7 +101,7 @@
     </div>
 
     <!-- Modal for transferring payment -->
-    <div id="transferModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center z-50 hidden">
+    <div id="transferModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 items-center justify-center z-50 hidden flex">
         <div class="bg-white rounded-lg p-6 w-1/3">
             <h3 class="text-xl font-bold mb-4 text-center">Transfer Payment to Space Owner</h3>
             <form action="{{ route('admin.payments.transfer') }}" method="POST" enctype="multipart/form-data">

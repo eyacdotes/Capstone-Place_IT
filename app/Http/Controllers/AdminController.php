@@ -70,7 +70,7 @@ class AdminController extends Controller
         $pendingListings = Listing::where('status', 'pending')->get();
         $userCount = User::where('role', '!=', 'admin')->count();
         $listingCount = Listing::count();
-        $allListings = Listing::all();
+        $allListings = Listing::orderBy('dateCreated','desc')->get();
 
         return view('admin.listingmanagement', compact('userCount','listingCount','pendingListings','allListings'));
     }
@@ -118,7 +118,7 @@ class AdminController extends Controller
     public function payment() {
         // Fetch all payments with related details
         $payments = Payment::with(['renter', 'rentalAgreement.listing.owner', 'spaceOwner', 'billing', 'negotiation'])
-            ->get();
+            ->orderBy('date','desc')->get();
     
         $userCount = User::where('role', '!=', 'admin')->count();
     
