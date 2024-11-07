@@ -98,7 +98,7 @@
                     @endif
 
                    <!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden">
+<div id="modal" class="flex fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden">
     <div class="bg-white rounded-lg w-1/2 p-8 relative overflow-auto max-h-[90vh]">
         <!-- X Button in the top-right corner -->
         <button onclick="closeModal()" class="absolute top-2 right-4 text-gray-500 hover:bg-red-500  hover:text-white text-2xl font-bold">

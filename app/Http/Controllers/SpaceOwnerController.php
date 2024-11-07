@@ -37,11 +37,12 @@ class SpaceOwnerController extends Controller
     public function reviews()
     {
         // Fetch feedbacks from the reviews table, with related space title and renter details
+        $rentalAgreements = RentalAgreement::where('ownerID', auth()->user()->userID)->get();
         $feedbacks = Reviews::with(['rentalAgreement.space', 'renter'])
                     ->latest() // Order by the latest feedback
                     ->get();
 
-        return view('space_owner.reviews', compact('feedbacks'));
+        return view('space_owner.reviews', compact('feedbacks','rentalAgreements'));
     }
 
     public function edit($listingID)
@@ -60,7 +61,7 @@ class SpaceOwnerController extends Controller
         $listing->save();
 
         // Redirect back with a success message or JSON response
-        return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
+        return redirect()->route('space.dashboard')->with('success', 'Listing deactivated successfully.');
     }
 
     public function restore($listingID) 
@@ -70,7 +71,7 @@ class SpaceOwnerController extends Controller
             // Update status to 'Vacant' before soft delete
             $listing->status = 'Vacant';
             $listing->save();
-            return redirect()->route('space.dashboard')->with('success', 'Listing deleted successfully.');
+            return redirect()->route('space.dashboard')->with('success', 'Listing Restored successfully.');
     }
 
     public function update(Request $request, $listingID)
@@ -136,13 +137,16 @@ class SpaceOwnerController extends Controller
     {   
         // Validate the incoming request
         $validated = $request->validate([
-            'renterID' => 'required|exists:users,userID',
-            'rentalAgreementID' => 'required|exists:rental_agreements,rentalAgreementID',
             'rate' => 'required|integer|between:1,5',
             'comment' => 'nullable|string',
+            'rentalAgreementID' => 'nullable|exists:rental_agreements,rentalAgreementID',
         ]);
 
-        // Create a new review
+        $validated['renterID'] = auth()->user()->userID;
+        $validated['rentalAgreementID'] = 3; // Automatically set renterID from logged-in user
+        
+
+        // Create a new feedback entry
         Reviews::create($validated);
 
         // Redirect with a success message
