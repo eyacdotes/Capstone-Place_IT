@@ -18,7 +18,7 @@
                                 <th class="px-6 py-4 w-60">Owner</th>
                                 <th class="px-6 py-4 w-60">Rental Term</th>
                                 <th class="px-6 py-4 w-60">Amount</th>
-                                <th class="px-6 py-4 w-60 rounded-tr-2xl">Date</th
+                                <th class="px-6 py-4 w-60 rounded-tr-2xl">Date</th>
                             </tr>
                         </thead>
                         <tbody>
