@@ -22,26 +22,26 @@
                     });
                 </script>
             @endif
-                <div>
+               <div class="overflow-hidden rounded-lg">
                     <h3 class="text-lg font-bold mb-4">Sent Negotiations</h3>
-                    <table class="w-full border-collapse">
+                    <table class="w-full border-seperate" style="border-spacing: 0;">
                         <thead>
-                            <tr class="bg-orange-400 text-white">
-                                <th class="px-6 py-4">Space Title</th>
-                                <th class="px-6 py-4">Space Owner</th>
-                                <th class="px-6 py-4">Offer Amount</th>
-                                <th class="px-6 py-4">Status</th>
+                            <tr class="bg-orange-400 text-black">
+                                <th class="px-6 py-4 w-60 rounded-tl-2xl">Space Title</th>
+                                <th class="px-6 py-4 w-60">Space Owner</th>
+                                <th class="px-6 py-4 w-60">Offer Amount</th>
+                                <th class="px-6 py-4 w-60 rounded-tr-2xl">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($negotiations as $negotiation)
-                            <tr class="hover:bg-opacity-75 hover:border-orange-400 hover:shadow-lg cursor-pointer transition duration-200 ease-in-out"
+                            <tr class="cursor-pointer bg-orange-100 hover:bg-orange-200 hover:shadow-lg hover:border-2 hover:border-orange-400 transition duration-200 ease-in-out"
                                 style="border: 1px solid transparent;" 
                                 onclick="window.location='{{ route('business.negotiation.show', ['negotiationID' => $negotiation->negotiationID]) }}'">
-                                <td class="px-6 py-4 bg-gray-100">{{ $negotiation->listing->title }}</td>
-                                <td class="px-6 py-4 bg-gray-100">{{ ucwords($negotiation->receiver->firstName) . ' ' . ucwords($negotiation->receiver->lastName) }}</td>
-                                <td class="px-6 py-4 bg-gray-100">{{ number_format($negotiation->offerAmount, 2) }}</td>
-                                <td class="px-6 py-4 bg-gray-100">
+                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $negotiation->listing->title }}</td>
+                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ ucwords($negotiation->receiver->firstName) . ' ' . ucwords($negotiation->receiver->lastName) }}</td>
+                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ number_format($negotiation->offerAmount, 2) }}</td>
+                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">
                                 <span class="
                                                     {{ $negotiation->negoStatus === 'Approved' ? 'text-green-600' : '' }}
                                                     {{ $negotiation->negoStatus === 'Pending' ? 'text-blue-600' : '' }}
@@ -53,7 +53,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-4 text-center bg-gray-100">You have not sent any negotiations.</td>
+                                <td colspan="5" class="px-6 py-4 text-center bg-orange-100">You have not sent any negotiations.</td>
                             </tr>
                             @endforelse
                         </tbody>

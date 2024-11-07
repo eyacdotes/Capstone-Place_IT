@@ -148,7 +148,7 @@
                 <div class="flex justify-center space-x-3 text-gray-500">
                     <a href="https://www.facebook.com/yani.mcphee"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.instagram.com/yani.mcphee/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="#"><img src="{{ asset('storage/images/Carsido.jpg') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
+                    <a href="#"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                     <a href="https://www.linkedin.com/in/frances-diana-carsido-987286207/?originalSubdomain=ph"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
                 </div>
             </div>
