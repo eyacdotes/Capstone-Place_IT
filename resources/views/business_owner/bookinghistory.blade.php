@@ -18,7 +18,8 @@
                                 <th class="px-6 py-4 w-60">Owner</th>
                                 <th class="px-6 py-4 w-60">Rental Term</th>
                                 <th class="px-6 py-4 w-60">Amount</th>
-                                <th class="px-6 py-4 w-60 rounded-tr-2xl">Date</th>
+                                <th class="px-6 py-4 w-60">Date</th>
+                                <th class="px-6 py-4 w-60 rounded-tr-2xl">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,9 +30,9 @@
                                 <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ ucwords($history->rentalAgreement->rentalTerm) ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ number_format($history->rentalAgreement->offerAmount, 2) }}</td>
                                 <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $history->date }}</td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 text-center">
                                     <a href="{{ route('place.detail', ['listingID' => $history->rentalAgreement->space->listingID]) }}"
-                                        class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                        class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-red-500 rounded-lg border border-transparent hover:bg-red-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                         Book Again!
                                     </a>
                                 </td>

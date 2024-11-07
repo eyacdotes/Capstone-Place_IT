@@ -92,7 +92,9 @@
                 <!-- Feedback Title -->
                 <div class="text-center mb-8 container-header fade-in">
                     <h3 class="text-2xl font-semibold text-gray-800">We Value Your Feedback!</h3>
-                    <p class="text-gray-600 mt-2">Tell us how you feel about using our platform</p>
+                    <p class="text-gray-600 mt-2">Tell us how you feel about using our platform.</p>
+                    <p class="text-gray-600">Your feedback is valuable to us and helps improve our system, PlaceIt.</p>
+                    <p class="text-gray-600">Please share your experience to help us grow and serve you better!</p>
                 </div>
 
                 <!-- Feedback Experience Section -->
