@@ -11,44 +11,46 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                    <h3 class="text-lg font-bold mb-4">Rental Agreements</h3>
+                    <div class="overflow-hidden rounded-lg">
+                        <h3 class="text-lg font-bold mb-4">Rental Agreements</h3>
 
-                    <table class="table-auto w-full text-left">
-                        <thead>
-                            <tr>
-                                <th class="px-4 py-2">Space Name</th>
-                                <th class="px-4 py-2">Owner</th>
-                                <th class="px-4 py-2">Amount Paid</th>
-                                <th class="px-4 py-2">Rental Term</th>
-                                <th class="px-4 py-2">Date Start</th>
-                                <th class="px-4 py-2">Date End</th>
-                                <th class="px-4 py-2">Status</th>
-                                <th class="px-4 py-2">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($rentalAgreements as $agreement)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $agreement->listing->title }}</td>
-                                    <td class="border px-4 py-2">{{ ucwords($agreement->owner->firstName) }} {{ ucwords($agreement->owner->lastName) }}</td>
-                                    <td class="border px-4 py-2">{{ $agreement->offerAmount }}</td>
-                                    <td class="border px-4 py-2">{{ ucwords($agreement->rentalTerm) }}</td>
-                                    <td class="border px-4 py-2">{{ $agreement->dateStart }}</td>
-                                    <td class="border px-4 py-2">{{ $agreement->dateEnd }}</td>
-                                    <td class="border px-4 py-2">{{ $agreement->status }}</td>
-                                    <td class="border px-4 py-2">
-                                        <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="text-blue-500">
-                                            Give Feedback
-                                        </a>
-                                    </td>
+                        <table class="w-full border-seperate" style="border-spacing: 0;">
+                            <thead>
+                                <tr class="bg-orange-400 text-black">
+                                    <th class="px-6 py-4 w-44 rounded-tl-2xl">Space Name</th>
+                                    <th class="px-4 py-2">Owner</th>
+                                    <th class="px-4 py-2">Amount Paid</th>
+                                    <th class="px-4 py-2">Rental Term</th>
+                                    <th class="px-4 py-2">Date Start</th>
+                                    <th class="px-4 py-2">Date End</th>
+                                    <th class="px-4 py-2">Status</th>
+                                    <th class="px-6 py-4 w-44 rounded-tr-2xl">Action</th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="border px-4 py-2 text-center">No rental agreements found.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @forelse ($rentalAgreements as $agreement)
+                                    <tr class="bg-orange-100">
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $agreement->listing->title }}</td>
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ ucwords($agreement->owner->firstName) }} {{ ucwords($agreement->owner->lastName) }}</td>
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $agreement->offerAmount }}</td>
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ ucwords($agreement->rentalTerm) }}</td>
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $agreement->dateStart }}</td>
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $agreement->dateEnd }}</td>
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $agreement->status }}</td>
+                                        <td class="px-6 py-4 text-center border-b-2 border-orange-200">
+                                            <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="text-blue-500">
+                                                Give Feedback
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="px-4 py-2 text-center bg-orange-200">No rental agreements found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
                     @if(isset($selectedAgreement))
                         <h3 class="text-lg font-bold mt-6 mb-4">Submit Feedback for Rental Agreement ID: {{ $selectedAgreement->rentalAgreementID }}</h3>

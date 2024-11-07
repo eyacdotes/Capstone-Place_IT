@@ -147,7 +147,7 @@
                                 </button>
 
                                 <!-- Modal Background -->
-                                <div id="editModal" class="fixed inset-0 items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                                <div id="editModal" class="fixed inset-0 items-center flex justify-center bg-gray-900 bg-opacity-50 hidden">
                                     <!-- Modal Content -->
                                     <div class="bg-white rounded-lg w-full max-w-lg p-6">
                                         <h2 class="text-xl font-bold mb-4">Edit Rental Agreement</h2>

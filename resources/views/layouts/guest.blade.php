@@ -5,6 +5,7 @@
     <link rel="icon" href="{{ asset('place-it.png') }}" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
 
 
     <!-- Scripts -->
@@ -12,10 +13,10 @@
 </head>
 <body class="bg-white font-sans antialiased min-h-screen flex flex-col">
     <!-- Navbar -->
-    <nav class="p-4 bg-white shadow flex justify-between items-center">
+    <nav class="p-4 bg-white shadow md:flex md:justify-between md:items-center border-b-2 border-orange-500">
         <!-- Logo Section with "Get Started" next to it on mobile -->
         <div class="flex items-center space-x-40">
-            <a href="{{ url('/') }}" class="text-orange-600 text-3xl font-bold">place.it</a>
+            <a href="{{ url('/') }}" class="text-orange-600 text-3xl font-bold" style="font-family: fredoka">place.it</a>
 
             <!-- Get Started Button next to the logo on mobile, hidden on larger screens -->
             @if (Route::has('login') && !Auth::check())
@@ -33,7 +34,8 @@
     <div class="-mt-8 container mx-auto flex flex-col lg:flex-row justify-center items-center h-screen space-y-8 lg:space-y-0 lg:space-x-12 px-4">
         <!-- Left Image Section (hidden on mobile, visible on large screens) -->
         <div class="hidden lg:block lg:w-1/2">
-            <img src="https://freemockup.net/wp-content/uploads/2021/01/Free-Vertical-Building-Billboard-Mockup-PSD.jpg" alt="Building" class="h-full w-full object-cover  shadow-lg">
+            <h1 class="text-4xl md:text-6xl font-bold text-red-600 leading-tight mb-4"><span style="font-family: fredoka">Welcome to PlaceIt</h1>
+            <p class="text-black-600 text-base md:text-2xl mb-6">Find the perfect space to advertise your business, or list your available space and start earning today!</p>
         </div>
 
         <!-- Content (Login Form / Register Form) -->
