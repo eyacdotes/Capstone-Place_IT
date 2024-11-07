@@ -26,14 +26,14 @@
                             </thead>
                             <tbody>
                                 @forelse ($rentalAgreements as $agreement)
-                                    <tr class="text-center bg-orange-100">
-                                        <td class="px-4 py-2 border-b-2 border-orange-200">{{ $agreement->listing->title }}</td>
-                                        <td class="px-4 py-2 border-b-2 border-orange-200">{{ ucwords($agreement->owner->firstName) }} {{ ucwords($agreement->owner->lastName) }}</td>
-                                        <td class="px-4 py-2 border-b-2 border-orange-200">{{ $agreement->offerAmount }}</td>
-                                        <td class="px-4 py-2 border-b-2 border-orange-200">{{ ucwords($agreement->rentalTerm) }}</td>
-                                        <td class="px-4 py-2 border-b-2 border-orange-200">{{ $agreement->dateStart }}</td>
-                                        <td class="px-4 py-2 border-b-2 border-orange-200">{{ $agreement->dateEnd }}</td>
-                                        <td class="px-4 py-2 w-60 border-b-2 border-orange-200">
+                                    <tr class="text-center bg-orange-100 border-b-2 border-orange-200">
+                                        <td class="px-4 py-2 ">{{ $agreement->listing->title }}</td>
+                                        <td class="px-4 py-2 ">{{ ucwords($agreement->owner->firstName) }} {{ ucwords($agreement->owner->lastName) }}</td>
+                                        <td class="px-4 py-2 ">{{ $agreement->offerAmount }}</td>
+                                        <td class="px-4 py-2 ">{{ ucwords($agreement->rentalTerm) }}</td>
+                                        <td class="px-4 py-2 ">{{ $agreement->dateStart }}</td>
+                                        <td class="px-4 py-2 ">{{ $agreement->dateEnd }}</td>
+                                        <td class="px-4 py-2 w-60 ">
                                             @if (isset($feedbacks[$agreement->rentalAgreementID]))
                                                 <span colspan="7" class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900">Done feedback idiot.</span>
                                             @else
