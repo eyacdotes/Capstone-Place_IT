@@ -108,6 +108,7 @@
                             <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateStart)->format('M d, Y') }}</p>
                             <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateEnd)->format('M d, Y') }}</p>
                             <p><strong>Offer Amount:</strong> ₱{{ number_format($rentalAgreement->offerAmount, 2) }}</p>
+                            <p><strong>Status:</strong> {{ ucfirst($rentalAgreement->status) }}</p>
                         </div>
 
                         @if(Auth::id() == $negotiation->senderID) <!-- If Business Owner -->

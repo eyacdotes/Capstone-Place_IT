@@ -57,11 +57,11 @@
                                         <td class="py-2 px-4 border-b">
                                         @if($currentRole !== 'admin')
                                             @if($user->isActive)
-                                                <button onclick="showDeactivationModal('{{ $user->userID }}')" class="font-semibold border-2 bg-red-500 rounded-lg p-2 text-black hover:text-red-100">
+                                                <button onclick="showDeactivationModal('{{ $user->userID }}')" class="font-semibold border-2 border-red-500 bg-red-500 rounded-lg p-2 text-black hover:text-red-100">
                                                     Deactivate
                                                 </button>
                                             @else
-                                                <button onclick="showActivationModal('{{ $user->userID }}')" class="font-semibold border-2 bg-green-500 rounded-lg p-2 text-black hover:text-green-100">
+                                                <button onclick="showActivationModal('{{ $user->userID }}')" class="font-semibold border-2 bg-green-500 border-green-500 rounded-lg p-2 text-black hover:text-green-100">
                                                     Activate
                                                 </button>
 
