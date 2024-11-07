@@ -151,7 +151,7 @@
     </script>
 
     <!-- Image Modal -->
-    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center flex">
         <div class="relative max-w-full max-h-full">
             <!-- Close Button with Circular Gray Background -->
             <button onclick="closeModal()" 

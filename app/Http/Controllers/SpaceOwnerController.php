@@ -20,7 +20,7 @@ class SpaceOwnerController extends Controller
      */
     public function index()
     {
-        $listings = Listing::with('images')->where('ownerID', Auth::id())->get();
+        $listings = Listing::with('images')->where('ownerID', Auth::id())->orderBy('dateCreated','desc')->get();
         return view('dashboard.space', compact('listings'));
     }
 

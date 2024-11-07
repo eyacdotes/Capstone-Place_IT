@@ -23,6 +23,7 @@ class NegotiationController extends Controller
         $negotiations = Negotiation::where('senderID', Auth::id())
                                    ->orWhere('receiverID', Auth::id())
                                    ->with('listing', 'sender', 'receiver')
+                                   ->orderBy('created_at','desc')
                                    ->get();
 
         // Check role and return appropriate view

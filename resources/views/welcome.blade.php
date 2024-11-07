@@ -71,12 +71,13 @@
             <div class="lg:w-1/2 relative">
                 <div id="carousel" class="relative w-full overflow-hidden rounded-md shadow-lg">
                     <div id="carousel-images" class="relative w-full h-full flex transition-all duration-500">
-                    <img src="{{ asset('storage/images/billboardss.jpg') }}" alt="Image 1" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/Jeepneysss.jpg') }}" alt="Image 3" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/billboards (2).jpg') }}" alt="Image 1" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/jeep.jpg') }}" alt="Image 3" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/billboards (3).jpg') }}" alt="Image 1" class="w-full h-67 hidden">
                         <img src="{{ asset('storage/images/taxi.jpg') }}" alt="Image 4" class="w-full h-67 hidden">
                         <img src="{{ asset('storage/images/tricycle.jpg') }}" alt="Image 5" class="w-full h-67 hidden">
                         <img src="{{ asset('storage/images/billboards.jpg') }}" alt="Image 6" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/jeeps.png') }}" alt="Image 7" class="w-full h-67">
+                        <img src="{{ asset('storage/images/jeep.jpg') }}" alt="Image 7" class="w-full h-67 hidden">
                     </div>
 
                     <!-- Previous/Next Buttons -->
