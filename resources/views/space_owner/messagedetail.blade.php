@@ -46,24 +46,35 @@
                         <!-- Message Input -->
                         <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
                             @csrf
-                            <div class="flex items-center space-x-2 bg-gray-100 p-2 rounded-lg">
-                                <!-- Hidden file input -->
-                                <label for="aImage" class="cursor-pointer flex items-center justify-center bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300">
-                                    <!-- File attachment icon -->
-                                    <i class="fas fa-paperclip"></i>
-                                </label>
-                                <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
+                            <div class="flex items-center bg-gray-100 p-2 rounded-lg space-x-2">
+                                
+                                <!-- Left Section: File Attachment and Message Input -->
+                                <div class="flex-grow flex items-center space-x-2">
+                                    <!-- File Attachment -->
+                                    <label for="aImage" class="cursor-pointer flex items-center justify-center bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300">
+                                        <i class="fas fa-paperclip"></i>
+                                    </label>
+                                    <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
 
-                                <!-- File name display -->
-                                <span id="fileName" class="text-gray-600 text-sm"></span>
+                                    <!-- File Name Display -->
+                                    <span id="fileName" class="text-gray-600 text-sm"></span>
 
-                                <!-- Message input -->
-                                <input type="text" name="message" class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" placeholder="Type your message...">
+                                    <!-- Message Input -->
+                                    <input type="text" name="message" id="messageInput" class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" placeholder="Type your message...">
+                                </div>
 
-                                <!-- Send button -->
-                                <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center">
-                                    Send
-                                </button>
+                                <!-- Right Section: Clear and Send Buttons -->
+                                <div class="flex items-center space-x-2">
+                                    <!-- Clear File Button (Trash Icon) -->
+                                    <button type="button" id="clearFileBtn" class="hidden bg-red-500 text-white p-2 rounded-lg hover:bg-red-700" onclick="clearFileSelection()">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    <!-- Send Button -->
+                                    <button type="submit" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center">
+                                        Send
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -364,7 +375,52 @@
         function closeModal() {
             document.getElementById('imageModal').classList.add('hidden');
         }
-        
+
+        function toggleMessageInput() {
+        const fileInput = document.getElementById('aImage');
+        const messageInput = document.getElementById('messageInput');
+        const fileNameDisplay = document.getElementById('fileName');
+        const clearFileBtn = document.getElementById('clearFileBtn');
+
+        if (fileInput.files.length > 0) {
+            // Hide message input and show file name
+            messageInput.classList.add('hidden');
+            clearFileBtn.classList.remove('hidden');
+            fileNameDisplay.textContent = fileInput.files[0].name;
+        } else {
+            // Show message input if no file is selected
+            messageInput.classList.remove('hidden');
+            clearFileBtn.classList.add('hidden');
+            fileNameDisplay.textContent = '';
+        }
+    }
+        function showFileName() {
+        const fileInput = document.getElementById("aImage");
+        const fileNameDisplay = document.getElementById("fileName");
+        const clearFileBtn = document.getElementById("clearFileBtn");
+        const messageInput = document.getElementById("messageInput");
+
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+            clearFileBtn.classList.remove("hidden");
+            messageInput.classList.add("hidden"); // Hide the message input when an image is selected
+        } else {
+            clearFileSelection();
+        }
+    }
+
+        function clearFileSelection() {
+            const fileInput = document.getElementById("aImage");
+            const fileNameDisplay = document.getElementById("fileName");
+            const clearFileBtn = document.getElementById("clearFileBtn");
+            const messageInput = document.getElementById("messageInput");
+
+            fileInput.value = ""; // Clear file input
+            fileNameDisplay.textContent = ""; // Clear displayed file name
+            clearFileBtn.classList.add("hidden"); // Hide the clear button
+            messageInput.classList.remove("hidden"); // Show the message input
+        }
+
     </script>
     <!-- Image Modal -->
     <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">

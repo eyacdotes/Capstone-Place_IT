@@ -61,7 +61,7 @@ class LoginRequest extends FormRequest
         RateLimiter::clear($this->throttleKey());
     }
 
-
+    
     /**
      * Ensure the login request is not rate limited.
      *
