@@ -145,7 +145,7 @@
 
                     <!-- Feedback Textarea -->
                     <div class="mb-6">
-                        <textarea name="comment" rows="4" class="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="Leave your feedback here..." required></textarea>
+                        <textarea name="feedback_content" rows="4" class="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="Leave your feedback here..." required></textarea>
                     </div>
 
                     <!-- Submit Button -->

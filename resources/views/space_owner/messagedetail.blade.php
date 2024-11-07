@@ -130,25 +130,33 @@
                                     <p class="text-red-500">No rental agreement submitted yet.</p>
                                 @endif
                             </div>
+                            <!-- Update Negotiation Status Section -->
                             @if($negotiation->negoStatus !== 'Approved')
-                                <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
-                                    @csrf
-                                    <div class="mb-4">
-                                        <label for="status" class="block text-lg font-semibold">Update Negotiation Status:</label>
-                                        <select name="status" id="status" class="form-select mt-1 block w-full">
-                                            <option value="Pending" {{ $negotiation->negoStatus === 'Pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="Approved" {{ $negotiation->negoStatus === 'Approved' ? 'selected' : '' }}>Approve</option>
-                                            <option value="Disapproved" {{ $negotiation->negoStatus === 'Disapproved' ? 'selected' : '' }}>Disapprove</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
-                                </form>
+                                @if($negotiation->rentalAgreement && $billing && isset($negotiation->meetupProof))
+                                    <!-- Show the Update Negotiation Status form only after all required actions are completed -->
+                                    <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
+                                        @csrf
+                                        <div class="mb-4">
+                                            <label for="status" class="block text-lg font-semibold">Update Negotiation Status:</label>
+                                            <select name="status" id="status" class="form-select mt-1 block w-full">
+                                                <option value="Pending" {{ $negotiation->negoStatus === 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="Approved" {{ $negotiation->negoStatus === 'Approved' ? 'selected' : '' }}>Approve</option>
+                                                <option value="Disapproved" {{ $negotiation->negoStatus === 'Disapproved' ? 'selected' : '' }}>Disapprove</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
+                                    </form>
+                                @else
+                                    <!-- Placeholder message guiding the user -->
+                                    <p class="text-gray-600 font-light mb-2">Complete the approval, GCash details, and meetup proof steps to enable negotiation status update.</p>
+                                @endif
                             @else
-                                <p class="text-blue-600 font-light mb-2">Negotiation has been approved. The space is now occupied and cannot be rented by others. Please wait for further instructions from the admin.</p>
+                                <!-- Message displayed after the negotiation status is approved -->
+                                <p class="text-blue-600 font-light mb-2">
+                                    Negotiation status approved. The space is now occupied and cannot be rented by others. Please await further instructions from the admin.
+                                </p>
                             @endif
                         </div>
-
-
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                         @csrf
                         <div id="detailsModal" class="fixed inset-0 bg-gray-500 flex bg-opacity-75 items-center justify-center hidden">

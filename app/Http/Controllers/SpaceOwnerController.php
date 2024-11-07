@@ -34,16 +34,6 @@ class SpaceOwnerController extends Controller
         $listings = Listing::where('ownerID', Auth::id())->get();
         return view('space_owner.negotiations', compact('listings'));
     }
-    public function reviews()
-    {
-        // Fetch feedbacks from the reviews table, with related space title and renter details
-        $rentalAgreements = RentalAgreement::where('ownerID', auth()->user()->userID)->get();
-        $feedbacks = Reviews::with(['rentalAgreement.space', 'renter'])
-                    ->latest() // Order by the latest feedback
-                    ->get();
-
-        return view('space_owner.reviews', compact('feedbacks','rentalAgreements'));
-    }
 
     public function edit($listingID)
     {
