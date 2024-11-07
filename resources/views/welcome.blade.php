@@ -36,7 +36,7 @@
             <!-- Mobile Login and Get Started Buttons -->
             <div class="block md:hidden space-y-4">
                 @if (Route::has('login') && Auth::check())
-                    <a href="{{ url('/home') }}" class="text-red-600 hover:text-gray-800 block">Dashboard</a>
+                    <a href="{{ url('/login') }}" class="text-red-600 hover:text-gray-800 block">Dashboard</a>
                 @elseif (Route::has('login') && !Auth::check())
                     <a href="{{ url('/login') }}" class="text-red-600 text-center border-2 block rounded-lg py-2 px-4 hover:text-blue-800">Login</a>
                     <a href="{{ url('/register') }}" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md block text-center">Get Started</a>
@@ -47,7 +47,7 @@
         <!-- Desktop Login and Get Started Buttons -->
         <div class="hidden md:flex items-center space-x-4 mt-4 md:mt-0">
             @if (Route::has('login') && Auth::check())
-                <a href="{{ url('/home') }}" class="text-red-600  hover:text-gray-800 ">Dashboard</a>
+                <a href="{{ url('/dashboard') }}" class="text-red-600  hover:text-gray-800 ">Dashboard</a>
             @elseif (Route::has('login') && !Auth::check())
                 <a href="{{ url('/login') }}" class="font-semibold bg-red-500 hover:bg-sky-600 text-white py-2 px-4 rounded-md">Login</a>
                 <a href="{{ url('/register') }}" class="font-semibold bg-red-500 hover:bg-sky-600 text-white py-2 px-4 rounded-md">Get Started</a>
@@ -62,8 +62,8 @@
             <div class="lg:w-1/2 text-center lg:text-left mt-8 lg:mt-0">
                 <!--h1 class="text-9xl md:text-9xl font-bold text-orange-600 leading-tight mb-4" style="font-family: 'Fredoka', sans-serif;">PlaceIt</h1-->
                 <h1 class="text-2xl md:text-6xl font-bold text-red-600 mb-4" style="font-family: 'Fredoka', sans-serif;">Monetize Your Empty Spaces with PlaceIt!</h1>
-                <h2 class="text-gray-600 text-base md:text-2xl mb-6">Transform spaces, maximizing potential — where opportunities meet visibility.</>
-                <h3 class="text-gray-600 text-base md:text-lg mb-6">Welcome to the ultimate platform for turning your unused spaces into a source of revenue. Whether it’s a blank wall, a billboard, or any available area, we connect space owners with businesses looking to advertise. Let your empty spaces work for you!</h3>
+                <h2 class="text-gray-600 text-base md:text-2xl mb-6 ml-3">Transform spaces, maximizing potential — where opportunities meet visibility.</>
+                <h3 class="text-gray-600 text-base md:text-lg mb-6 ml-3">Welcome to the ultimate platform for turning your unused spaces into a source of revenue. Whether it’s a blank wall, a billboard, or any available area, we connect space owners with businesses looking to advertise. Let your empty spaces work for you!</h3>
                 <a href="{{url(path: '/register') }}" class="bg-red-500 hover:bg-red-700 text-white py-3 px-6 rounded-md text-lg">Learn More</a>
             </div>
 
@@ -71,13 +71,13 @@
             <div class="lg:w-1/2 relative">
                 <div id="carousel" class="relative w-full overflow-hidden rounded-md shadow-lg">
                     <div id="carousel-images" class="relative w-full h-full flex transition-all duration-500">
-                        <img src="{{ asset('storage/images/billboards (2).jpg') }}" alt="Image 1" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/jeep.jpg') }}" alt="Image 3" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/billboards (3).jpg') }}" alt="Image 1" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/taxi.jpg') }}" alt="Image 4" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/tricycle.jpg') }}" alt="Image 5" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/billboards.jpg') }}" alt="Image 6" class="w-full h-67 hidden">
-                        <img src="{{ asset('storage/images/jeep.jpg') }}" alt="Image 7" class="w-full h-67 hidden">
+                    <img src="{{ asset('storage/images/p1.jpg') }}" alt="Image 1" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/p2.jpg') }}" alt="Image 2" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/p3.png') }}" alt="Image 3" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/p4.jpg') }}" alt="Image 4" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/p5.jpg') }}" alt="Image 5" class="w-full h-67 hidden">
+                        <img src="{{ asset('storage/images/p6.jpg') }}" alt="Image 6" class="w-full h-67">
+
                     </div>
 
                     <!-- Previous/Next Buttons -->

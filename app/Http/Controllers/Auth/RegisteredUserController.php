@@ -55,7 +55,7 @@ class RegisteredUserController extends Controller
         session(['show_welcome_modal' => true]);
 
 
-        return redirect()->route('otp.verify')->with('status', 'Please check your email for the OTP.');
+        return redirect()->route('otp.verify');
     }
 
     /**
@@ -76,7 +76,7 @@ class RegisteredUserController extends Controller
         // Set session flag for showing welcome modal
         session(['show_welcome_modal' => true]);
 
-        return redirect()->route('otp.verify')->with('status', 'Please check your email for the OTP.');
+        return redirect()->route('otp.verify');
     }
 
     /**
