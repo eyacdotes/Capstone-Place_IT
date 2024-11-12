@@ -151,6 +151,14 @@
                             data.forEach(notification => {
                                 const notificationLink = document.createElement('a');
                                 notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+
+                                // Set background based on read status
+                                if (notification.read_at === null) {
+                                    notificationLink.classList.add('bg-gray-200'); // Unread - gray background
+                                } else {
+                                    notificationLink.classList.add('bg-white'); // Read - white background
+                                }
+
                                 notificationLink.href = getNotificationUrl(notification);
                                 notificationLink.setAttribute('data-id', notification.notificationID);
 
@@ -161,20 +169,24 @@
                                     const notificationId = this.getAttribute('data-id');
                                     markAsRead(notificationId, url);
                                 });
+                                
                                 const notificationMessage = document.createElement('div');
+                                // Customize the message based on notification type
                                 if (notification.type === 'listing_approved') {
-                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data + '</strong> was approved';
+                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved';
+                                } else if (notification.type === 'listing_disapproved') {
+                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved';
                                 } else if (notification.type === 'payment') {
                                     notificationMessage.textContent = 'You received a payment';
-                                } else if (notification.type === 'negotiation') {
-                                    notificationMessage.innerHTML = '<strong>' + notification.data + '</strong>';
-                                } else if (notification.type === 'negotiation_status_update') {
-                                    notificationMessage.innerHTML = 'Your negotiation for ' + '<strong>' + notification.data + '</strong>' + ' has been approved!';
-                                } else if (notification.type === 'payment_confirmed') {
-                                    notificationMessage.innerHTML = 'Your ' + '<strong>' + notification.data + '</strong>' + ' has been confirmed by the admin.';
-                                } else if (notification.type === 'agreement_approved') {
-                                    notificationMessage.innerHTML = 'Your rental agreement has been approved by ' + '<strong>' + notification.data + '</strong>.';
                                 } else if (notification.type === 'maintenance') {
+                                    notificationMessage.textContent = notification.data;
+                                } else if (notification.type === 'negotiation') {
+                                    notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>';
+                                } else if (notification.type === 'payment_sent') {
+                                    notificationMessage.innerHTML = notification.data;
+                                } else if (notification.type === 'payment_confirmed') {
+                                    notificationMessage.innerHTML = 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
+                                } else if (notification.type === 'feedback') {
                                     notificationMessage.innerHTML = notification.data;
                                 } else {
                                     notificationMessage.textContent = notification.description;  // Default message
@@ -206,6 +218,7 @@
                     })
                     .catch(error => console.error('Error loading notifications:', error));
             }
+
 
             // Event listener for "See previous notifications" button
             seePreviousBtn.addEventListener('click', function () {
@@ -248,8 +261,13 @@
                 return '/business/negotiations';
             } else if (notification.type === 'negotiation_status_update') {
                 return '/business/negotiations';
-            }
-            return '#';  // Default URL
+            }   else if (notification.type === 'payment_confirmed') {
+                return '/business/negotiations';
+            } else if (notification.type === 'maintenance') {
+                return '/business/dashboard';
+            } else if (notification.type === 'feedback') {
+                return '/business/dashboard';
+            }return '#';  // Default URL
         }
 
         // AJAX function to mark a notification as read

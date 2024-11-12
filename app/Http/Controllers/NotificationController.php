@@ -13,33 +13,41 @@ class NotificationController extends Controller
         return view('admin.notifications.create');
     }
     public function store(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'type' => 'required|string|max:255',
-            'message' => 'required|string|max:255',
-            'selectUser' => 'required|string' // Add validation for the new field
-        ]);
+{
+    // Validate the request data
+    $request->validate([
+        'type' => 'required|string|max:255',
+        'message' => 'required|string|max:255',
+        'selectUser' => 'required|string'
+    ]);
 
-        // Determine the role based on the selected user type
-        $role = $request->selectUser === 'space_owner' ? 'space_owner' : 'business_owner';
-
-        // Retrieve all users except admins
-        $users = User::where('role', $role)->get(); 
-
-        // Loop through each user and create a notification entry for them
-        foreach ($users as $user) {
-            Notification::create([
-                'n_userID' => $user->userID,  // Ensure the n_userID references the users table
-                'type' => $request->type,  // You can put additional data here if needed
-                'data' => $request->message,
-                'created_at' => now(),
-            ]);
-        }
-
-        // Redirect back with a success message
-        return redirect()->route('admin.dashboard')->with('success', 'Notification sent successfully!');
+    // Determine the user roles to notify based on the selection
+    $roles = [];
+    if ($request->selectUser === 'space_owner') {
+        $roles[] = 'space_owner';
+    } elseif ($request->selectUser === 'business_owner') {
+        $roles[] = 'business_owner';
+    } elseif ($request->selectUser === 'both') {
+        $roles = ['space_owner', 'business_owner'];
     }
+
+    // Retrieve all users with the selected roles
+    $users = User::whereIn('role', $roles)->get();
+
+    // Loop through each user and create a notification entry for them
+    foreach ($users as $user) {
+        Notification::create([
+            'n_userID' => $user->userID,  // Ensure the n_userID references the users table
+            'type' => $request->type,
+            'data' => $request->message,
+            'created_at' => now(),
+        ]);
+    }
+
+    // Redirect back with a success message
+    return redirect()->route('admin.dashboard')->with('success', 'Notification sent successfully!');
+}
+
 
     // Mark a notification as read
     public function markAsRead($id)
