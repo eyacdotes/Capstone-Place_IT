@@ -172,16 +172,14 @@
                                 
                                 const notificationMessage = document.createElement('div');
                                 // Customize the message based on notification type
-                                if (notification.type === 'listing_approved') {
-                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved';
-                                } else if (notification.type === 'listing_disapproved') {
-                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved';
-                                } else if (notification.type === 'payment') {
-                                    notificationMessage.textContent = 'You received a payment';
+                                if (notification.type === 'negotiation_status_update') {
+                                    notificationMessage.textContent = notification.data;
+                                } else if (notification.type === 'agreement_approved') {
+                                    notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'maintenance') {
                                     notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'negotiation') {
-                                    notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>';
+                                    notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'payment_sent') {
                                     notificationMessage.innerHTML = notification.data;
                                 } else if (notification.type === 'payment_confirmed') {
