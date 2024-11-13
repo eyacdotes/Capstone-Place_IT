@@ -132,82 +132,97 @@
 
         // Fetch notifications via AJAX
         function loadNotifications() {
-                fetch(`/notifications?offset=${offset}&limit=8`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const unreadNotifications = data.filter(notification => notification.read_at === null);
+    fetch(`/notifications?offset=${offset}&limit=8`)
+        .then(response => response.json())
+        .then(data => {
+            const unreadNotifications = data.filter(notification => notification.read_at === null);
 
-                        // Show or hide red dot based on unread notifications
-                        if (unreadNotifications.length > 0) {
-                            notificationDot.style.display = 'inline-block';  // Show the red dot
-                        } else {
-                            notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
-                        }
-                        if (data.length > 0) {
-                            if (offset === 0) {
-                                notificationList.innerHTML = ''; // Clear placeholder on first load
-                            }
-
-                            data.forEach(notification => {
-                                const notificationLink = document.createElement('a');
-                                notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
-                                notificationLink.href = getNotificationUrl(notification);
-                                notificationLink.setAttribute('data-id', notification.notificationID);
-
-                                // Add click event for marking as read and redirect
-                                notificationLink.addEventListener('click', function (event) {
-                                    event.preventDefault();
-                                    const url = this.href;
-                                    const notificationId = this.getAttribute('data-id');
-                                    markAsRead(notificationId, url);
-                                });
-                                const notificationMessage = document.createElement('div');
-                                if (notification.type === 'listing_approved') {
-                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved';
-                                } else if (notification.type === 'listing_disapproved') {
-                                    notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved';
-                                } else if (notification.type === 'payment') {
-                                    notificationMessage.textContent = 'You received a payment';
-                                } else if (notification.type === 'maintenance') {
-                                    notificationMessage.textContent = notification.data;
-                                } else if (notification.type === 'negotiation') {
-                                    notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>';
-                                } else if (notification.type === 'payment_sent') {
-                                    notificationMessage.innerHTML = notification.data;
-                                } else if (notification.type === 'payment_confirmed') {
-                                    notificationMessage.innerHTML = 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
-                                } else if (notification.type === 'payment_sent') {
-                                    notificationMessage.textContent = notification.data;
-                                } else {
-                                    notificationMessage.textContent = notification.description;  // Default message
-                                }
-
-                                const notificationDate = document.createElement('span');
-                                notificationDate.classList.add('text-gray-400', 'text-sm');
-                                notificationDate.textContent = new Date(notification.created_at).toLocaleString();
-
-                                notificationLink.appendChild(notificationMessage);
-                                notificationLink.appendChild(notificationDate);
-
-                                notificationList.appendChild(notificationLink);
-                            });
-
-                            // Show "See previous notifications" button if there are more notifications
-                            if (data.length === 8) {
-                                seePreviousBtn.style.display = 'block';
-                                hasPrevious = true; // Previous notifications exist
-                            } else {
-                                seePreviousBtn.style.display = 'none';
-                                hasPrevious = false; // No previous notifications
-                            }
-
-                            offset += data.length; // Increase the offset
-                        } else if (offset === 0) {
-                            notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
-                        }
-                    })
-                    .catch(error => console.error('Error loading notifications:', error));
+            // Show or hide red dot based on unread notifications
+            if (unreadNotifications.length > 0) {
+                notificationDot.style.display = 'inline-block';  // Show the red dot
+            } else {
+                notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
             }
+            if (data.length > 0) {
+                if (offset === 0) {
+                    notificationList.innerHTML = ''; // Clear placeholder on first load
+                }
+
+                data.forEach(notification => {
+                    const notificationLink = document.createElement('a');
+                    notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+
+                    // Set background based on read status
+                    if (notification.read_at === null) {
+                        notificationLink.classList.add('bg-gray-200'); // Unread - gray background
+                    } else {
+                        notificationLink.classList.add('bg-white'); // Read - white background
+                    }
+
+                    notificationLink.href = getNotificationUrl(notification);
+                    notificationLink.setAttribute('data-id', notification.notificationID);
+
+                    // Add click event for marking as read and redirect
+                    notificationLink.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const url = this.href;
+                        const notificationId = this.getAttribute('data-id');
+                        markAsRead(notificationId, url);
+                    });
+                    
+                    const notificationMessage = document.createElement('div');
+                    // Customize the message based on notification type
+                    if (notification.type === 'listing_approved') {
+                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved';
+                    } else if (notification.type === 'listing_disapproved') {
+                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved';
+                    } else if (notification.type === 'payment') {
+                        notificationMessage.textContent = 'You received a payment';
+                    } else if (notification.type === 'maintenance') {
+                        notificationMessage.textContent = notification.data;
+                    }else if (notification.type === 'feedback') {
+                        notificationMessage.textContent = notification.data;
+                    }else if (notification.type === 'maintenance') {
+                        notificationMessage.textContent = notification.data;
+                    }else if (notification.type === 'negotiation') {
+                        notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>';
+                    } else if (notification.type === 'payment_sent') {
+                        notificationMessage.innerHTML = notification.data;
+                    } else if (notification.type === 'payment_confirmed') {
+                        notificationMessage.innerHTML = 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
+                    } else if (notification.type === 'listing') {
+                                    notificationMessage.innerHTML = 'Your listing ' + '<strong>' + notification.data + '</strong> has beed monitored';
+                    } else {
+                        notificationMessage.textContent = notification.description;  // Default message
+                    }
+
+                    const notificationDate = document.createElement('span');
+                    notificationDate.classList.add('text-gray-400', 'text-sm');
+                    notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+
+                    notificationLink.appendChild(notificationMessage);
+                    notificationLink.appendChild(notificationDate);
+
+                    notificationList.appendChild(notificationLink);
+                });
+
+                // Show "See previous notifications" button if there are more notifications
+                if (data.length === 8) {
+                    seePreviousBtn.style.display = 'block';
+                    hasPrevious = true; // Previous notifications exist
+                } else {
+                    seePreviousBtn.style.display = 'none';
+                    hasPrevious = false; // No previous notifications
+                }
+
+                offset += data.length; // Increase the offset
+            } else if (offset === 0) {
+                notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+            }
+        })
+        .catch(error => console.error('Error loading notifications:', error));
+}
+
 
             // Event listener for "See previous notifications" button
             seePreviousBtn.addEventListener('click', function () {
@@ -264,8 +279,10 @@
                 return '/space/negotiations';
             } else if (notification.type === 'listing_disapproved') {
                 return '/space/dashboard';
+            } else if (notification.type === 'payment_confirmed') {
+                return '/space/negotiations';
             }
-            return '#';  // Default URL
+            return '/space/dashboard';  // Default URL
         }
         loadNotifications();
     });

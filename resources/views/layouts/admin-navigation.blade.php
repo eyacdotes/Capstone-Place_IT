@@ -155,16 +155,13 @@
                     <select type="text" id="type" name="type" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="e.g. General, Alert" required>
                         <option value="null">Choose..</option>
                         <option value="maintenance">Maintenance</option>
-                        <option value="listing">Listing</option>
-                        <option value="payment">Payment</option>
-                        <option value="negotiations">Negotiations</option>
                         <option value="feedback">Feedback</option>
                     </select>
                 </div>
                 <div class="mt-4">
                 <label for="selectUser" class="block text-sm font-medium text-gray-700">Select User Type</label>
                 <select id="selectUser" name="selectUser" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" required>
-                    <option value="">Choose..</option>
+                    <option value="both" selected>All Users</option>
                     <option value="business_owner">Business Owner</option>
                     <option value="space_owner">Space Owner</option>
                 </select>
@@ -202,73 +199,82 @@
 
         // Fetch notifications via AJAX
         function loadNotifications() {
-                fetch(`/notifications?offset=${offset}&limit=8`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const unreadNotifications = data.filter(notification => notification.read_at === null);
+            fetch(`/notifications?offset=${offset}&limit=8`)
+                .then(response => response.json())
+                .then(data => {
+                    const unreadNotifications = data.filter(notification => notification.read_at === null);
 
-                        // Show or hide red dot based on unread notifications
-                        if (unreadNotifications.length > 0) {
-                            notificationDot.style.display = 'inline-block';  // Show the red dot
-                        } else {
-                            notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
+                    // Show or hide red dot based on unread notifications
+                    if (unreadNotifications.length > 0) {
+                        notificationDot.style.display = 'inline-block';  // Show the red dot
+                    } else {
+                        notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
+                    }
+
+                    if (data.length > 0) {
+                        if (offset === 0) {
+                            notificationList.innerHTML = ''; // Clear placeholder on first load
                         }
-                        if (data.length > 0) {
-                            if (offset === 0) {
-                                notificationList.innerHTML = ''; // Clear placeholder on first load
+
+                        data.forEach(notification => {
+                            const notificationLink = document.createElement('a');
+                            notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+                            notificationLink.href = getNotificationUrl(notification);
+                            notificationLink.setAttribute('data-id', notification.notificationID);
+
+                            // Set background based on read status
+                            if (notification.read_at === null) {
+                                notificationLink.classList.add('bg-gray-200');  // Gray background for unread
+                            } else {
+                                notificationLink.classList.add('bg-white');     // White background for read
                             }
 
-                            data.forEach(notification => {
-                                const notificationLink = document.createElement('a');
-                                notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
-                                notificationLink.href = getNotificationUrl(notification);
-                                notificationLink.setAttribute('data-id', notification.notificationID);
-
-                                // Add click event for marking as read and redirect
-                                notificationLink.addEventListener('click', function (event) {
-                                    event.preventDefault();
-                                    const url = this.href;
-                                    const notificationId = this.getAttribute('data-id');
-                                    markAsRead(notificationId, url);
-                                });
-
-                                const notificationMessage = document.createElement('div');
-                                if (notification.type === 'listing_approval') {
-                                    notificationMessage.innerHTML = 'A new listing needs approval: <strong>' + notification.data +'</strong>';
-                                } else if (notification.type === 'payment_submitted') {
-                                    notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has submitted a payment.';
-                                } else if (notification.type === 'payment') {
-                                    notificationMessage.textContent = 'You received a payment';
-                                } else {
-                                    notificationMessage.textContent = notification.description;  // Default message
-                                }
-
-                                const notificationDate = document.createElement('span');
-                                notificationDate.classList.add('text-gray-400', 'text-sm');
-                                notificationDate.textContent = new Date(notification.created_at).toLocaleString();
-
-                                notificationLink.appendChild(notificationMessage);
-                                notificationLink.appendChild(notificationDate);
-
-                                notificationList.appendChild(notificationLink);
+                            // Add click event for marking as read and redirect
+                            notificationLink.addEventListener('click', function (event) {
+                                event.preventDefault();
+                                const url = this.href;
+                                const notificationId = this.getAttribute('data-id');
+                                markAsRead(notificationId, url);
                             });
 
-                            // Show "See previous notifications" button if there are more notifications
-                            if (data.length === 8) {
-                                seePreviousBtn.style.display = 'block';
-                                hasPrevious = true; // Previous notifications exist
+                            const notificationMessage = document.createElement('div');
+                            if (notification.type === 'listing_approval') {
+                                notificationMessage.innerHTML = 'A new listing needs approval: <strong>' + notification.data + '</strong>';
+                            } else if (notification.type === 'payment_submitted') {
+                                notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has submitted a payment.';
+                            } else if (notification.type === 'payment') {
+                                notificationMessage.textContent = 'You received a payment';
                             } else {
-                                seePreviousBtn.style.display = 'none';
-                                hasPrevious = false; // No previous notifications
+                                notificationMessage.textContent = notification.description;  // Default message
                             }
 
-                            offset += data.length; // Increase the offset
-                        } else if (offset === 0) {
-                            notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                            const notificationDate = document.createElement('span');
+                            notificationDate.classList.add('text-gray-400', 'text-sm');
+                            notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+
+                            notificationLink.appendChild(notificationMessage);
+                            notificationLink.appendChild(notificationDate);
+
+                            notificationList.appendChild(notificationLink);
+                        });
+
+                        // Show "See previous notifications" button if there are more notifications
+                        if (data.length === 8) {
+                            seePreviousBtn.style.display = 'block';
+                            hasPrevious = true; // Previous notifications exist
+                        } else {
+                            seePreviousBtn.style.display = 'none';
+                            hasPrevious = false; // No previous notifications
                         }
-                    })
-                    .catch(error => console.error('Error loading notifications:', error));
-            }
+
+                        offset += data.length; // Increase the offset
+                    } else if (offset === 0) {
+                        notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                    }
+                })
+                .catch(error => console.error('Error loading notifications:', error));
+        }
+
 
         // Event listener for "See previous notifications" button
             seePreviousBtn.addEventListener('click', function () {
