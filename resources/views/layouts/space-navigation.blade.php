@@ -182,6 +182,10 @@
                         notificationMessage.textContent = notification.data;
                     }else if (notification.type === 'feedback') {
                         notificationMessage.textContent = notification.data;
+                    }else if (notification.type === 'follow-up') {
+                        notificationMessage.textContent = notification.data;
+                    }else if (notification.type === 'message') {
+                        notificationMessage.textContent = notification.data;
                     }else if (notification.type === 'maintenance') {
                         notificationMessage.textContent = notification.data;
                     }else if (notification.type === 'negotiation') {
@@ -275,6 +279,8 @@
                 return '/space/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'payment') {
                 return '/space/payment';  // Adjust to the payment-related page
+            } else if (notification.type === 'message') {
+                return '/space/negotiations';
             } else if (notification.type === 'negotiation') {
                 return '/space/negotiations';
             } else if (notification.type === 'listing_disapproved') {

@@ -78,6 +78,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // Add new admin
     Route::get('/admin/usermanagement/admins/add', [AdminController::class, 'create'])->name('admin.create');
     Route::post('/admin/usermanagement/admins', [AdminController::class, 'store'])->name('admin.store');
+
+    Route::get('/admin/dashboard/{role}', [AdminController::class, 'getUsersByRole']);
 });
 
 // Admin Listings
