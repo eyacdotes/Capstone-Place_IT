@@ -178,6 +178,10 @@
                                     notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'maintenance') {
                                     notificationMessage.textContent = notification.data;
+                                } else if (notification.type === 'follow-up') {
+                                    notificationMessage.textContent = notification.data;
+                                }else if (notification.type === 'message') {
+                                    notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'negotiation') {
                                     notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'payment_sent') {
@@ -192,7 +196,7 @@
 
                                 const notificationDate = document.createElement('span');
                                 notificationDate.classList.add('text-gray-400', 'text-sm');
-                                notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+                                notificationDate.textContent = new Date(notification.updated_at).toLocaleString();
 
                                 notificationLink.appendChild(notificationMessage);
                                 notificationLink.appendChild(notificationDate);
@@ -256,6 +260,8 @@
             } else if (notification.type === 'negotiation') {
                 return '/business/negotiations';
             } else if (notification.type === 'agreement_approved') {
+                return '/business/negotiations';
+            } else if (notification.type === 'message') {
                 return '/business/negotiations';
             } else if (notification.type === 'negotiation_status_update') {
                 return '/business/negotiations';

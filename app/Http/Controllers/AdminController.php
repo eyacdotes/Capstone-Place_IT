@@ -303,5 +303,13 @@ class AdminController extends Controller
             return redirect()->back()->withErrors(['error' => 'User not found!']);
         }
     }
+    public function getUsersByRole($role)
+    {
+        if (!in_array($role, ['business_owner', 'space_owner'])) {
+            return response()->json([], 400); // Invalid role
+        }
 
+        $users = User::where('role', $role)->get(['userID', 'firstName', 'lastName']);
+        return response()->json($users);
+    }
 }

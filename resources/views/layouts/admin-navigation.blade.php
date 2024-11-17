@@ -156,16 +156,23 @@
                         <option value="null">Choose..</option>
                         <option value="maintenance">Maintenance</option>
                         <option value="feedback">Feedback</option>
+                        <option value="follow-up">Follow-Up</option>
                     </select>
                 </div>
                 <div class="mt-4">
-                <label for="selectUser" class="block text-sm font-medium text-gray-700">Select User Type</label>
-                <select id="selectUser" name="selectUser" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" required>
-                    <option value="both" selected>All Users</option>
-                    <option value="business_owner">Business Owner</option>
-                    <option value="space_owner">Space Owner</option>
-                </select>
-            </div>
+                    <label for="selectUser" class="block text-sm font-medium text-gray-700">Select User Type</label>
+                    <select id="selectUser" name="selectUser" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" required>
+                        <option value="both" selected>All Users</option>
+                        <option value="business_owner">Business Owner</option>
+                        <option value="space_owner">Space Owner</option>
+                    </select>
+                </div>
+                <div class="mt-4" id="user-list-container" class="hidden">
+                    <label for="users" class="block text-sm font-medium text-gray-700">Select Specific User</label>
+                    <select id="users" name="user_id" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
             </form>
         </div>
         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -182,6 +189,41 @@
 
 
 <script>
+    document.getElementById('selectUser').addEventListener('change', function () {
+    const selectedRole = this.value;
+    const userListContainer = document.getElementById('user-list-container');
+    const userListSelect = document.getElementById('users');
+
+    // Clear existing options
+    userListSelect.innerHTML = '<option value="">Loading...</option>';
+
+    if (selectedRole === 'both') {
+        userListContainer.classList.add('hidden');
+        userListSelect.innerHTML = '';
+        return;
+    }
+
+    // Show user list container
+    userListContainer.classList.remove('hidden');
+
+    // Fetch users for the selected role
+    fetch(`/admin/dashboard/${selectedRole}`)
+        .then(response => response.json())
+        .then(data => {
+            userListSelect.innerHTML = '<option value="">Select User</option>';
+            data.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.firstName} ${user.lastName}`;
+                userListSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            userListSelect.innerHTML = '<option value="">Error loading users</option>';
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const notificationIcon = document.querySelector('.fa-bell');
         const notificationDropdown = document.getElementById('notification-dropdown');

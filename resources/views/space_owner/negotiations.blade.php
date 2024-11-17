@@ -8,7 +8,7 @@
     </x-slot>
 
     <div class="w-full py-6 flex justify-center">
-        <div class="w-full max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="w-full max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-8 overflow-hidden shadow-sm sm:rounded-lg">
                 <div>
                     <h3 class="text-2xl font-extrabold mb-6">Active Negotiations</h3>

@@ -114,21 +114,16 @@ class NegotiationController extends Controller
 
         return redirect()->back()->with('success', 'Offer amount updated successfully.');
     }
-    
 
-    /**
-     * Store a reply (message) for a negotiation.
-     */
     public function reply(Request $request, $negotiationID)
     {
         $request->validate([
             'message' => 'nullable|string|max:1000',
-            'aImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the rules as needed
+            'aImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $negotiation = Negotiation::findOrFail($negotiationID);
 
-        // Ensure only the sender (business owner) or receiver (space owner) can reply
         if (Auth::id() !== $negotiation->senderID && Auth::id() !== $negotiation->receiverID) {
             abort(403, 'Unauthorized');
         }
@@ -137,29 +132,64 @@ class NegotiationController extends Controller
         $imageName = null;
         if ($request->hasFile('aImage')) {
             $image = $request->file('aImage');
-            $imageName = $image->getClientOriginalName(); // Get the original name of the uploaded file
-            $image->storeAs('negotiation_images', $imageName, 'public'); // Store the file with its original name
+            $imageName = $image->getClientOriginalName();
+            $image->storeAs('negotiation_images', $imageName, 'public');
         }
 
-        // Prepare the reply data
+        // Save the reply
         $replyData = [
             'negotiationID' => $negotiationID,
             'senderID' => Auth::id(),
-            'message' => $imageName ?? $request->input('message'), // Save the image name or the message text
+            'message' => $imageName ?? $request->input('message'),
         ];
 
-        // Create a reply
         Reply::create($replyData);
 
-        // Conditionally redirect based on the user's role
-        if (Auth::user()->role === 'business_owner') {
-            return redirect()->route('business.negotiation.show', ['negotiationID' => $negotiationID]);
-        } elseif (Auth::user()->role === 'space_owner') {
-            return redirect()->route('space.negotiation.show', ['negotiationID' => $negotiationID]);
-        } else {
-            abort(403, 'Unauthorized'); // If role is not authorized
+        // Determine the recipient
+        $receiverID = (Auth::id() === $negotiation->senderID)
+            ? $negotiation->receiverID
+            : $negotiation->senderID;
+
+        // Check for an existing unread notification
+        $existingNotification = Notification::where('n_userID', $receiverID)
+            ->where('type', 'message')
+            ->whereJsonContains('data->negotiationID', $negotiationID)
+            ->first();
+
+            if ($existingNotification) {
+                $existingNotification->update([
+                    'data' => json_encode([
+                        'message' => 'You have new messages in your negotiation.',
+                        'negotiationID' => $negotiationID,
+                        'senderName' => Auth::user()->firstName,
+                        'updated_at' => now(),
+                    ]),
+                    'read_at' => null,  // Reset read status, mark as unread
+                ]);
+            } else {
+                // If no existing notification, create a new one
+                Notification::create([
+                    'n_userID' => $receiverID,
+                    'read_at' => null,  // Set as unread initially
+                    'data' => json_encode([
+                        'message' => 'You have new messages in your negotiation.',
+                        'negotiationID' => $negotiationID,
+                        'senderName' => Auth::user()->firstName,
+                    ]),
+                    'type' => 'message',
+                ]);
+            }
+        
+            // Redirect based on user role
+            if (Auth::user()->role === 'business_owner') {
+                return redirect()->route('business.negotiation.show', ['negotiationID' => $negotiationID]);
+            } elseif (Auth::user()->role === 'space_owner') {
+                return redirect()->route('space.negotiation.show', ['negotiationID' => $negotiationID]);
+            } else {
+                abort(403, 'Unauthorized');
+            }
         }
-    }
+
 
     /**
      * Get all messages for a negotiation (for API or dynamic loading purposes).
