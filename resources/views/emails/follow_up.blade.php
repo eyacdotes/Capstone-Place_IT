@@ -21,7 +21,7 @@
         </div>
 
         <p class="mt-4 text-gray-600">
-            To ensure the completion of this process and avoid any potential misunderstandings, we kindly request you to review the pending negotiation and take appropriate action. This may include marking the negotiation as complete or providing additional updates regarding the status.
+        To ensure the completion of this process and avoid any potential misunderstandings, we kindly request you to review the pending negotiation and take appropriate action. Failure to do so will result in the deactivation of your account, all of your transactions will be voided or deleted and you will no longer be able to access our system. 
         </p>
 
         <div class="mt-4 bg-gray-50 border border-gray-300 rounded-lg p-4 text-center">
