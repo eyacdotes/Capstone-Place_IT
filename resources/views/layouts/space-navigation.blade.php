@@ -36,6 +36,7 @@
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
                     <!-- Notification Dropdown -->
                     <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                        <h2 class="px-4 py-2 text-lg font-semibold text-gray-800 border-b">Notifications</h2>
                         <div id="notification-list" class="max-h-80">
                             <p class="px-4 py-2 text-gray-800">No new notifications.</p>
                         </div>
@@ -173,11 +174,11 @@
                     const notificationMessage = document.createElement('div');
                     // Customize the message based on notification type
                     if (notification.type === 'listing_approved') {
-                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved';
+                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved.';
                     } else if (notification.type === 'listing_disapproved') {
-                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved';
+                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved.';
                     } else if (notification.type === 'payment') {
-                        notificationMessage.textContent = 'You received a payment';
+                        notificationMessage.textContent = 'You received a payment.';
                     } else if (notification.type === 'maintenance') {
                         notificationMessage.textContent = notification.data;
                     }else if (notification.type === 'feedback') {
@@ -185,17 +186,19 @@
                     }else if (notification.type === 'follow-up') {
                         notificationMessage.textContent = notification.data;
                     }else if (notification.type === 'message') {
-                        notificationMessage.textContent = notification.data;
+                        const data = JSON.parse(notification.data); // Parse the notification data to extract senderName
+                        const senderName = data.senderName || 'Unknown sender'; // Default to 'Unknown sender' if no name is available
+                        notificationMessage.innerHTML = `You have a new message from <strong> ${senderName}. </strong>`;
                     }else if (notification.type === 'maintenance') {
                         notificationMessage.textContent = notification.data;
                     }else if (notification.type === 'negotiation') {
-                        notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>';
+                        notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>.';
                     } else if (notification.type === 'payment_sent') {
                         notificationMessage.innerHTML = notification.data;
                     } else if (notification.type === 'payment_confirmed') {
                         notificationMessage.innerHTML = 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
                     } else if (notification.type === 'listing') {
-                                    notificationMessage.innerHTML = 'Your listing ' + '<strong>' + notification.data + '</strong> has beed monitored';
+                        notificationMessage.innerHTML = 'Your listing ' + '<strong>' + notification.data + '</strong> has beed monitored.';
                     } else {
                         notificationMessage.textContent = notification.description;  // Default message
                     }
@@ -273,16 +276,31 @@
 
         // Function to generate the notification URL based on type
         function getNotificationUrl(notification) {
+            const baseNegotiationUrl = '/space/negotiations';
+
             if (notification.type === 'listing_approved') {
-                return '/space/dashboard';  // Adjust to the correct URL where the admin manages listings
+                return '/space/dashboard';  // Adjust to the correct URL where the space owner manages listings
             } else if (notification.type === 'payment_sent') {
                 return '/space/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'payment') {
                 return '/space/payment';  // Adjust to the payment-related page
-            } else if (notification.type === 'message') {
-                return '/space/negotiations';
-            } else if (notification.type === 'negotiation') {
-                return '/space/negotiations';
+            } else if (notification.type === 'message' || notification.type === 'negotiation') {
+                let data;
+                
+                // Try to parse the notification data if it's valid JSON
+                try {
+                    data = JSON.parse(notification.data);
+                } catch (e) {
+                    console.error('Error parsing notification data:', e);
+                    return baseNegotiationUrl;  // Return a default URL if parsing fails
+                }
+
+                // If the negotiationID exists, redirect to the specific negotiation
+                if (data && data.negotiationID) {
+                    return `${baseNegotiationUrl}/${data.negotiationID}`;
+                } else {
+                    return baseNegotiationUrl;  // Return the base negotiations URL if no negotiationID
+                }
             } else if (notification.type === 'listing_disapproved') {
                 return '/space/dashboard';
             } else if (notification.type === 'payment_confirmed') {

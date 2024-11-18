@@ -24,23 +24,45 @@
                         </thead>
                         <tbody>
                             @forelse($bhistory as $history)
-                            <tr class="bg-orange-200">
-                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $history->rentalAgreement->space->title ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ ucwords($history->rentalAgreement->owner->firstName).' '.ucwords($history->rentalAgreement->owner->lastName)?? 'N/A' }}</td>
-                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ ucwords($history->rentalAgreement->rentalTerm) ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ number_format($history->rentalAgreement->offerAmount, 2) }}</td>
-                                <td class="px-6 py-4 text-center border-b-2 border-orange-200">{{ $history->date }}</td>
-                                <td class="px-6 py-4 text-center">
-                                    <a href="{{ route('place.detail', ['listingID' => $history->rentalAgreement->space->listingID]) }}"
-                                        class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-red-500 rounded-lg border border-transparent hover:bg-red-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                        Book Again!
-                                    </a>
-                                </td>
-                            </tr>
+                                <tr class="bg-orange-200">
+                                    <!-- Display the listing title -->
+                                    <td class="px-6 py-4 text-center border-b-2 border-orange-200">
+                                        {{ $history->rentalAgreement->listing->title ?? 'N/A' }}
+                                    </td>
+
+                                    <!-- Display space owner's name -->
+                                    <td class="px-6 py-4 text-center border-b-2 border-orange-200">
+                                        {{ ucwords($history->spaceOwner->firstName ?? 'N/A') }} 
+                                        {{ ucwords($history->spaceOwner->lastName ?? 'N/A') }}
+                                    </td>
+
+                                    <!-- Display rental term -->
+                                    <td class="px-6 py-4 text-center border-b-2 border-orange-200">
+                                        {{ ucwords($history->rentalAgreement->rentalTerm ?? 'N/A') }}
+                                    </td>
+
+                                    <!-- Display offer amount -->
+                                    <td class="px-6 py-4 text-center border-b-2 border-orange-200">
+                                        {{ number_format($history->amount, 2) }}
+                                    </td>
+
+                                    <!-- Display payment date -->
+                                    <td class="px-6 py-4 text-center border-b-2 border-orange-200">
+                                        {{ $history->date->format('Y-m-d') ?? 'N/A' }}
+                                    </td>
+
+                                    <!-- Book Again Button -->
+                                    <td class="px-6 py-4 text-center">
+                                        <a href="{{ route('place.detail', ['listingID' => $history->listing->listingID]) }}"
+                                            class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-red-500 rounded-lg border border-transparent hover:bg-red-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                            Book Again!
+                                        </a>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-4 text-center bg-orange-100">No booking history found.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="6" class="px-6 py-4 text-center bg-orange-100">No booking history found.</td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>

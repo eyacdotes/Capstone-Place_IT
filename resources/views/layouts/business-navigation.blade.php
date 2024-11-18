@@ -35,6 +35,7 @@
                     <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
                     <!-- Notification Dropdown -->
                     <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                        <h2 class="px-4 py-2 text-lg font-semibold text-gray-800 border-b">Notifications</h2>
                         <div id="notification-list" class="max-h-80">
                             <p class="px-4 py-2 text-gray-800">No new notifications.</p>
                         </div>
@@ -173,15 +174,17 @@
                                 const notificationMessage = document.createElement('div');
                                 // Customize the message based on notification type
                                 if (notification.type === 'negotiation_status_update') {
-                                    notificationMessage.textContent = notification.data;
+                                    notificationMessage.innerHTML = 'Your negotiation for ' + '<strong>' + notification.data + '</strong> has been updated.';
                                 } else if (notification.type === 'agreement_approved') {
-                                    notificationMessage.textContent = notification.data;
+                                    notificationMessage.innerHTML = 'Your agreement was approved by ' + '<strong>' + notification.data + '</strong>.';
                                 } else if (notification.type === 'maintenance') {
                                     notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'follow-up') {
                                     notificationMessage.textContent = notification.data;
-                                }else if (notification.type === 'message') {
-                                    notificationMessage.textContent = notification.data;
+                                } else if (notification.type === 'message') {
+                                    const data = JSON.parse(notification.data); // Parse the notification data to extract senderName
+                                    const senderName = data.senderName || 'Unknown sender'; // Default to 'Unknown sender' if no name is available
+                                    notificationMessage.innerHTML = `You have a new message from <strong> ${senderName}. </strong>`;
                                 } else if (notification.type === 'negotiation') {
                                     notificationMessage.textContent = notification.data;
                                 } else if (notification.type === 'payment_sent') {
@@ -253,26 +256,41 @@
 
         // Function to generate the notification URL based on type
         function getNotificationUrl(notification) {
-            if (notification.type === 'listing_approved') {
-                return '/business/dashboard';  // Adjust to the correct URL where the admin manages listings
-            } else if (notification.type === 'payment') {
-                return '/business/payment';  // Adjust to the payment-related page
-            } else if (notification.type === 'negotiation') {
-                return '/business/negotiations';
-            } else if (notification.type === 'agreement_approved') {
-                return '/business/negotiations';
-            } else if (notification.type === 'message') {
-                return '/business/negotiations';
-            } else if (notification.type === 'negotiation_status_update') {
-                return '/business/negotiations';
-            }   else if (notification.type === 'payment_confirmed') {
-                return '/business/negotiations';
+            const baseNegotiationUrl = '/business/negotiations';
+
+            // Handle the case where the notification type requires a negotiationID
+            if (
+                notification.type === 'message' ||
+                notification.type === 'negotiation' ||
+                notification.type === 'negotiation_status_update' ||
+                notification.type === 'payment_confirmed' ||
+                notification.type === 'agreement_approved'
+            ) {
+                let data;
+                
+                // Try to parse the notification data if it's valid JSON
+                try {
+                    data = JSON.parse(notification.data);
+                } catch (e) {
+                    console.error('Error parsing notification data:', e);
+                    return baseNegotiationUrl;  // Return a default URL if parsing fails
+                }
+
+                // If the negotiationID exists, redirect to the specific negotiation
+                if (data && data.negotiationID) {
+                    return `${baseNegotiationUrl}/${data.negotiationID}`;
+                } else {
+                    return baseNegotiationUrl;  // Return the base negotiations URL if no negotiationID
+                }
             } else if (notification.type === 'maintenance') {
                 return '/business/dashboard';
             } else if (notification.type === 'feedback') {
                 return '/business/dashboard';
-            }return '#';  // Default URL
+            }
+
+            return '/business/dashboard'; // Default URL if no specific match is found
         }
+
 
         // AJAX function to mark a notification as read
         function markAsRead(notificationId, redirectUrl) {

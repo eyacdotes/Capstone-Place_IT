@@ -129,12 +129,28 @@ class AdminController extends Controller
     {
         // Find the payment by ID
         $payment = Payment::find($paymentID);
+
+        if (!$payment) {
+            return redirect()->back()->with('error', 'Payment not found.');
+        }
         
         // Update the status based on form input
         $payment->status = $request->input('status');
         
         // Save the updated payment
         $payment->save();
+
+        if ($payment->status === 'confirmed') {
+            // Find the related RentalAgreement
+            $rentalAgreement = $payment->rentalAgreement;
+    
+            if ($rentalAgreement) {
+                // Update the isPaid field to true (1)
+                $rentalAgreement->isPaid = true; // Or $rentalAgreement->isPaid = 1;
+                $rentalAgreement->save();
+            }
+        }
+        
         $this->notifyOwnerPayment($payment);
         $this->notifyBusinessOwnerPayment($payment);
 

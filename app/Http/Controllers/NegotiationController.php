@@ -247,7 +247,7 @@ class NegotiationController extends Controller
     {
         // Validate the status field
         $request->validate([
-            'status' => 'required|in:Pending,Approved,Disapproved',
+            'status' => 'required|in:Pending,Approved,Declined',
         ]);
 
         // Find the negotiation by ID

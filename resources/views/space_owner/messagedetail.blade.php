@@ -95,7 +95,7 @@
                                     <span class="
                                         {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
                                         {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
-                                        {{ $negotiation->negoStatus === 'Disapproved' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
+                                        {{ $negotiation->negoStatus === 'Declined' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
                                         font-bold">
                                         {{ $negotiation->negoStatus }}
                                     </span>
@@ -142,7 +142,7 @@
                                 @endif
                             </div>
                             <!-- Update Negotiation Status Section -->
-                            @if($negotiation->negoStatus !== 'Approved')
+                            @if($negotiation->negoStatus !== 'Approved' && $negotiation->negoStatus !== 'Declined')
                                 @if($negotiation->rentalAgreement && $billing && isset($negotiation->meetupProof))
                                     <!-- Show the Update Negotiation Status form only after all required actions are completed -->
                                     <form action="{{ route('negotiation.updateStatus', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
@@ -152,7 +152,7 @@
                                             <select name="status" id="status" class="form-select mt-1 block w-full">
                                                 <option value="Pending" {{ $negotiation->negoStatus === 'Pending' ? 'selected' : '' }}>Pending</option>
                                                 <option value="Approved" {{ $negotiation->negoStatus === 'Approved' ? 'selected' : '' }}>Approve</option>
-                                                <option value="Disapproved" {{ $negotiation->negoStatus === 'Disapproved' ? 'selected' : '' }}>Disapprove</option>
+                                                <option value="Declined" {{ $negotiation->negoStatus === 'Declined' ? 'selected' : '' }}>Decline</option>
                                             </select>
                                         </div>
                                         <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
@@ -161,9 +161,13 @@
                                     <!-- Placeholder message guiding the user -->
                                     <p class="text-gray-600 font-light mb-2">Complete the approval, GCash details, and meetup proof steps to enable negotiation status update.</p>
                                 @endif
+                            @elseif($negotiation->negoStatus === 'Declined')
+                                <p class="text-red-600 font-light mb-2">
+                                    Negotiation status declined. This space is not available for further transactions. Please contact support for more details.
+                                </p>
                             @else
                                 <!-- Message displayed after the negotiation status is approved -->
-                                <p class="text-blue-600 font-light mb-2">
+                                <p class="text-green-600 font-light mb-2">
                                     Negotiation status approved. The space is now occupied and cannot be rented by others. Please await further instructions from the admin.
                                 </p>
                             @endif
