@@ -96,16 +96,6 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="w-full sm:w-auto pl-0 sm:pl-28 text-right mb-6 pt-2">
-                                <h4 class="text-lg font-semibold pr-4">Status</h4>
-                                <span class="
-                                    {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
-                                    {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
-                                    {{ $negotiation->negoStatus === 'Disapproved' || $negotiation->negoStatus === 'Another Term' ? 'text-xl font-bold text-red-600' : '' }}
-                                    font-bold">
-                                    {{ $negotiation->negoStatus }}
-                                </span>
-                            </div>
                         </div>
 
                             <!-- Rental Agreement Section -->

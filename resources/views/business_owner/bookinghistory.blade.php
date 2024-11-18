@@ -25,11 +25,12 @@
                     <tbody>
                         @forelse($bhistory as $history)
                         <tr class="bg-orange-200">
-                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ $history->rentalAgreement->space->title ?? 'N/A' }}</td>
-                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ ucwords($history->rentalAgreement->owner->firstName).' '.ucwords($history->rentalAgreement->owner->lastName) ?? 'N/A' }}</td>
-                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ ucwords($history->rentalAgreement->rentalTerm) ?? 'N/A' }}</td>
-                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ number_format($history->rentalAgreement->offerAmount, 2) }}</td>
-                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ $history->date }}</td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ $history->rentalAgreement->listing->title ?? 'N/A' }}</td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ ucwords($history->spaceOwner->firstName ?? 'N/A') }} 
+                            {{ ucwords($history->spaceOwner->lastName ?? 'N/A') }}</td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ ucwords($history->rentalAgreement->rentalTerm ?? 'N/A') }}</td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ number_format($history->amount, 2) }}</td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4 text-center border-b border-orange-300">{{ $history->date->format('Y-m-d') ?? 'N/A' }}</td>
                             <td class="px-4 py-2 sm:px-6 sm:py-4 text-center">
                                 <a href="{{ route('place.detail', ['listingID' => $history->rentalAgreement->space->listingID]) }}"
                                     class="inline-block py-1 px-3 sm:py-2 sm:px-4 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-700">

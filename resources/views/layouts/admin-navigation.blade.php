@@ -286,6 +286,8 @@
                                 notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has submitted a payment.';
                             } else if (notification.type === 'payment') {
                                 notificationMessage.textContent = 'You received a payment';
+                            } else if (notification.type === 'meetup_submitted') {
+                                notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has submitted a proof of meetup for confirmation.';
                             } else {
                                 notificationMessage.textContent = notification.description;  // Default message
                             }
@@ -353,6 +355,8 @@
             } else if (notification.type === 'payment_submitted') {
                 return '/admin/payment';  // Adjust to the payment-related page
             } else if (notification.type === 'payment') {
+                return '/admin/payment';
+            } else if (notification.type === 'meetup_submitted') {
                 return '/admin/payment';  // Adjust to the payment-related page
             }
             return '#';  // Default URL

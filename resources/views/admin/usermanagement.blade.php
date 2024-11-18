@@ -39,7 +39,7 @@
                                     <th class="py-2 px-4 border-b text-left">Last Name</th>
                                     <th class="py-2 px-4 border-b text-left">Email</th>
                                     <th class="py-2 px-4 border-b text-left">Verified</th>
-                                    <th class="py-2 px-4 border-b text-left">Status</th>
+                                    <th class="py-2 px-4 border-b text-left">Mobile Number</th>
                                     <th class="py-2 px-4 border-b text-left">Created At</th>
                                     <th class="py-2 px-4 border-b text-left">Actions</th>
                                 </tr>
@@ -52,7 +52,7 @@
                                         <td class="py-2 px-4 border-b">{{ ucwords($user->lastName) }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->isVerified ? 'Yes' : 'No' }}</td>
-                                        <td class="py-2 px-4 border-b">{{ $user->isActive ? 'Activated' : 'Deactivated' }}</td>
+                                        <td class="py-2 px-4 border-b">{{ $user->mobileNumber}}</td>
                                         <td class="py-2 px-4 border-b">{{ $user->created_at->format('Y-m-d') }}</td>
                                         <td class="py-2 px-4 border-b">
                                         @if($currentRole !== 'admin')

@@ -29,7 +29,7 @@
                                 @forelse ($rentalAgreements as $agreement)
                                     <tr class="text-center bg-orange-100 border-b-2 border-orange-200">
                                         <td class="px-4 py-2 ">{{ $agreement->listing->title }}</td>
-                                        <td class="px-4 py-2 ">{{ ucwords($agreement->owner->firstName) }} {{ ucwords($agreement->owner->lastName) }}</td>
+                                        <td class="px-4 py-2 ">{{ ucwords($agreement->spaceOwner->firstName) }} {{ ucwords($agreement->spaceOwner->lastName) }}</td>
                                         <td class="px-4 py-2 ">{{ $agreement->offerAmount }}</td>
                                         <td class="px-4 py-2 ">{{ ucwords($agreement->rentalTerm) }}</td>
                                         <td class="px-4 py-2 ">{{ $agreement->dateStart }}</td>
