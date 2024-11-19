@@ -205,6 +205,14 @@
                 fetch(`/notifications?offset=${offset}&limit=8`)
                     .then(response => response.json())
                     .then(data => {
+                        const unreadNotifications = data.filter(notification => notification.read_at === null);
+
+                        // Show or hide red dot based on unread notifications
+                        if (unreadNotifications.length > 0) {
+                            notificationDot.style.display = 'inline-block';  // Show the red dot
+                        } else {
+                            notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
+                        }
                         if (data.length > 0) {
                             if (offset === 0) {
                                 notificationList.innerHTML = ''; // Clear placeholder on first load

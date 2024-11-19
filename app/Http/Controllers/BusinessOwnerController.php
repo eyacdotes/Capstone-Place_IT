@@ -107,6 +107,7 @@ class BusinessOwnerController extends Controller
     {
         $bhistory = History::with(['rentalAgreement.space', 'rentalAgreement.owner'])
                            ->where('renterID', auth()->id())
+                           ->orderBy('date','desc')
                            ->get();
         
         return view('business_owner.bookinghistory', compact('bhistory'));
@@ -126,6 +127,7 @@ class BusinessOwnerController extends Controller
         // Fetch rental agreements where the user is either the owner or the renter
         $rentalAgreements = RentalAgreement::where('ownerID', $ownerID)
             ->orWhere('renterID', $ownerID)
+            ->orderBy('dateCreated','desc')
             ->get();
 
         if ($rentalAgreementID) {
