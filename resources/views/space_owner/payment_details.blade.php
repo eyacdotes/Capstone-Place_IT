@@ -65,6 +65,7 @@
                     @if($negotiations->count())
                         <div class="mb-8">
                             <h3 class="text-2xl font-semibold text-gray-700 mb-4">Payments</h3>
+                            <div class="mb-8 overflow-x-auto rounded-lg">
                             <table class="min-w-full bg-gray-100 rounded-lg shadow-sm divide-y divide-gray-200">
                                 <thead>
                                     <tr class="bg-gray-200">
@@ -110,6 +111,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     @else
                         <p class="text-gray-600 italic">No negotiations found for this business owner.</p>

@@ -6,14 +6,12 @@
         </h2>
     </x-slot>
 
-    <div class="w-full py-6 flex justify-center">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="overflow-hidden rounded-lg">
+        <div class="w-full py-6 flex justify-center ">
+            <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="overflow-x-auto rounded-lg">
                         <h3 class="text-lg font-bold mb-4">Provide Feedbacks</h3>
-
-                        <table class="w-full border-seperate" style="border-spacing: 0;">
+                        <table class="w-full border-separate border-spacing-0 text-sm sm:text-base" style="border-spacing: 0;">
                             <thead>
                                 <tr class="bg-orange-400 text-black">
                                     <th class="px-6 py-4 w-44 rounded-tl-2xl">Space Name</th>
@@ -38,7 +36,7 @@
                                             @if (isset($feedbacks[$agreement->rentalAgreementID]))
                                                 <span colspan="7" class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900">Done feedback idiot.</span>
                                             @else
-                                                <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-red-500 rounded-lg border border-transparent hover:bg-red-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="inline-block py-1 px-3 sm:py-2 sm:px-4 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-700">
                                                     Give Feedback
                                                 </a>
                                             @endif
@@ -51,9 +49,8 @@
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
-    </div>
 </x-app-layout>
