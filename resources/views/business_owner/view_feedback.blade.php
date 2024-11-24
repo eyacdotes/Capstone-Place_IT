@@ -34,7 +34,7 @@
                                         <td class="px-4 py-2 ">{{ $agreement->dateEnd }}</td>
                                         <td class="px-4 py-2 w-60 ">
                                             @if (isset($feedbacks[$agreement->rentalAgreementID]))
-                                                <span colspan="7" class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900">Done feedback idiot.</span>
+                                                <span colspan="7" class="py-1.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900">Feedback submitted.</span>
                                             @else
                                                 <a href="{{ route('business.action', ['rentalAgreementID' => $agreement->rentalAgreementID]) }}" class="inline-block py-1 px-3 sm:py-2 sm:px-4 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-700">
                                                     Give Feedback

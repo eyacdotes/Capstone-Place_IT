@@ -70,7 +70,7 @@ class NotificationController extends Controller
 
         // Retrieve notifications with offset
         $notifications = Notification::where('n_userID', auth()->id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->skip($offset)
             ->take($limit)
             ->get();

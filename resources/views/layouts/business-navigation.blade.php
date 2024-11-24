@@ -192,7 +192,7 @@
                                 } else if (notification.type === 'payment_sent') {
                                     notificationMessage.innerHTML = notification.data;
                                 } else if (notification.type === 'payment_confirmed') {
-                                    notificationMessage.innerHTML = 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
+                                    notificationMessage.innerHTML = 'Your ' + '<strong>' + notification.data + '</strong> has been confirmed by the admin.';
                                 } else if (notification.type === 'feedback') {
                                     notificationMessage.innerHTML = notification.data;
                                 } else {
