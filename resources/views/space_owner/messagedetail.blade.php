@@ -382,22 +382,22 @@
     // Fetch messages every 1 second
     setInterval(fetchMessages, 1000);
 
-    function showFileName() {
-            const fileInput = document.getElementById("aImage");
-            const fileNameDisplay = document.getElementById("fileName");
-            const clearFileBtn = document.getElementById("clearFileBtn");
-            const messageInput = document.getElementById("messageInput");
+            function showFileName() {
+                    const fileInput = document.getElementById("aImage");
+                    const fileNameDisplay = document.getElementById("fileName");
+                    const clearFileBtn = document.getElementById("clearFileBtn");
+                    const messageInput = document.getElementById("messageInput");
 
-            if (fileInput.files.length > 0) {
-                    const fullFileName = fileInput.files[0].name;
-                    const truncatedFileName = truncateFileName(fullFileName, 15); // Adjust the character limit as needed
-                    fileNameDisplay.textContent = truncatedFileName;
-                    clearFileBtn.classList.remove("hidden");
-                    messageInput.classList.add("hidden"); // Hide the message input when an image is selected
-                } else {
-                    clearFileSelection();
-                }
-            }
+                    if (fileInput.files.length > 0) {
+                            const fullFileName = fileInput.files[0].name;
+                            const truncatedFileName = truncateFileName(fullFileName, 15); // Adjust the character limit as needed
+                            fileNameDisplay.textContent = truncatedFileName;
+                            clearFileBtn.classList.remove("hidden");
+                            messageInput.classList.add("hidden"); // Hide the message input when an image is selected
+                        } else {
+                            clearFileSelection();
+                        }
+                    }
 
             function truncateFileName(fileName, maxLength) {
                 const extension = fileName.slice(fileName.lastIndexOf("."));

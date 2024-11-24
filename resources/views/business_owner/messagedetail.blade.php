@@ -60,7 +60,10 @@
                                 <i class="fas fa-paperclip"></i>
                             </label>
                             <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
-
+                            
+                            <span id="fileName"></span>
+                            <button type="button" id="clearFileBtn" class="hidden text-red-500 text-sm underline" onclick="clearFileSelection()">Clear</button>
+                            
                             <!-- Message Input -->
                             <input 
                                 type="text" 
@@ -344,19 +347,42 @@
         fileNameDisplay.textContent = '';
     }
 }
+        function showFileName() {
+                    const fileInput = document.getElementById("aImage");
+                    const fileNameDisplay = document.getElementById("fileName");
+                    const clearFileBtn = document.getElementById("clearFileBtn");
+                    const messageInput = document.getElementById("messageInput");
 
-function clearFileSelection() {
-    const fileInput = document.getElementById('aImage');
-    const fileNameDisplay = document.getElementById('fileName');
-    const clearFileBtn = document.getElementById('clearFileBtn');
-    const messageInput = document.getElementById('messageInput');
+                    if (fileInput.files.length > 0) {
+                            const fullFileName = fileInput.files[0].name;
+                            const truncatedFileName = truncateFileName(fullFileName, 15); // Adjust the character limit as needed
+                            fileNameDisplay.textContent = truncatedFileName;
+                            clearFileBtn.classList.remove("hidden");
+                            messageInput.classList.add("hidden"); // Hide the message input when an image is selected
+                        } else {
+                            clearFileSelection();
+                        }
+                    }
+            function truncateFileName(fileName, maxLength) {
+                const extension = fileName.slice(fileName.lastIndexOf("."));
+                const baseName = fileName.slice(0, fileName.lastIndexOf("."));
+                if (baseName.length > maxLength) {
+                    return `${baseName.slice(0, maxLength)}...${extension}`;
+                }
+                return fileName;
+            }
+            function clearFileSelection() {
+                const fileInput = document.getElementById('aImage');
+                const fileNameDisplay = document.getElementById('fileName');
+                const clearFileBtn = document.getElementById('clearFileBtn');
+                const messageInput = document.getElementById('messageInput');
 
-    // Reset file input and UI elements
-    fileInput.value = '';
-    fileNameDisplay.textContent = '';
-    clearFileBtn.classList.add('hidden');
-    messageInput.classList.remove('hidden');
-}
+                // Reset file input and UI elements
+                fileInput.value = '';
+                fileNameDisplay.textContent = '';
+                clearFileBtn.classList.add('hidden');
+                messageInput.classList.remove('hidden');
+            }
 
 
     document.addEventListener('DOMContentLoaded', function () {
