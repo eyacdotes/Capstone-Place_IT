@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('storage/images/placeholder.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('placeholder.png') }}" type="image/png">
     <title>PlaceIt - Monetize Your Empty Spaces</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-nmkRI2k3l2GKtWo8ZxLpW2VfZHRlXYWnPbm2LFl9hAL5ZtntF7D1h6jcNcdEHOo5AC5f5E3i6fq4+Qkv3DdOdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
@@ -104,7 +104,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Top Row - 3 Team Members -->
             <div class="text-center">
-                <img src="{{ asset('storage/images/perod.jpg') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/perod.png') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
                 <p class="text-orange-600 mb-2 font-bold">SOFTWARE ENGINEER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -116,7 +116,7 @@
             </div>
 
             <div class="text-center">
-                <img src="{{ asset('storage/images/eyac.jpg') }}" alt="Team Member 2" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/eyac.png') }}" alt="Team Member 2" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">LEMARC EYAC</h3>
                 <p class="text-orange-600 mb-2 font-bold">PROJECT MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -128,7 +128,7 @@
             </div>
 
             <div class="text-center">
-                <img src="{{ asset('storage/images/cinco.jpg') }}" alt="Team Member 3" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/cinco.png') }}" alt="Team Member 3" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">JOHN BENEDICT CINCO</h3>
                 <p class="text-orange-600 mb-2 font-bold">QUALITY ASSURANCE</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -143,7 +143,7 @@
         <!-- Bottom Row - 2 Team Members -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             <div class="text-center">
-                <img src="{{ asset('storage/images/Carsido.jpg') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/yani.png') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">FRANCES DIANA N. CARSIDO</h3>
                 <p class="text-orange-600 mb-2 font-bold">DATABASE MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -155,7 +155,7 @@
             </div>
 
             <div class="text-center">
-                <img src="{{ asset('storage/images/managaytay.jpg') }}" alt="Team Member 5" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/shy.jpg') }}" alt="Team Member 5" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
                 <h3 class="text-xl font-bold">SHYRELLE SHINE L. MANAGAYTAY</h3>
                 <p class="text-orange-600 mb-2 font-bold">UI/UX DESIGNER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
