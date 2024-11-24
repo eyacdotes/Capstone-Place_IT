@@ -205,12 +205,16 @@
 
 
     <!-- Footer Section -->
-    <footer class="bg-gray-800 py-6 text-center text-white">
+    <footer class="bg-red-500 py-6 text-center text-white">
         <p class="text-sm">Copyright &copy; <a href="#top">PlaceIt</a>, All Rights Reserved.</p>
     </footer>
 
-    <!-- JavaScript for Hamburger Menu (Mobile) and Smooth Scroll -->
-    <script>
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="fixed bottom-5 right-5 bg-red-500 text-white rounded-full p-4 shadow-lg hover:bg-red-600">
+        <img src="{{ asset('arrow-up.png') }}" alt="Scroll Up" style="width: 18px; height: auto;" />
+    </button>
+</body>
+<script>
         const menuBtn = document.getElementById('menu-btn');
         const menu = document.getElementById('menu');
 
@@ -270,6 +274,20 @@
 
         // Show the first image initially
         showImage(currentIndex);
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+    // Show the button when scrolling down
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        };
+
+        // When the button is clicked, scroll to the top
+        scrollToTopBtn.onclick = function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
     </script>
-</body>
 </html>
