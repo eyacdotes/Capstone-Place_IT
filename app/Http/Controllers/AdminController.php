@@ -252,7 +252,7 @@ class AdminController extends Controller
         // Create the notification for the space owner
         Notification::create([
             'n_userID' => $spaceOwner->userID,  // The space owner's user ID
-            'data' => 'You have received a payment sent by admin, check your credentials.',  // Store the title in the notification's data field as JSON
+            'data' => 'You have received a payment sent by admin, check your GCash.',  // Store the title in the notification's data field as JSON
             'type' => 'payment_sent',  // Notification type
             ]);
         }

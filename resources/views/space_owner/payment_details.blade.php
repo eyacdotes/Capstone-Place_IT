@@ -105,6 +105,8 @@
                                                             Approve Payment
                                                         </button>
                                                     </form>
+                                                @else
+                                                    <p class="text-gray-600 italic">Payment received.</p>
                                                 @endif
                                             </td>
                                         </tr>
