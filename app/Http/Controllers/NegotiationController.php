@@ -17,14 +17,25 @@ class NegotiationController extends Controller
     /**
      * Show the list of negotiations for the authenticated user (either space owner or business owner).
      */
+
     public function index()
     {
-        // Fetch negotiations where the current user is either the sender (business owner) or receiver (space owner)
-        $negotiations = Negotiation::where('senderID', Auth::id())
-                                   ->orWhere('receiverID', Auth::id())
-                                   ->with('listing', 'sender', 'receiver')
-                                   ->orderBy('created_at','desc')
-                                   ->get();
+        // Calculate the date 30 days ago from today
+        $dateLimit = now()->subDays(60);
+
+        // Fetch negotiations where the current user is either the sender (business owner) or receiver (space owner),
+        // and where the created_at date is within the last 30 days
+        $negotiations = Negotiation::where(function ($query) use ($dateLimit) {
+            $query->where('senderID', Auth::id())
+                ->where('created_at', '>=', $dateLimit);
+        })
+        ->orWhere(function ($query) use ($dateLimit) {
+            $query->where('receiverID', Auth::id())
+                ->where('created_at', '>=', $dateLimit);
+        })
+        ->with('listing', 'sender', 'receiver')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         // Check role and return appropriate view
         if (Auth::user()->role === 'business_owner') {

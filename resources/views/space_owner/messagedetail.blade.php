@@ -115,10 +115,10 @@
                         </div>
 
                             <!-- Rental Agreement Section -->
-                            <div class="mb-4">
+                            <div class="mb-1">
                                 <h4 class="text-lg font-semibold">Rental Agreement</h4>
                                 @if($negotiation->rentalAgreement)
-                                    <div class="bg-gray-100 p-4 rounded-lg">
+                                    <div class="bg-gray-100 p-6 rounded-lg">
                                         <p><strong>Rental Term:</strong> {{ ucfirst($negotiation->rentalAgreement->rentalTerm) }}</p>
                                         <p><strong>Offer Amount:</strong> ₱{{ number_format($negotiation->rentalAgreement->offerAmount, 2) }}</p>
                                         <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateStart)->format('M d, Y') }}</p>
@@ -153,6 +153,7 @@
                                     <p class="text-red-500">No rental agreement submitted yet.</p>
                                 @endif
                             </div>
+                            <div class="mt-auto pb-4">
                             <!-- Update Negotiation Status Section -->
                             @if($negotiation->negoStatus !== 'Approved' && $negotiation->negoStatus !== 'Declined')
                                 @if($negotiation->rentalAgreement && $billing && isset($negotiation->meetupProof))
@@ -167,11 +168,11 @@
                                                 <option value="Declined" {{ $negotiation->negoStatus === 'Declined' ? 'selected' : '' }}>Decline</option>
                                             </select>
                                         </div>
-                                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
+                                        <button type="submit" class="bg-green-600 text-white mb-6 py-2 px-4 rounded-lg hover:bg-green-700 w-full">Submit</button>
                                     </form>
                                 @else
                                     <!-- Placeholder message guiding the user -->
-                                    <p class="text-gray-600 font-light mb-2">Complete the approval, GCash details, and meetup proof steps to enable negotiation status update.</p>
+                                    <p class="text-gray-600 text-sm mb-2">Complete the approval, GCash details, and meetup proof steps to enable negotiation status update.</p>
                                 @endif
                             @elseif($negotiation->negoStatus === 'Declined')
                                 <p class="text-red-600 font-light mb-2">
@@ -184,6 +185,7 @@
                                 </p>
                               
                             @endif
+                        </div>
                         </div>
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
                         @csrf
