@@ -5,8 +5,16 @@
             {{ __('Negotiation Details') }}
         </h2>
     </x-slot>
+    <style>
+        @media (max-width: 768px) {
+        .chat-box {
+            max-height: calc(100vh - 200px); /* Adjust based on your header/footer height */
+            height: auto; /* Let the content determine height */
+                }
+        }
 
-    <div class="w-full py-8 flex justify-center px-2">
+    </style>
+    <div class="w-full py-2 flex justify-center px-2">
     <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
         <div class="flex flex-col lg:flex-row lg:h-[500px] flex-wrap">
             <!-- Chat Section -->
@@ -27,7 +35,7 @@
                     </div>
 
                     <!-- Messages Section -->
-                    <div class="space-y-4 overflow-y-auto flex-1 chat-box h-[calc(100%_-_80px)] pt-4 max-h-screen">
+                    <div class="space-y-4 overflow-y-auto flex-1 chat-box pt-4" style="height: calc(100vh - 100px); min-height: 200px;" >
                         @foreach($negotiation->replies as $reply)
                             <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
                                 <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
@@ -52,7 +60,10 @@
                                 <i class="fas fa-paperclip"></i>
                             </label>
                             <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
-
+                            
+                            <span id="fileName"></span>
+                            <button type="button" id="clearFileBtn" class="hidden text-red-500 text-sm underline" onclick="clearFileSelection()">Clear</button>
+                            
                             <!-- Message Input -->
                             <input 
                                 type="text" 
@@ -79,12 +90,12 @@
             <div class="w-full lg:w-1/3 p-4 overflow-y-auto max-h-screen">
                 <div class="flex flex-col h-full justify-between">
                     <div class="mb-4">
-                        <div class="flex flex-wrap items-center mb-2">
+                        <div class="flex items-center mb-2">
                             <div class="mr-4">
                                 <h4 class="text-lg font-semibold pl-2">Amount Offered</h4>
                                 <input class="pl-7 text-2xl bg-gray-100 rounded-md w-full sm:w-40 font-bold" value="₱{{ number_format($negotiation->offerAmount, 2) }}" readonly>
                             </div>
-                            <div class="w-full sm:w-auto pl-0 sm:pl-28 text-right mb-6 pt-2">
+                            <div class="w-1/2 text-right mt-4 md:mt-0">
                                 <h4 class="text-lg font-semibold pr-4">Status</h4>
                                 <span class="
                                     {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
@@ -336,19 +347,42 @@
         fileNameDisplay.textContent = '';
     }
 }
+        function showFileName() {
+                    const fileInput = document.getElementById("aImage");
+                    const fileNameDisplay = document.getElementById("fileName");
+                    const clearFileBtn = document.getElementById("clearFileBtn");
+                    const messageInput = document.getElementById("messageInput");
 
-function clearFileSelection() {
-    const fileInput = document.getElementById('aImage');
-    const fileNameDisplay = document.getElementById('fileName');
-    const clearFileBtn = document.getElementById('clearFileBtn');
-    const messageInput = document.getElementById('messageInput');
+                    if (fileInput.files.length > 0) {
+                            const fullFileName = fileInput.files[0].name;
+                            const truncatedFileName = truncateFileName(fullFileName, 15); // Adjust the character limit as needed
+                            fileNameDisplay.textContent = truncatedFileName;
+                            clearFileBtn.classList.remove("hidden");
+                            messageInput.classList.add("hidden"); // Hide the message input when an image is selected
+                        } else {
+                            clearFileSelection();
+                        }
+                    }
+            function truncateFileName(fileName, maxLength) {
+                const extension = fileName.slice(fileName.lastIndexOf("."));
+                const baseName = fileName.slice(0, fileName.lastIndexOf("."));
+                if (baseName.length > maxLength) {
+                    return `${baseName.slice(0, maxLength)}...${extension}`;
+                }
+                return fileName;
+            }
+            function clearFileSelection() {
+                const fileInput = document.getElementById('aImage');
+                const fileNameDisplay = document.getElementById('fileName');
+                const clearFileBtn = document.getElementById('clearFileBtn');
+                const messageInput = document.getElementById('messageInput');
 
-    // Reset file input and UI elements
-    fileInput.value = '';
-    fileNameDisplay.textContent = '';
-    clearFileBtn.classList.add('hidden');
-    messageInput.classList.remove('hidden');
-}
+                // Reset file input and UI elements
+                fileInput.value = '';
+                fileNameDisplay.textContent = '';
+                clearFileBtn.classList.add('hidden');
+                messageInput.classList.remove('hidden');
+            }
 
 
     document.addEventListener('DOMContentLoaded', function () {

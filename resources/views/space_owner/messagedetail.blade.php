@@ -5,8 +5,16 @@
             {{ __('Negotiation Details') }}
         </h2>
     </x-slot>
+    <style>
+        @media (max-width: 768px) {
+        .chat-box {
+            max-height: calc(100vh - 200px); /* Adjust based on your header/footer height */
+            height: auto; /* Let the content determine height */
+                }
+        }
 
-    <div class="w-full py-8 flex justify-center px-2">
+    </style>
+    <div class="w-full py-2 flex justify-center px-2">
     <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-7xl">
         <div class="flex flex-col lg:flex-row lg:h-[500px] flex-wrap">
             <!-- Chat Section -->
@@ -17,7 +25,7 @@
                         <div class="flex items-center text-gray-800">
                             <a href="{{ route('space.negotiations') }}" class="flex items-center text-orange-500 hover:text-orange-800 hover:bg-gray-200 rounded-3xl p-2">
                                 <span class="flex items-center">
-                                    <i class="fas fa-arrow-left mr-2"></i> 
+                                    <i class="fas fa-arrow-left mr-2"></i>
                                 </span>
                             </a>
                             <span class="font-semibold p-4 text-lg sm:text-xl">
@@ -27,7 +35,7 @@
                     </div>
 
                     <!-- Messages Section -->
-                    <div class="space-y-4 overflow-y-auto flex-1 chat-box h-[calc(100%_-_80px)] pt-4 max-h-screen">
+                    <div class="space-y-4 overflow-y-auto flex-1 chat-box pt-4" style="height: calc(100vh - 100px); min-height: 200px;" >
                         @foreach($negotiation->replies as $reply)
                             <div class="flex {{ $reply->senderID == Auth::id() ? 'justify-end' : 'justify-start' }}">
                                 <div class="p-4 rounded-lg shadow-lg {{ $reply->senderID == Auth::id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
@@ -39,44 +47,52 @@
                                     <small class="text-xs">{{ $reply->created_at->format('h:i A') }}</small>
                                 </div>
                             </div>
-                        @endforeach         
+                        @endforeach
                     </div>
+
 
                     <!-- Message Input -->
                     <form action="{{ route('negotiation.reply', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
-                            @csrf
-                            <div class="flex items-center mb-2 bg-gray-100 p-2 rounded-lg space-x-2">
-                                
-                                <!-- File Attachment -->
-                                <label for="aImage" class="cursor-pointer flex items-center justify-center bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300">
-                                    <i class="fas fa-paperclip"></i>
-                                </label>
-                                <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
+                        @csrf
+                        <div class="flex items-center mb-10 bg-gray-100 p-2 rounded-lg space-x-2">
+                            
+                            <!-- File Attachment -->
+                            <label for="aImage" class="cursor-pointer flex items-center justify-center bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300">
+                                <i class="fas fa-paperclip"></i>
+                            </label>
+                            <input type="file" name="aImage" id="aImage" class="hidden" onchange="showFileName()"/>
 
-                                <!-- Message Input -->
-                                <input 
-                                    type="text" 
-                                    name="message" 
-                                    id="messageInput" 
-                                    class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" 
-                                    placeholder="Type your message..."
-                                />
+                            <!-- File Name Display -->
+                            <span id="fileName" class="text-gray-600 text-sm"></span>
 
-                                <!-- Send Button -->
-                                <button 
-                                    type="submit" 
-                                    class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center"
-                                >
-                                    Send
-                                </button>
-                            </div>
-                        </form>
+                            <!-- Clear File Button -->
+                            <button type="button" id="clearFileBtn" class="hidden text-red-500 text-sm underline" onclick="clearFileSelection()">Clear</button>
+
+                            <!-- Message Input -->
+                            <input 
+                                type="text" 
+                                name="message" 
+                                id="messageInput" 
+                                class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" 
+                                placeholder="Type your message..."
+                            />
+
+                            <!-- Send Button -->
+                            <button 
+                                type="submit" 
+                                class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 flex items-center"
+                            >
+                                Send
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
 
 
                 <!-- Negotiation Details Section -->
-                <div class="w-full lg:w-1/3 p-4 overflow-y-auto">
+                <div class="w-full lg:w-1/3 p-4 overflow-y-auto max-h-screen">
                     <!-- Amount and Status Section -->
                     <div class="flex flex-col h-full justify-between">
                         <div class="mb-4">
@@ -85,7 +101,7 @@
                                     <h4 class="text-lg font-semibold pl-2">Amount Offered</h4>
                                     <input class="pl-7 text-2xl bg-gray-100 rounded-md w-40 font-bold" value="₱{{ number_format($negotiation->offerAmount, 2) }}" readonly>
                                 </div>
-                                <div class="pl-28 text-right mb-6 pt-2">
+                                <div class="w-1/2 text-right mt-4 md:mt-0">
                                     <h4 class="text-lg font-semibold pr-4">Status</h4>
                                     <span class="
                                         {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
@@ -163,9 +179,10 @@
                                 </p>
                             @else
                                 <!-- Message displayed after the negotiation status is approved -->
-                                <p class="text-green-600 font-light mb-2">
-                                    Negotiation status approved. The space is now occupied and cannot be rented by others. Please await further instructions from the admin.
+                                <p class="text-green-600 font-light mb-2 md:mb-9">
+                                    Negotiation status approved. The space is now occupied and cannot be rented by others.
                                 </p>
+                              
                             @endif
                         </div>
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
@@ -231,7 +248,7 @@
                             </div>
                         </div>
                     </div>
-            </div>
+                </div>
         </div>
     </div>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -365,15 +382,31 @@
     // Fetch messages every 1 second
     setInterval(fetchMessages, 1000);
 
-        function showFileName() {
-            const input = document.getElementById('aImage');
-            const fileName = document.getElementById('fileName');
-            if (input.files.length > 0) {
-                fileName.textContent = input.files[0].name;
-            } else {
-                fileName.textContent = '';
+            function showFileName() {
+                    const fileInput = document.getElementById("aImage");
+                    const fileNameDisplay = document.getElementById("fileName");
+                    const clearFileBtn = document.getElementById("clearFileBtn");
+                    const messageInput = document.getElementById("messageInput");
+
+                    if (fileInput.files.length > 0) {
+                            const fullFileName = fileInput.files[0].name;
+                            const truncatedFileName = truncateFileName(fullFileName, 15); // Adjust the character limit as needed
+                            fileNameDisplay.textContent = truncatedFileName;
+                            clearFileBtn.classList.remove("hidden");
+                            messageInput.classList.add("hidden"); // Hide the message input when an image is selected
+                        } else {
+                            clearFileSelection();
+                        }
+                    }
+
+            function truncateFileName(fileName, maxLength) {
+                const extension = fileName.slice(fileName.lastIndexOf("."));
+                const baseName = fileName.slice(0, fileName.lastIndexOf("."));
+                if (baseName.length > maxLength) {
+                    return `${baseName.slice(0, maxLength)}...${extension}`;
+                }
+                return fileName;
             }
-        }
 
         function openModal(imageSrc) {
             document.getElementById('modalImage').src = imageSrc;
@@ -402,20 +435,6 @@
             fileNameDisplay.textContent = '';
         }
     }
-        function showFileName() {
-        const fileInput = document.getElementById("aImage");
-        const fileNameDisplay = document.getElementById("fileName");
-        const clearFileBtn = document.getElementById("clearFileBtn");
-        const messageInput = document.getElementById("messageInput");
-
-        if (fileInput.files.length > 0) {
-            fileNameDisplay.textContent = fileInput.files[0].name;
-            clearFileBtn.classList.remove("hidden");
-            messageInput.classList.add("hidden"); // Hide the message input when an image is selected
-        } else {
-            clearFileSelection();
-        }
-    }
 
         function clearFileSelection() {
             const fileInput = document.getElementById("aImage");
@@ -431,7 +450,7 @@
 
     </script>
     <!-- Image Modal -->
-    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center justify-center">
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 items-center flex justify-center">
         <div class="relative max-w-full max-h-full">
             <!-- Close Button with Circular Gray Background -->
             <button onclick="closeModal()" 
