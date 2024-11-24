@@ -92,11 +92,18 @@
                     <div class="mb-4">
                         <div class="flex items-center mb-2">
                             <div class="mr-4">
-                                <h4 class="text-lg font-semibold pl-2">Amount Offered</h4>
-                                <input class="pl-7 text-2xl bg-gray-100 rounded-md w-full sm:w-40 font-bold" value="₱{{ number_format($negotiation->offerAmount, 2) }}" readonly>
+                            <form action="{{ route('business.updateOfferAmount', $negotiation->negotiationID) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                                <h4 class="text-lg font-semibold pl-2">Amount Offered</h4>  
+                                <input name="offerAmount" class="pl-7 text-2xl bg-gray-100 rounded-md w-full sm:w-40 font-bold" value="{{ number_format($negotiation->offerAmount, 2) }}" required>
+                                <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Update Offer
+                                </button>
+                            </form>
                             </div>
                             <div class="w-1/2 text-right mt-4 md:mt-0">
-                                <h4 class="text-lg font-semibold pr-4">Status</h4>
+                                <h4 class="text-lg font-semibold -mt-16 pr-4">Status</h4>
                                 <span class="
                                     {{ $negotiation->negoStatus === 'Approved' ? 'text-xl font-bold text-green-600' : '' }}
                                     {{ $negotiation->negoStatus === 'Pending' ? 'text-xl font-bold text-blue-600' : '' }}
