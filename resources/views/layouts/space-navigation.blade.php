@@ -30,20 +30,23 @@
 
             <!-- Settings Dropdown -->
             <div class="flex items-center space-x-4">
-                <!-- Notification Icon -->
-                <div class="relative">
-                    <i class="fa-regular fa-bell font-semibold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
-                    <!-- Red dot for new notifications -->
-                    <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
-                    <!-- Notification Dropdown -->
-                    <div id="notification-dropdown" class="border absolute right-0 mt-1 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden"  style="right: -50px;">
+                <div class="flex items-center space-x-4">
+                    <!-- Notification Icon -->
+                    <div class="relative">
+                        <i class="fa-regular fa-bell font-semibold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
+                        <!-- Red dot for new notifications -->
+                        <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full hidden"></span>
+                        <!-- Notification Dropdown -->
+                        <div id="notification-dropdown" class="absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden border border-gray-200" style="right: -50px;">    
                         <h2 class="px-4 py-2 text-lg font-semibold text-gray-800 border-b">Notifications</h2>
-                        <div id="notification-list" class="max-h-80">
-                            <p class="px-4 py-2 text-gray-800">No new notifications.</p>
+                            <div id="notification-list" class="max-h-80 overflow-y-auto">
+                                <p class="px-4 py-2 text-gray-800">No new notifications.</p>
+                            </div>
+                            <button id="see-previous-btn" class="px-4 py-2 w-full text-center text-blue-600 hover:bg-gray-100 hidden">See previous notifications</button>
                         </div>
-                        <button id="see-previous-btn" class="px-4 py-2 w-full text-center text-blue-600 hover:bg-gray-100 hidden">See previous notifications</button>
                     </div>
                 </div>
+
 
                 <!-- Settings Dropdown -->
                 <div class="hidden sm:flex sm:items-center">
@@ -137,102 +140,161 @@
 
         // Fetch notifications via AJAX
         function loadNotifications() {
-    fetch(`/notifications?offset=${offset}&limit=8`)
+        fetch(`/notifications?offset=${offset}&limit=8`)
         .then(response => response.json())
         .then(data => {
             const unreadNotifications = data.filter(notification => notification.read_at === null);
 
             // Show or hide red dot based on unread notifications
-            if (unreadNotifications.length > 0) {
-                notificationDot.style.display = 'inline-block';  // Show the red dot
-            } else {
-                notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
-            }
+            notificationDot.style.display = unreadNotifications.length > 0 ? 'inline-block' : 'none';
+
             if (data.length > 0) {
                 if (offset === 0) {
-                    notificationList.innerHTML = ''; // Clear placeholder on first load
+                    notificationList.innerHTML = ''; // Clear notifications on first load
                 }
 
                 data.forEach(notification => {
-                    const notificationLink = document.createElement('a');
-                    notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
+                    // Container for each notification
+                    const notificationItem = document.createElement('div');
+                    notificationItem.classList.add('flex', 'items-center', 'justify-between', 'px-4', 'py-2', 'border-b');
 
-                    // Set background based on read status
+                    // Apply background color for unread notifications
                     if (notification.read_at === null) {
-                        notificationLink.classList.add('bg-gray-200'); // Unread - gray background
+                        notificationItem.style.backgroundColor = '#daccc9'; // Light gray background for unread
                     } else {
-                        notificationLink.classList.add('bg-white'); // Read - white background
+                        notificationItem.style.backgroundColor = '#fff'; // White background for read
                     }
 
+                    // Notification link/message
+                    const notificationLink = document.createElement('a');
+                    notificationLink.classList.add('flex-grow', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer', 'mr-4', 'p-2');
                     notificationLink.href = getNotificationUrl(notification);
                     notificationLink.setAttribute('data-id', notification.notificationID);
 
-                    // Add click event for marking as read and redirect
-                    notificationLink.addEventListener('click', function (event) {
-                        event.preventDefault();
-                        const url = this.href;
-                        const notificationId = this.getAttribute('data-id');
-                        markAsRead(notificationId, url);
-                    });
-                    
                     const notificationMessage = document.createElement('div');
-                    // Customize the message based on notification type
-                    if (notification.type === 'listing_approved') {
-                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been approved.';
-                    } else if (notification.type === 'listing_disapproved') {
-                        notificationMessage.innerHTML = 'Your listing <strong>' + notification.data +'</strong> has been disapproved.';
-                    } else if (notification.type === 'payment') {
-                        notificationMessage.textContent = 'You received a payment.';
-                    } else if (notification.type === 'maintenance') {
-                        notificationMessage.textContent = notification.data;
-                    }else if (notification.type === 'feedback') {
-                        notificationMessage.textContent = notification.data;
-                    }else if (notification.type === 'follow-up') {
-                        notificationMessage.textContent = notification.data;
-                    }else if (notification.type === 'message') {
-                        const data = JSON.parse(notification.data); // Parse the notification data to extract senderName
-                        const senderName = data.senderName || 'Unknown sender'; // Default to 'Unknown sender' if no name is available
-                        notificationMessage.innerHTML = `You have a new message from <strong> ${senderName}. </strong>`;
-                    }else if (notification.type === 'maintenance') {
-                        notificationMessage.textContent = notification.data;
-                    }else if (notification.type === 'negotiation') {
-                        notificationMessage.innerHTML = 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>.';
-                    } else if (notification.type === 'payment_sent') {
-                        notificationMessage.innerHTML = notification.data;
-                    } else if (notification.type === 'payment_confirmed') {
-                        notificationMessage.innerHTML = 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
-                    } else if (notification.type === 'listing') {
-                        notificationMessage.innerHTML = 'Your listing ' + '<strong>' + notification.data + '</strong> has beed monitored.';
-                    } else {
-                        notificationMessage.textContent = notification.description;  // Default message
-                    }
+                    notificationMessage.innerHTML = getNotificationMessage(notification);
 
                     const notificationDate = document.createElement('span');
-                    notificationDate.classList.add('text-gray-400', 'text-sm');
+                    notificationDate.classList.add('text-gray-400', 'text-sm', 'block');
                     notificationDate.textContent = new Date(notification.created_at).toLocaleString();
 
                     notificationLink.appendChild(notificationMessage);
                     notificationLink.appendChild(notificationDate);
 
-                    notificationList.appendChild(notificationLink);
+                    // Add click event to mark as read and redirect
+                    notificationLink.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        markAsRead(notification.notificationID, notificationLink.href);
+                    });
+
+                    // Delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('text-red-600', 'hover:text-red-800');
+                    deleteButton.innerHTML = '<i class="fa-solid fa-trash-alt"></i>';
+                    deleteButton.addEventListener('click', () => {
+                        deleteNotification(notification.notificationID, notificationItem);
+                    });
+
+                    // Append notification content and delete button
+                    notificationItem.appendChild(notificationLink);
+                    notificationItem.appendChild(deleteButton);
+
+                    notificationList.appendChild(notificationItem);
                 });
 
-                // Show "See previous notifications" button if there are more notifications
-                if (data.length === 8) {
-                    seePreviousBtn.style.display = 'block';
-                    hasPrevious = true; // Previous notifications exist
-                } else {
-                    seePreviousBtn.style.display = 'none';
-                    hasPrevious = false; // No previous notifications
-                }
-
-                offset += data.length; // Increase the offset
+                // Show "See previous notifications" button if more notifications exist
+                seePreviousBtn.style.display = data.length === 8 ? 'block' : 'none';
+                hasPrevious = data.length === 8;
+                offset += data.length;
             } else if (offset === 0) {
                 notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
             }
         })
         .catch(error => console.error('Error loading notifications:', error));
+    }
+
+
+    function deleteNotification(notificationID, notificationElement) {
+    fetch(`/notifications/${notificationID}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            // Remove the notification from the DOM
+            notificationElement.remove();
+            
+            // Show success message using SweetAlert
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'The notification has been deleted successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                timer: 2000, // Auto close after 2 seconds
+            });
+        } else {
+            // Show error message if the delete operation fails
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to delete the notification. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting notification:', error);
+
+        // Show error alert
+        Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while deleting the notification.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+        });
+    });
 }
+
+
+
+// Helper function to customize notification messages
+        function getNotificationMessage(notification) {
+                     if (notification.type === 'listing_approved') {
+                        return 'Your listing <strong>' + notification.data +'</strong> has been approved.';
+                    } else if (notification.type === 'listing_disapproved') {
+                        return 'Your listing <strong>' + notification.data +'</strong> has been disapproved.';
+                    } else if (notification.type === 'payment') {
+                        return 'You received a payment.';
+                    } else if (notification.type === 'maintenance') {
+                        return notification.data;
+                    }else if (notification.type === 'feedback') {
+                        return notification.data;
+                    }else if (notification.type === 'follow-up') {
+                        notificationMessage.textContent = notification.data;
+                    }else if (notification.type === 'message') {
+                        const data = JSON.parse(notification.data); // Parse the notification data to extract senderName
+                        const senderName = data.senderName || 'Unknown sender'; // Default to 'Unknown sender' if no name is available
+                        return `You have a new message from <strong> ${senderName}. </strong>`;
+                    }else if (notification.type === 'maintenance') {
+                        return notification.data;
+                    }else if (notification.type === 'negotiation') {
+                        return 'Someone wants to negotiate your space: <strong>' + notification.data + '</strong>.';
+                    } else if (notification.type === 'payment_sent') {
+                        return notification.data;
+                    } else if (notification.type === 'payment_confirmed') {
+                        return 'Renter ' + '<strong>' + notification.data + '</strong> has sent a payment confirmed by the admin.';
+                    } else if (notification.type === 'listing') {
+                        return 'Your listing ' + '<strong>' + notification.data + '</strong> has beed monitored.';
+                    } else {
+                        return notification.description;  // Default message
+                    }
+
+            return notification.description; // Default message
+            }
+
 
 
             // Event listener for "See previous notifications" button
