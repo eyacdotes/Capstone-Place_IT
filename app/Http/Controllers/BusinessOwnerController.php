@@ -22,23 +22,23 @@ class BusinessOwnerController extends Controller
      */
     public function index()
     {
-        // Define the locations you want to filter
-        $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Lapu-Lapu City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
-        
-        // Initialize an array to store the counts
-        $listingsCount = [];
+            // Define the locations you want to filter
+            $locations = ['Cebu City', 'Mandaue City', 'Talisay City', 'Lapu-Lapu City', 'Naga City', 'Minglanilla City', 'Toledo City', 'Carcar', 'Asturias', 'Dumanjug', 'Barili', 'Danao'];
+            
+            // Initialize an array to store the counts
+            $listingsCount = [];
 
-        // Loop through the locations and get the count for each
-        foreach ($locations as $location) {
-            // Count listings for the current location, excluding Pending and Deactivated statuses
-            $listingsCount[$location] = Listing::where('location', 'LIKE', '%' . $location . '%')
-                                                ->whereNotIn('status', ['Deactivated', 'Pending', 'Disapproved'])
-                                                ->count();
-        }
+            // Loop through the locations and get the count for each
+            foreach ($locations as $location) {
+                // Count listings for the current location, excluding Pending and Deactivated statuses
+                $listingsCount[$location] = Listing::where('location', 'LIKE', '%' . $location . '%')
+                                                    ->whereNotIn('status', ['Deactivated', 'Pending', 'Disapproved'])
+                                                    ->count();
+            }
 
-    // Return the count to the view
-    return view('dashboard.business', compact('listingsCount'));
-}
+        // Return the count to the view
+        return view('dashboard.business', compact('listingsCount'));
+    }
 
 
     public function showByLocation($location)

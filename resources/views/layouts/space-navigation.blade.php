@@ -19,9 +19,6 @@
                     <x-nav-link :href="route('space.negotiations')"  class="ajax-link" :active="request()->routeIs('space.negotiations')">
                         {{ __('Negotiations') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('space.reviews')"  class="ajax-link" :active="request()->routeIs('space.reviews')">
-                        {{ __('Feedback') }}
-                    </x-nav-link>
                     <x-nav-link :href="route('space.business_details')"  class="ajax-link" :active="request()->routeIs('space.business_details')">
                         {{ __('Payment') }}
                     </x-nav-link>
@@ -63,16 +60,28 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
+                            <!-- Profile Link -->
+                            <x-dropdown-link :href="route('profile.edit')" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-orange-100">
+                                <i class="fas fa-user w-5 h-5 text-gray-500"></i>
+                                <span>{{ __('Profile') }}</span>
                             </x-dropdown-link>
+
+                            <!-- Feedback Link -->
+                            <x-dropdown-link :href="route('space.reviews')" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-orange-100">
+                                <i class="fas fa-comment-dots w-5 h-5 text-gray-500"></i>
+                                <span>{{ __('Feedback') }}</span>
+                            </x-dropdown-link>
+
+                            <!-- Log Out Form -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-orange-100">
+                                    <i class="fas fa-sign-out-alt w-5 h-5 text-gray-500"></i>
+                                    <span>{{ __('Log Out') }}</span>
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
+
                     </x-dropdown>
             </div>
 
@@ -100,8 +109,8 @@
             <x-responsive-nav-link :href="route('space.negotiations')" :active="request()->routeIs('space.negotiations')">
                 {{ __('Negotiations') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('space.reviews')" :active="request()->routeIs('space.reviews')">
-                {{ __('Feedback') }}
+            <x-responsive-nav-link :href="route('space.business_details')" :active="request()->routeIs('space.business_details')">
+                {{ __('Payment') }}
             </x-responsive-nav-link>
         </div>
         
@@ -114,12 +123,18 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('profile.edit')" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-orange-100">
+                    <i class="fas fa-user w-5 h-5 text-gray-500"></i>
                     {{ __('Profile') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('space.reviews')" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-orange-100">
+                    <i class="fas fa-comment-dots w-5 h-5 text-gray-500"></i>
+                    {{ __('Give Feedback') }}
                 </x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                        <i class="fas fa-sign-out-alt w-5 h-5 text-gray-500"></i>    
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
@@ -259,7 +274,6 @@
 }
 
 
-
 // Helper function to customize notification messages
         function getNotificationMessage(notification) {
                      if (notification.type === 'listing_approved') {
@@ -273,7 +287,7 @@
                     }else if (notification.type === 'feedback') {
                         return notification.data;
                     }else if (notification.type === 'follow-up') {
-                        notificationMessage.textContent = notification.data;
+                        return notification.data;
                     }else if (notification.type === 'message') {
                         const data = JSON.parse(notification.data); // Parse the notification data to extract senderName
                         const senderName = data.senderName || 'Unknown sender'; // Default to 'Unknown sender' if no name is available

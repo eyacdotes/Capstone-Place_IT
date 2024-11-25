@@ -44,11 +44,12 @@ class NotificationController extends Controller
                 'data' => $request->message,
                 'created_at' => now(),
             ]);
-            Mail::to($user->email)->send(new FollowUp);
-        }
 
-        // Redirect back with a success message
-        return redirect()->route('admin.dashboard')->with('success', 'Notification sent successfully!');
+            // Send an email only if the type is 'pending_negotiations'
+            if ($request->type === 'follow-up') {
+                Mail::to($user->email)->send(new FollowUp);
+            }
+        }
     }
     // Mark a notification as read
     public function markAsRead($id)
