@@ -44,49 +44,55 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <div class="relative">
-                    <i class="fa-regular fa-bell font-bold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
-                    <!-- Red dot label (initially hidden) -->
-                    <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
-                    <!-- Notification Dropdown (initially hidden) -->
-                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
-                        <!-- Create Notification button -->
-                        <div class="border-b-2 border-gray-200 px-4 py-2">
-                            <button id="create-notification-btn" class="text-blue-500 hover:text-blue-700 cursor-pointer">
-                                Create Notification
-                            </button>
+            <div class="flex items-center space-x-4">
+                <!-- Notification Icon -->
+                <div class="">
+                    <!-- Notification Icon -->
+                    <div class="relative">
+                        <i class="fa-regular fa-bell font-semibold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
+                        <!-- Red dot for new notifications -->
+                        <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full hidden"></span>
+                        <!-- Notification Dropdown -->
+                        <div id="notification-dropdown" class="absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden border border-gray-200" style="right: -50px;">
+                            <div class="border-b-2 border-gray-200 px-4 py-2">
+                                <button id="create-notification-btn" class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    Create Notification
+                                </button>
+                            </div>
+                            <div id="notification-list" class="max-h-80 overflow-y-auto">
+                                <p class="px-4 py-2 text-gray-800">No new notifications.</p>
+                            </div>
+                            <button id="see-previous-btn" class="px-4 py-2 w-full text-center text-blue-600 hover:bg-gray-100 hidden">See previous notifications</button>
                         </div>
-                        <div id="notification-list" class="max-h-80">
-                            <p class="px-4 py-2 text-gray-800">No new notifications.</p>
-                        </div>
-                        <button id="see-previous-btn" class="px-4 py-2 w-full text-center text-blue-600 hover:bg-gray-100 hidden">See previous notifications</button>
                     </div>
                 </div>
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->firstName }}</div>
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                <!-- Settings Dropdown -->
+                <div class="hidden sm:flex sm:items-center">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                <div>{{ Auth::user()->firstName }}</div>
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
                             </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
             </div>
 
             <!-- Hamburger -->
@@ -189,41 +195,6 @@
 
 
 <script>
-    document.getElementById('selectUser').addEventListener('change', function () {
-    const selectedRole = this.value;
-    const userListContainer = document.getElementById('user-list-container');
-    const userListSelect = document.getElementById('users');
-
-    // Clear existing options
-    userListSelect.innerHTML = '<option value="">Loading...</option>';
-
-    if (selectedRole === 'both') {
-        userListContainer.classList.add('hidden');
-        userListSelect.innerHTML = '';
-        return;
-    }
-
-    // Show user list container
-    userListContainer.classList.remove('hidden');
-
-    // Fetch users for the selected role
-    fetch(`/admin/dashboard/${selectedRole}`)
-        .then(response => response.json())
-        .then(data => {
-            userListSelect.innerHTML = '<option value="">Select User</option>';
-            data.forEach(user => {
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = `${user.firstName} ${user.lastName}`;
-                userListSelect.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching users:', error);
-            userListSelect.innerHTML = '<option value="">Error loading users</option>';
-        });
-    });
-
     document.addEventListener('DOMContentLoaded', function () {
         const notificationIcon = document.querySelector('.fa-bell');
         const notificationDropdown = document.getElementById('notification-dropdown');
@@ -236,91 +207,144 @@
         const accountManagementDropdown = document.getElementById('account-management-dropdown');
         const seePreviousBtn = document.getElementById('see-previous-btn');
 
+
         let offset = 0;
         let hasPrevious = false;
 
-        // Fetch notifications via AJAX
         function loadNotifications() {
-            fetch(`/notifications?offset=${offset}&limit=8`)
-                .then(response => response.json())
-                .then(data => {
-                    const unreadNotifications = data.filter(notification => notification.read_at === null);
+        fetch(`/notifications?offset=${offset}&limit=8`)
+        .then(response => response.json())
+        .then(data => {
+            const unreadNotifications = data.filter(notification => notification.read_at === null);
 
-                    // Show or hide red dot based on unread notifications
-                    if (unreadNotifications.length > 0) {
-                        notificationDot.style.display = 'inline-block';  // Show the red dot
+            // Show or hide red dot based on unread notifications
+            notificationDot.style.display = unreadNotifications.length > 0 ? 'inline-block' : 'none';
+
+            if (data.length > 0) {
+                if (offset === 0) {
+                    notificationList.innerHTML = ''; // Clear notifications on first load
+                }
+
+                data.forEach(notification => {
+                    // Container for each notification
+                    const notificationItem = document.createElement('div');
+                    notificationItem.classList.add('flex', 'items-center', 'justify-between', 'px-4', 'py-2', 'border-b');
+
+                    // Apply background color for unread notifications
+                    if (notification.read_at === null) {
+                        notificationItem.style.backgroundColor = '#daccc9'; // Light gray background for unread
                     } else {
-                        notificationDot.style.display = 'none';  // Hide the red dot if no unread notifications
+                        notificationItem.style.backgroundColor = '#fff'; // White background for read
                     }
 
-                    if (data.length > 0) {
-                        if (offset === 0) {
-                            notificationList.innerHTML = ''; // Clear placeholder on first load
-                        }
+                    // Notification link/message
+                    const notificationLink = document.createElement('a');
+                    notificationLink.classList.add('flex-grow', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer', 'mr-4', 'p-2');
+                    notificationLink.href = getNotificationUrl(notification);
+                    notificationLink.setAttribute('data-id', notification.notificationID);
 
-                        data.forEach(notification => {
-                            const notificationLink = document.createElement('a');
-                            notificationLink.classList.add('block', 'px-4', 'py-2', 'text-gray-800', 'hover:bg-gray-100', 'cursor-pointer');
-                            notificationLink.href = getNotificationUrl(notification);
-                            notificationLink.setAttribute('data-id', notification.notificationID);
+                    const notificationMessage = document.createElement('div');
+                    notificationMessage.innerHTML = getNotificationMessage(notification);
 
-                            // Set background based on read status
-                            if (notification.read_at === null) {
-                                notificationLink.classList.add('bg-gray-200');  // Gray background for unread
-                            } else {
-                                notificationLink.classList.add('bg-white');     // White background for read
-                            }
+                    const notificationDate = document.createElement('span');
+                    notificationDate.classList.add('text-gray-400', 'text-sm', 'block');
+                    notificationDate.textContent = new Date(notification.created_at).toLocaleString();
 
-                            // Add click event for marking as read and redirect
-                            notificationLink.addEventListener('click', function (event) {
-                                event.preventDefault();
-                                const url = this.href;
-                                const notificationId = this.getAttribute('data-id');
-                                markAsRead(notificationId, url);
-                            });
+                    notificationLink.appendChild(notificationMessage);
+                    notificationLink.appendChild(notificationDate);
 
-                            const notificationMessage = document.createElement('div');
-                            if (notification.type === 'listing_approval') {
-                                notificationMessage.innerHTML = 'A new listing needs approval: <strong>' + notification.data + '</strong>';
-                            } else if (notification.type === 'payment_submitted') {
-                                notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has submitted a payment.';
-                            } else if (notification.type === 'payment') {
-                                notificationMessage.textContent = 'You received a payment';
-                            } else if (notification.type === 'meetup_submitted') {
-                                notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has submitted a proof of meetup for confirmation.';
-                            } else {
-                                notificationMessage.textContent = notification.description;  // Default message
-                            }
+                    // Add click event to mark as read and redirect
+                    notificationLink.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        markAsRead(notification.notificationID, notificationLink.href);
+                    });
 
-                            const notificationDate = document.createElement('span');
-                            notificationDate.classList.add('text-gray-400', 'text-sm');
-                            notificationDate.textContent = new Date(notification.created_at).toLocaleString();
+                    // Delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('text-red-600', 'hover:text-red-800');
+                    deleteButton.innerHTML = '<i class="fa-solid fa-trash-alt"></i>';
+                    deleteButton.addEventListener('click', () => {
+                        deleteNotification(notification.notificationID, notificationItem);
+                    });
 
-                            notificationLink.appendChild(notificationMessage);
-                            notificationLink.appendChild(notificationDate);
+                    // Append notification content and delete button
+                    notificationItem.appendChild(notificationLink);
+                    notificationItem.appendChild(deleteButton);
 
-                            notificationList.appendChild(notificationLink);
+                    notificationList.appendChild(notificationItem);
+                });
+
+
+                // Show "See previous notifications" button if more notifications exist
+                seePreviousBtn.style.display = data.length === 8 ? 'block' : 'none';
+                hasPrevious = data.length === 8;
+                offset += data.length;
+            } else if (offset === 0) {
+                notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+            }
+        })
+        .catch(error => console.error('Error loading notifications:', error));
+    } 
+        function getNotificationMessage(notification) {
+                if (notification.type === 'listing_approval') {
+                    return 'A new listing needs approval: <strong>' + notification.data + '</strong>';
+                } else if (notification.type === 'payment_submitted') {
+                    return '<strong>' + notification.data + '</strong> has submitted a payment.';
+                } else if (notification.type === 'payment') {
+                    return 'You received a payment';
+                } else if (notification.type === 'meetup_submitted') {
+                    return '<strong>' + notification.data + '</strong> has submitted a proof of meetup for confirmation.';
+                } else {
+                    return notification.description;  // Default message
+                }
+                    return notification.description; // Default message
+            }
+
+
+            function deleteNotification(notificationID, notificationElement) {
+                fetch(`/notifications/${notificationID}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the notification from the DOM
+                        notificationElement.remove();
+                        
+                        // Show success message using SweetAlert
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'The notification has been deleted successfully.',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            timer: 2000, // Auto close after 2 seconds
                         });
-
-                        // Show "See previous notifications" button if there are more notifications
-                        if (data.length === 8) {
-                            seePreviousBtn.style.display = 'block';
-                            hasPrevious = true; // Previous notifications exist
-                        } else {
-                            seePreviousBtn.style.display = 'none';
-                            hasPrevious = false; // No previous notifications
-                        }
-
-                        offset += data.length; // Increase the offset
-                    } else if (offset === 0) {
-                        notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                    } else {
+                        // Show error message if the delete operation fails
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Failed to delete the notification. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
                     }
                 })
-                .catch(error => console.error('Error loading notifications:', error));
-        }
+                .catch(error => {
+                    console.error('Error deleting notification:', error);
 
-
-        // Event listener for "See previous notifications" button
+                    // Show error alert
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while deleting the notification.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                });
+            }
+            // Event listener for "See previous notifications" button
             seePreviousBtn.addEventListener('click', function () {
                 // Enable scrolling when this button is clicked
                 notificationList.classList.add('max-h-96');
@@ -348,6 +372,7 @@
                     notificationIcon.classList.remove('text-orange-500'); // Remove highlight if clicked outside
                 }
             });
+
         // Function to generate the notification URL based on type
         function getNotificationUrl(notification) {
             if (notification.type === 'listing_approval') {
@@ -361,6 +386,7 @@
             }
             return '#';  // Default URL
         }
+
 
         // AJAX function to mark a notification as read
         function markAsRead(notificationId, redirectUrl) {
@@ -382,17 +408,13 @@
                 console.error('Error marking notification as read:', error);
             });
         }
-
         createNotificationBtn.addEventListener('click', function () {
             notificationModal.classList.remove('hidden');
         });
 
-        // Hide the modal when the "Cancel" button is clicked
         closeModalBtn.addEventListener('click', function () {
             notificationModal.classList.add('hidden');
         });
-
-        // Optional: Hide the modal when clicking outside of it
         notificationModal.addEventListener('click', function (event) {
             if (event.target === notificationModal) {
                 notificationModal.classList.add('hidden');
@@ -410,5 +432,44 @@
         });
         loadNotifications();
     });
+
+    
+
+    document.getElementById('selectUser').addEventListener('change', function () {
+        const selectedRole = this.value;
+        const userListContainer = document.getElementById('user-list-container');
+        const userListSelect = document.getElementById('users');
+
+        // Clear existing options
+        userListSelect.innerHTML = '<option value="">Loading...</option>';
+
+        if (selectedRole === 'both') {
+            userListContainer.classList.add('hidden');
+            userListSelect.innerHTML = '';
+            return;
+        }
+
+        // Show user list container
+        userListContainer.classList.remove('hidden');
+
+        // Fetch users for the selected role
+        fetch(`/admin/dashboard/${selectedRole}`)
+            .then(response => response.json())
+            .then(data => {
+                userListSelect.innerHTML = '<option value="">Select User</option>';
+                data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = `${user.firstName} ${user.lastName}`;
+                    userListSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+                userListSelect.innerHTML = '<option value="">Error loading users</option>';
+            });
+    });
+
+    
 </script>
 
