@@ -16,40 +16,61 @@ class NotificationController extends Controller
     }
     public function store(Request $request)
     {
-        // Validate the request data
+        //dd($request->all());
         $request->validate([
             'type' => 'required|string|max:255',
             'message' => 'required|string|max:255',
-            'selectUser' => 'required|string'
+            'selectUser' => 'required|string',
+            'user_id' => 'nullable|exists:users,userID',
         ]);
 
         // Determine the user roles to notify based on the selection
-        $roles = [];
-        if ($request->selectUser === 'space_owner') {
-            $roles[] = 'space_owner';
-        } elseif ($request->selectUser === 'business_owner') {
-            $roles[] = 'business_owner';
-        } elseif ($request->selectUser === 'both') {
-            $roles = ['space_owner', 'business_owner'];
-        }
-
-        // Retrieve all users with the selected roles
-        $users = User::whereIn('role', $roles)->get();
-
-        // Loop through each user and create a notification entry for them
-        foreach ($users as $user) {
+        if ($request->filled('user_id')) {
+            // Create a notification for the selected user
+            $user = User::findOrFail($request->user_id);
+    
             Notification::create([
-                'n_userID' => $user->userID,  // Ensure the n_userID references the users table
+                'n_userID' => $user->userID,
                 'type' => $request->type,
                 'data' => $request->message,
                 'created_at' => now(),
             ]);
-
-            // Send an email only if the type is 'pending_negotiations'
+    
+            // Send email if notification type is follow-up
             if ($request->type === 'follow-up') {
                 Mail::to($user->email)->send(new FollowUp);
             }
+        } else {
+            // Notify users based on roles if no specific user is selected
+            $roles = [];
+            if ($request->selectUser === 'space_owner') {
+                $roles[] = 'space_owner';
+            } elseif ($request->selectUser === 'business_owner') {
+                $roles[] = 'business_owner';
+            } elseif ($request->selectUser === 'both') {
+                $roles = ['space_owner', 'business_owner'];
+            }
+    
+            // Retrieve all users with the selected roles
+            $users = User::whereIn('role', $roles)->get();
+    
+            // Loop through each user and create a notification entry for them
+            foreach ($users as $user) {
+                Notification::create([
+                    'n_userID' => $user->userID,
+                    'type' => $request->type,
+                    'data' => $request->message,
+                    'created_at' => now(),
+                ]);
+    
+                // Send email if notification type is follow-up
+                if ($request->type === 'follow-up') {
+                    Mail::to($user->email)->send(new FollowUp);
+                }
+            }
         }
+    
+        return redirect()->route('admin.dashboard')->with('success', 'Notification sent successfully!');
     }
     // Mark a notification as read
     public function markAsRead($id)
