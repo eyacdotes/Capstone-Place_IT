@@ -239,7 +239,7 @@ class NegotiationController extends Controller
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'gcashNumber' => 'required|unique:billing_details,gcash_number|max:255',
+            'gcashNumber' => 'required|max:255',
             'myCheckbox' => 'required'
         ]);
 
