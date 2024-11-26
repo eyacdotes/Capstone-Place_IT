@@ -84,7 +84,7 @@
             </p>
         </div>
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Your Company. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} PlaceIt. All rights reserved.</p>
             <p>
                 <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
             </p>
