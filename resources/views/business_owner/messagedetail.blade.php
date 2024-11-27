@@ -29,7 +29,7 @@
                                 </span>
                             </a>
                             <span class="font-semibold p-4 text-lg sm:text-xl">
-                                {{ ucwords($negotiation->sender->firstName) }} {{ ucwords($negotiation->sender->lastName) }}
+                                {{ ucwords($negotiation->reciever->firstName) }} {{ ucwords($negotiation->reciever->lastName) }}
                             </span>
                         </div>
                     </div>
