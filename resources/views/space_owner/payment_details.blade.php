@@ -109,6 +109,11 @@
                                                     <p class="text-gray-600 italic">Payment received.</p>
                                                 @endif
                                             </td>
+                                            <td class="px-6 py-4 text-left">
+                                                <a href="{{ route('payment.download', $payment->paymentID) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200">
+                                                    Download Receipt
+                                                </a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
