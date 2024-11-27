@@ -97,7 +97,7 @@
                     <div class="card-body text-center">
                         <i class="fas fa-wallet fa-3x mb-3 text-success"></i>
                         <h5 class="card-title font-weight-bold">Total Earnings</h5>
-                        <p class="card-text text-muted">Total earnings (after 10% fee) from negotiations.</p>
+                        <p class="card-text text-muted">Total earnings 10% of each negotiations.</p>
                         <a href="#" class="btn btn-outline-success">
                             ₱{{ number_format($totalEarnings, 2) }}
                         </a>
