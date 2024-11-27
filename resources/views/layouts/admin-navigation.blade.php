@@ -443,39 +443,38 @@
     
 
     document.getElementById('selectUser').addEventListener('change', function () {
-        const selectedRole = this.value;
-        const userListContainer = document.getElementById('user-list-container');
-        const userListSelect = document.getElementById('users');
+    const selectedRole = this.value;
+    const userListContainer = document.getElementById('user-list-container');
+    const userListSelect = document.getElementById('users');
 
-        // Clear existing options
-        userListSelect.innerHTML = '<option value="">Loading...</option>';
+    // Clear existing options
+    userListSelect.innerHTML = '<option value="">Select User</option>';
 
-        if (selectedRole === 'both') {
-            userListContainer.classList.add('hidden');
-            userListSelect.innerHTML = '';
-            return;
-        }
+    if (selectedRole === 'both') {
+        userListContainer.classList.add('hidden');
+        return; // Stop further execution if 'All Users' is selected
+    }
 
-        // Show user list container
-        userListContainer.classList.remove('hidden');
+    // Show user list container if specific roles are selected
+    userListContainer.classList.remove('hidden');
 
-        // Fetch users for the selected role
-        fetch(`/admin/dashboard/${selectedRole}`)
-            .then(response => response.json())
-            .then(data => {
-                userListSelect.innerHTML = '<option value="">Select User</option>';
-                data.forEach(user => {
-                    const option = document.createElement('option');
-                    option.value = user.id;
-                    option.textContent = `${user.firstName} ${user.lastName}`;
-                    userListSelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching users:', error);
-                userListSelect.innerHTML = '<option value="">Error loading users</option>';
+    // Fetch users for the selected role
+    fetch(`/admin/dashboard/${selectedRole}`)
+        .then(response => response.json())
+        .then(data => {
+            userListSelect.innerHTML = '<option value="">Select User</option>';
+            data.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.userID; // Ensure correct `id` is set
+                option.textContent = `${user.firstName} ${user.lastName}`;
+                userListSelect.appendChild(option);
             });
-    });
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            userListSelect.innerHTML = '<option value="">Error loading users</option>';
+        });
+});
 
     
 </script>
