@@ -65,12 +65,11 @@
             <div class="card shadow-lg bg-gray-300 hover:bg-gray-400 border-light p-5 rounded h-100 mt-2">
                 <div class="card-body text-center">
                     <i class="fas fa-wallet fa-3x mb-3 text-success"></i>
-                    <p class="card-text text-muted">Total earnings (after 10% fee) from negotiations: <strong>₱{{ number_format($totalEarnings, 2) }}</strong></p>            
+                    <p class="card-text text-muted">Total earnings 10% of each successful negotiations: <strong>₱{{ number_format($totalEarnings, 2) }}</strong></p>            
                 </div>
             </div>
-
             <button onclick="printReport()" class="btn btn-primary mt-3 hover:text-slate-400">Print Report</button>
-        </div>
+          </div>
     </div>
 
     <script>

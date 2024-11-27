@@ -218,25 +218,46 @@ class NegotiationController extends Controller
         $request->validate([
             'listingID' => 'required|exists:listing,listingID',
             'receiverID' => 'required|exists:users,userID',
-            'offerAmount' => 'required|numeric',
+            'offerAmount' => 'required|numeric|min:1',
+            'rentalTerm' => 'required|string|in:weekly,monthly,yearly',
+            'startDate' => 'required|date|after_or_equal:today',
+            'endDate' => 'required|date|after:startDate',
         ]);
 
-        $negotiation = Negotiation::create([
-            'listingID' => $request->listingID,
-            'senderID' => Auth::id(),
-            'receiverID' => $request->receiverID, 
-            'negoStatus' => 'Pending',
-            'offerAmount' => $request->offerAmount,
-        ]);
+        try {
+            // Create a negotiation entry
+            $negotiation = Negotiation::create([
+                'listingID' => $request->listingID,
+                'senderID' => Auth::id(),
+                'receiverID' => $request->receiverID,
+                'negoStatus' => 'Pending',
+                'offerAmount' => $request->offerAmount,
+            ]);
 
-        Notification::create([
-            'n_userID' => $request->receiverID,  // Notify the space owner (receiver)
-            'type' => 'negotiation',  // You can define this type for negotiation
-            'data' => $negotiation->listing->title, // Custom message
-            'created_at' => now(),
-        ]);
+            // Create a rental agreement tied to this negotiation
+            RentalAgreement::create([
+                'listingID' => $request->listingID,
+                'ownerID' => $request->receiverID,
+                'renterID' => Auth::id(),
+                'rentalTerm' => $request->rentalTerm,
+                'offerAmount' => $request->offerAmount,
+                'dateStart' => $request->startDate,
+                'dateEnd' => $request->endDate,
+                'status' => 'Pending',
+                'isPaid' => false,
+            ]);
 
-        return redirect()->route('business.negotiations')->with('success', 'Your offer has been sent successfully, and the space owner has been notified.');
+            Notification::create([
+                'n_userID' => $request->receiverID,  // Notify the space owner (receiver)
+                'type' => 'negotiation',  // You can define this type for negotiation
+                'data' => $negotiation->listing->title, // Custom message
+                'created_at' => now(),
+            ]);
+
+            return redirect()->route('business.negotiations')->with('success', 'Negotiation request sent successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while processing your request.');
+        }
     }
     public function storeDB(Request $request, $negotiationID)
     {
@@ -368,6 +389,7 @@ class NegotiationController extends Controller
             'startDate' => $rentalAgreement->dateStart,
             'endDate' => $rentalAgreement->dateEnd,
             'status' => $rentalAgreement->status,
+            'offerAmount' => $rentalAgreement->offerAmount,
             'dateCreated' => $rentalAgreement->created_at->format('Y-m-d'),
         ];
 
@@ -391,7 +413,9 @@ class NegotiationController extends Controller
             ->get();
 
         // Fetch all payments
-        $payments = Payment::with(['renter', 'listing', 'rentalAgreement', 'spaceOwner'])->get();
+        $payments = Payment::whereIn('rentalAgreementID', $negotiations->pluck('negotiationID'))
+        ->with(['renter', 'listing', 'rentalAgreement', 'spaceOwner'])
+        ->get();
 
         // Fetch all billing details for the authenticated user
         $billingDetails = BillingDetail::where('user_id', Auth::id())

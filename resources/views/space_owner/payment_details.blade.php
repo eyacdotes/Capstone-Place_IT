@@ -63,9 +63,9 @@
 
                     <!-- Negotiation Offers Section -->
                     @if($negotiations->count())
-                        <div class="mb-8">
-                            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Payments</h3>
-                            <div class="mb-8 overflow-x-auto rounded-lg">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Payments</h3>
+                        <div class="mb-8 overflow-x-auto rounded-lg">
                             <table class="min-w-full bg-gray-100 rounded-lg shadow-sm divide-y divide-gray-200">
                                 <thead>
                                     <tr class="bg-gray-200">
@@ -73,6 +73,7 @@
                                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                                         <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Proof of Payment</th>
                                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Download Receipt</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-sm text-gray-700">
@@ -110,16 +111,20 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-left">
-                                                <a href="{{ route('payment.download', $payment->paymentID) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200">
-                                                    Download Receipt
-                                                </a>
+                                                @if($payment)
+                                                    <a href="{{ route('payment.download', $payment->paymentID) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200 inline-block text-center">
+                                                        Download Receipt
+                                                    </a>
+                                                @else
+                                                    <p class="text-gray-600 italic">No receipt available.</p>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            </div>
                         </div>
+                    </div>
                     @else
                         <p class="text-gray-600 italic">No negotiations found for this business owner.</p>
                     @endif

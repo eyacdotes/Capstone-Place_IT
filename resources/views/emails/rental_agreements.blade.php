@@ -86,6 +86,10 @@
             <td>{{ ucwords($agreementData['status']) }}</td>
         </tr>
         <tr>
+            <td>Payment Sent</td>
+            <td>{{ $agreementData['offerAmount'] }}</td>
+        </tr>
+        <tr>
             <td>Date Created</td>
             <td>{{ $agreementData['dateCreated'] }}</td>
         </tr>
