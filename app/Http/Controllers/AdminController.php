@@ -342,9 +342,8 @@ class AdminController extends Controller
         $paymentHistory = Payment::count();
         
         // Calculate Total Earnings (sum of offerAmount - 10%)
-        $totalEarnings = Negotiation::all()->reduce(function ($carry, $negotiation) {
-            return $carry + ($negotiation->offerAmount * 0.90);
-        }, 0);
+        $totalEarnings = Negotiation::where('negoStatus', 'approved')
+        ->sum(Negotiation::raw('offerAmount * 0.10'));
 
         return view('admin.reports', compact(
             'approvedNegotiations', 
