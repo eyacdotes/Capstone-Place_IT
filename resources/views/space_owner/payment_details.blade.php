@@ -106,12 +106,16 @@
                                                             Approve Payment
                                                         </button>
                                                     </form>
+                                                @elseif($payment && $payment->status == 'confirmed')
+                                                    <p class="text-gray-600 italic">Submit proof of meetup, and wait for confirmation.</p>
+                                                @elseif($payment && $payment->status == 'pending')
+                                                    <p class="text-gray-600 italic">Payment not yet confirmed.</p>    
                                                 @else
                                                     <p class="text-gray-600 italic">Payment received.</p>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-left">
-                                                @if($payment)
+                                                @if($payment && $payment->status == 'received')
                                                     <a href="{{ route('payment.download', $payment->paymentID) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200 inline-block text-center">
                                                         Download Receipt
                                                     </a>
