@@ -104,31 +104,49 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Top Row - 3 Team Members -->
             <div class="text-center">
-                <img src="{{ asset('team/perod.png') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
-                <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
-                <p class="text-orange-600 mb-2 font-bold">SOFTWARE ENGINEER</p>
-                <div class="flex justify-center space-x-3 text-gray-500">
-                    <a href="https://www.facebook.com/JahIsGood"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;"/></a>
-                    <a href="https://www.instagram.com/jahsspear/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="404 | Not Found"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="#"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                </div>
+            <img src="{{ asset('team/perod.png') }}" alt="Team Member 1" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600 object-cover ml-auto">
+            <h3 class="text-xl font-bold">JASPER ELDRICH BALLESTEROS</h3>
+            <p class="text-orange-600 mb-2 font-bold">SOFTWARE ENGINEER</p>
+            <div class="flex justify-center space-x-3 text-gray-500">
+                <a href="https://www.facebook.com/JahIsGood">
+                    <img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;"/>
+                </a>
+                <a href="https://www.instagram.com/jahsspear/">
+                    <img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" />
+                </a>
+                <a href="404 | Not Found">
+                    <img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" />
+                </a>
+                <a href="#https://www.linkedin.com/in/jasper-eldrich-ballesteros-8b2540303/">
+                    <img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" />
+                </a>
             </div>
+        </div>
+
+
+        <div class="text-center">
+            <img src="{{ asset('team/eyac.png') }}" alt="Team Member 2" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600 object-cover ml-auto" style="object-position: top; margin-top: -10px;">
+            <h3 class="text-xl font-bold">LEMARC EYAC</h3>
+            <p class="text-orange-600 mb-2 font-bold">PROJECT MANAGER</p>
+            <div class="flex justify-center space-x-3 text-gray-500">
+                <a href="https://www.facebook.com/lemarc.eyac">
+                    <img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" />
+                </a>
+                <a href="https://www.instagram.com/eyaczoldyck/">
+                    <img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" />
+                </a>
+                <a href="404 | Not Found">
+                    <img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" />
+                </a>
+                <a href="https://www.linkedin.com/in/eyac-lemarc-099935327/">
+                    <img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" />
+                </a>
+            </div>
+        </div>
+
 
             <div class="text-center">
-                <img src="{{ asset('team/eyac.png') }}" alt="Team Member 2" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
-                <h3 class="text-xl font-bold">LEMARC EYAC</h3>
-                <p class="text-orange-600 mb-2 font-bold">PROJECT MANAGER</p>
-                <div class="flex justify-center space-x-3 text-gray-500">
-                    <a href="https://www.facebook.com/lemarc.eyac"><img src="{{ asset('storage/images/facebook-app-symbol.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="https://www.instagram.com/eyaczoldyck/"><img src="{{ asset('storage/images/instagram.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></i></a>
-                    <a href="404 | Not Found"><img src="{{ asset('storage/images/twitter.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                    <a href="https://www.linkedin.com/in/eyac-lemarc-099935327/"><img src="{{ asset('storage/images/linkedin-logo.png') }}" alt="Description of icon" style="width: 18px; height: auto;" /></a>
-                </div>
-            </div>
-
-            <div class="text-center">
-                <img src="{{ asset('team/cinco.png') }}" alt="Team Member 3" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/cinco.png') }}" alt="Team Member 3" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600 object-cover ml-auto">
                 <h3 class="text-xl font-bold">JOHN BENEDICT CINCO</h3>
                 <p class="text-orange-600 mb-2 font-bold">QUALITY ASSURANCE</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -143,7 +161,7 @@
         <!-- Bottom Row - 2 Team Members -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             <div class="text-center">
-                <img src="{{ asset('team/yani.png') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/yani.png') }}" alt="Team Member 4" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600 object-cover ml-auto">
                 <h3 class="text-xl font-bold">FRANCES DIANA N. CARSIDO</h3>
                 <p class="text-orange-600 mb-2 font-bold">DATABASE MANAGER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
@@ -155,7 +173,7 @@
             </div>
 
             <div class="text-center">
-                <img src="{{ asset('team/shy.jpg') }}" alt="Team Member 5" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600">
+                <img src="{{ asset('team/shy.jpg') }}" alt="Team Member 5" class="w-40 h-40 mx-auto rounded-full mb-4 border-2 border-orange-600 object-cover ml-auto">
                 <h3 class="text-xl font-bold">SHYRELLE SHINE L. MANAGAYTAY</h3>
                 <p class="text-orange-600 mb-2 font-bold">UI/UX DESIGNER</p>
                 <div class="flex justify-center space-x-3 text-gray-500">
