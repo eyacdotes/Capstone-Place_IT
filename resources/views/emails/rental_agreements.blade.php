@@ -14,6 +14,21 @@
             text-align: center;
             color: #333;
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .header .contact {
+            font-size: 12px;
+            text-align: center;
+        }
         p {
             margin: 10px 0;
         }
@@ -40,6 +55,15 @@
     </style>
 </head>
 <body>
+    <div class="header">
+                <div class="company-name">
+                    PlaceIt
+                </div>
+                <div class="contact">
+                    <p>Alaska Duljo Fatima Cebu City Cebu 6000</p>
+                    <p>placeit13@gmail.com</p>
+                </div>
+    </div>
     <h1>Rental Agreement Details</h1>
 
     <div class="terms">

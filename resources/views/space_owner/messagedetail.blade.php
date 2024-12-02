@@ -189,43 +189,44 @@
                         </div>
                         </div>
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
-                        @csrf
-                        <div id="detailsModal" class="fixed inset-0 bg-gray-500 flex bg-opacity-75 items-center justify-center hidden">
-                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative">
-                                <button onclick="closeDetailsModal()" 
-                                        class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 text-xl z-10 
-                                            hover:bg-gray-200 rounded-full h-8 w-8 flex items-center justify-center">
-                                    &times;
-                                </button>
-                                <h3 class="text-lg font-semibold mb-4">Send Details</h3>
-                                <div class="mb-4">
-                                    <label for="amountSent" class="block text-sm font-semibold">Amount Sent:</label>
-                                    <input type="text" id="amountSent" name="amountSent" class="form-input mt-1 block w-full" disabled>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="taxPayment" class="block text-sm font-semibold">Tax Payment (10%):</label>
-                                    <input type="text" id="taxPayment" name="taxPayment" class="form-input mt-1 block w-full" disabled>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="total" class="block text-sm font-semibold">Total:</label>
-                                    <input type="text" id="total" name="total" class="form-input mt-1 block w-full" disabled>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="gcashNumber" class="block text-sm font-semibold">Gcash Number:</label>
-                                    <input type="text" id="gcashNumber" name="gcashNumber" class="form-input mt-1 block w-full" placeholder="0911-222-3333" required>
-                                </div>
-                                <div class="mb-4">
-                                    <h4 class="text-sm font-semibold">Terms and Conditions:</h4>
-                                    <p class="text-xs text-gray-600 mt-2">
-                                        The 10% tax deduction is applied to cover commission fees and other associated costs. This ensures that the transaction can proceed smoothly and all necessary charges are accounted for. The total amount reflects the final amount after the deduction of these fees.
-                                    </p>
-                                    <input type="checkbox" id="myCheckbox" name="myCheckbox" required>
-                                    <label for="myCheckbox" class="text-sm">I agree to the terms and conditions</label>
-                                </div>
-                                <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full">Submit</button>
-                            </div>
-                        </div>
-                        </form>
+    @csrf
+    <div id="detailsModal" class="fixed inset-0 bg-gray-500 flex bg-opacity-75 items-center justify-center hidden">
+        <div class="bg-white p-5 rounded-lg shadow-lg max-w-sm w-full relative">
+            <!-- Close Button -->
+            <p class="text-center text-red-600">Click anywhere outside to close</p>
+            <h3 class="text-lg font-semibold mb-4">Send Details</h3>
+            
+            <!-- Form Fields -->
+            <div class="mb-4">
+                <label for="amountSent" class="block text-sm font-semibold">Amount Sent:</label>
+                <input type="text" id="amountSent" name="amountSent" class="form-input mt-1 block w-full" disabled>
+            </div>
+            <div class="mb-4">
+                <label for="taxPayment" class="block text-sm font-semibold">Commission (10%):</label>
+                <input type="text" id="taxPayment" name="taxPayment" class="form-input mt-1 block w-full" disabled>
+            </div>
+            <div class="mb-4">
+                <label for="total" class="block text-sm font-semibold">Total:</label>
+                <input type="text" id="total" name="total" class="form-input mt-1 block w-full" disabled>
+            </div>
+            <div class="mb-4">
+                <label for="gcashNumber" class="block text-sm font-semibold">Gcash Number:</label>
+                <input type="text" id="gcashNumber" name="gcashNumber" class="form-input mt-1 block w-full" placeholder="0911-222-3333" required>
+            </div>
+            <div class="mb-4">
+                <h4 class="text-sm font-semibold">Terms and Conditions:</h4>
+                <p class="text-xs text-gray-600 mt-2">
+                    The 10%  deduction is applied to cover commission fees and other associated costs. This ensures that the transaction can proceed smoothly and all necessary charges are accounted for. The total amount reflects the final amount after the deduction of these fees.
+                </p>
+                <input type="checkbox" id="myCheckbox" name="myCheckbox" required>
+                <label for="myCheckbox" class="text-sm">I agree to the terms and conditions</label>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full">Submit</button>
+        </div>
+    </div>
+</form>
                         <!-- Modal Structure -->
                         <div id="proofModal" class="hidden flex fixed z-50 inset-0 items-center justify-center bg-gray-900 bg-opacity-75">
                             <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
