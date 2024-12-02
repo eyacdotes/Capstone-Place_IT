@@ -209,22 +209,32 @@ class BusinessOwnerController extends Controller
 
         // Fetch rental agreements where the business owner is the renter
         $agreements = RentalAgreement::where('renterID', $ownerID)
-            ->with(['listing']) // Eager load listing relation
+            ->with(['listing', 'payments']) // Eager load listing and payments relations
             ->get();
 
-        // Process the agreements to add due date logic
+        // Process the agreements to add payment status logic
         foreach ($agreements as $agreement) {
             $dueDate = Carbon::parse($agreement->dateStart);
             $today = Carbon::now();
+            $paymentStatus = $agreement->isPaid ? 'Paid' : 'Pay Now'; 
 
-            // Determine if the payment is due or beyond the due date
-            if ($today->isSameDay($dueDate)) {
-                $agreement->paymentStatus = 'Pay Now';
-            } elseif ($today->gt($dueDate)) {
-                $agreement->paymentStatus = 'Unpaid';
+            // Get the latest payment for this agreement (using 'first' or 'last' based on your system logic)
+            $latestPayment = $agreement->payments->last(); // Get the last payment in the collection
+
+            if ($latestPayment) {
+                // Check the payment status based on its status and the due date
+                if ($latestPayment->status == 'confirmed') {
+                    $paymentStatus = 'Paid'; // Update to 'Paid' if payment is confirmed
+                } elseif ($today->gt($dueDate) && !$agreement->isPaid) {
+                    $paymentStatus = 'Unpaid'; // If the due date has passed and the payment is not made
+                }
             } else {
-                $agreement->paymentStatus = 'Upcoming'; // If not yet due
+                // If no payment is made yet, we set it as 'Pay Now'
+                $paymentStatus = 'Pay Now';
             }
+
+            // Set the overall payment status for the agreement
+            $agreement->paymentStatus = $paymentStatus;
         }
 
         return view('business_owner.reports', [

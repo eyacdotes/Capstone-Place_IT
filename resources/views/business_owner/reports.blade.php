@@ -28,8 +28,8 @@
                             <td class="border border-gray-300 px-6 py-4">{{ $agreement->dateStart->format('F j, Y') }}</td>
                             <td class="border border-gray-300 px-6 py-4">₱{{ number_format($agreement->offerAmount, 2) }}</td>
                             <td class="border border-gray-300 px-6 py-4">
-                                @if($agreement->paymentStatus == 'Pay Now')
-                                    <span class="text-green-500 font-bold">Pay Now</span>
+                                @if($agreement->paymentStatus == 'Paid')
+                                    <span class="text-green-500 font-bold">Paid</span>
                                 @elseif($agreement->paymentStatus == 'Unpaid')
                                     <span class="text-red-500 font-bold">Unpaid</span>
                                 @else

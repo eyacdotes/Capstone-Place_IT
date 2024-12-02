@@ -82,7 +82,7 @@
             <h5 class="mt-4 font-semibold">Complaint Policy</h5>
             <p class="mt-4">Filing Complaints:</p>
             <ul class="list-disc pl-5">
-                <li>Users can submit complaints via the platform’s dedicated complaint form, providing:
+                <li>Users can submit complaints via the platform’s dedicated email address, providing:
                     <ul>
                         <li>Booking details.</li>
                         <li>Description of the issue.</li>
@@ -113,7 +113,7 @@
             </ul>
             <p class="mt-4">Transfer Schedule:</p>
             <ul class="list-disc pl-5">
-                <li>Space Owners will receive their earnings (less the commission fee) via Gcash  right after you send proof of meetup.</li>
+                <li>Space Owners will receive their earnings (less the commission fee) via Gcash right after you send proof of meetup.</li>
             </ul>
             <p class="mt-4">Fees and Deductions:</p>
             <ul class="list-disc pl-5">

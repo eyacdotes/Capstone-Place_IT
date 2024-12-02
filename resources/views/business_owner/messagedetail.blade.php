@@ -122,6 +122,7 @@
                     @if($rentalAgreement) <!-- Check if rental agreement exists -->
                         <!-- Display the Rental Agreement Details -->
                         <div class="p-4 bg-gray-300 rounded-lg">
+                            <p><strong>Visiting Date:</strong> {{ \Carbon\Carbon::parse($negotiation->visit_date)->format('M d, Y') }}</p>
                             <p><strong>Rental Term:</strong> {{ ucfirst($rentalAgreement->rentalTerm) }}</p>
                             <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateStart)->format('M d, Y') }}</p>
                             <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateEnd)->format('M d, Y') }}</p>
