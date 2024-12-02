@@ -31,7 +31,7 @@ class Negotiation extends Model
     }
     public function rentalAgreement()
     {
-        return $this->hasOne(RentalAgreement::class, 'listingID', 'listingID');
+        return $this->hasOne(RentalAgreement::class, 'rentalAgreementID', 'negotiationID');
     }
     public function bill() {
         return $this->hasOne(BillingDetail::class, 'rental_agreement_id', 'rentalAgreementID');
