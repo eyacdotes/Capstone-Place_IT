@@ -11,7 +11,7 @@ class Negotiation extends Model
 
     protected $table = 'negotiations';
     
-    protected $fillable = ['listingID', 'senderID', 'receiverID', 'offerAmount', 'negoStatus'];
+    protected $fillable = ['listingID', 'senderID', 'receiverID', 'offerAmount', 'negoStatus','visit_date','visitStatus'];
     protected $primaryKey = 'negotiationID';
 
     public function listing() {

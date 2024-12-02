@@ -137,6 +137,10 @@
                                             </select>
                                         </div>
 
+                                        <div class="flex flex-col mt-2">
+                                            <label for="visit_date" class="block mb-2 font-semibold text-gray-700">Visit Date</label>
+                                            <input type="date" name="visit_date" id="visit_date" class="p-2 border border-gray-300 rounded-lg" required />
+                                        </div>
                                         <!-- Start Date -->
                                         <div class="flex flex-col mt-2">
                                             <label for="startDate" class="block mb-2 font-semibold text-gray-700">Start Date:</label>
@@ -148,11 +152,11 @@
                                             <label for="endDate" class="block mb-2 font-semibold text-gray-700">End Date:</label>
                                             <input type="date" name="endDate" id="endDate" class="mb-2 p-2 border border-gray-300 rounded-lg" required>
                                         </div>
-                    <!-- Offer Amount -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Offer Amount</label>
-                        <input type="text" name="offerAmount" placeholder="e.g. ₱000.00" class="w-full p-3 border rounded-md" required>
-                    </div>
+                                        <!-- Offer Amount -->
+                                        <div class="mb-4">
+                                            <label class="block text-gray-700">Offer Amount</label>
+                                            <input type="text" name="offerAmount" placeholder="e.g. ₱000.00" class="w-full p-3 border rounded-md" required>
+                                        </div>
 
                     <!-- Submit Button -->
                     <div class="text-center">

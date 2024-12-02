@@ -223,6 +223,7 @@ class NegotiationController extends Controller
             'rentalTerm' => 'required|string|in:weekly,monthly,yearly',
             'startDate' => 'required|date|after_or_equal:today',
             'endDate' => 'required|date|after:startDate',
+            'visit_date' => 'required|date|after_or_equal:today',
         ]);
 
         try {
@@ -233,6 +234,8 @@ class NegotiationController extends Controller
                 'receiverID' => $request->receiverID,
                 'negoStatus' => 'Pending',
                 'offerAmount' => $request->offerAmount,
+                'visit_date' => $request->visit_date,
+                'visitStatus' => 'Pending'
             ]);
 
             // Create a rental agreement tied to this negotiation

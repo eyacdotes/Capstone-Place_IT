@@ -109,7 +109,9 @@
                                                 @elseif($payment && $payment->status == 'confirmed')
                                                     <p class="text-gray-600 italic">Submit proof of meetup, and wait for confirmation.</p>
                                                 @elseif($payment && $payment->status == 'pending')
-                                                    <p class="text-gray-600 italic">Payment not yet confirmed.</p>    
+                                                    <p class="text-gray-600 italic">Payment not yet confirmed.</p>
+                                                @elseif($payment && $payment->status == 'partial_payment')
+                                                    <p class="text-gray-600 italic">Remaining payment will be sent after transaction.</p>    
                                                 @else
                                                     <p class="text-gray-600 italic">Payment received.</p>
                                                 @endif

@@ -104,6 +104,7 @@ Route::get('/admin/payment', [AdminController::class, 'payment'])
 
 Route::put('/admin/payments/{paymentID}', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');
 Route::post('/admin/payments/transfer', [AdminController::class, 'transfer'])->name('admin.payments.transfer');
+Route::post('/admin/payments/transfer-full', [AdminController::class, 'transferFull'])->name('admin.payments.full');
 
 
 

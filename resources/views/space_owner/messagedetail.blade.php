@@ -119,10 +119,12 @@
                                 <h4 class="text-lg font-semibold">Rental Agreement</h4>
                                 @if($negotiation->rentalAgreement)
                                     <div class="bg-gray-100 p-6 rounded-lg">
+                                        <p><strong>Visiting Date:</strong> {{ \Carbon\Carbon::parse($negotiation->visit_date)->format('M d, Y') }}</p>
                                         <p><strong>Rental Term:</strong> {{ ucfirst($negotiation->rentalAgreement->rentalTerm) }}</p>
                                         <p><strong>Offer Amount:</strong> ₱{{ number_format($negotiation->rentalAgreement->offerAmount, 2) }}</p>
                                         <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateStart)->format('M d, Y') }}</p>
                                         <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($rentalAgreement->dateEnd)->format('M d, Y') }}</p>
+                                        
 
                                         @if($negotiation->rentalAgreement->status !== 'approved')
                                             <!-- Approve Button -->
@@ -189,44 +191,44 @@
                         </div>
                         </div>
                         <form id="myForm" action="{{ route('billing.store', ['negotiationID' => $negotiation->negotiationID]) }}" method="POST">
-    @csrf
-    <div id="detailsModal" class="fixed inset-0 bg-gray-500 flex bg-opacity-75 items-center justify-center hidden">
-        <div class="bg-white p-5 rounded-lg shadow-lg max-w-sm w-full relative">
-            <!-- Close Button -->
-            <p class="text-center text-red-600">Click anywhere outside to close</p>
-            <h3 class="text-lg font-semibold mb-4">Send Details</h3>
-            
-            <!-- Form Fields -->
-            <div class="mb-4">
-                <label for="amountSent" class="block text-sm font-semibold">Amount Sent:</label>
-                <input type="text" id="amountSent" name="amountSent" class="form-input mt-1 block w-full" disabled>
-            </div>
-            <div class="mb-4">
-                <label for="taxPayment" class="block text-sm font-semibold">Commission (10%):</label>
-                <input type="text" id="taxPayment" name="taxPayment" class="form-input mt-1 block w-full" disabled>
-            </div>
-            <div class="mb-4">
-                <label for="total" class="block text-sm font-semibold">Total:</label>
-                <input type="text" id="total" name="total" class="form-input mt-1 block w-full" disabled>
-            </div>
-            <div class="mb-4">
-                <label for="gcashNumber" class="block text-sm font-semibold">Gcash Number:</label>
-                <input type="text" id="gcashNumber" name="gcashNumber" class="form-input mt-1 block w-full" placeholder="0911-222-3333" required>
-            </div>
-            <div class="mb-4">
-                <h4 class="text-sm font-semibold">Terms and Conditions:</h4>
-                <p class="text-xs text-gray-600 mt-2">
-                    The 10%  deduction is applied to cover commission fees and other associated costs. This ensures that the transaction can proceed smoothly and all necessary charges are accounted for. The total amount reflects the final amount after the deduction of these fees.
-                </p>
-                <input type="checkbox" id="myCheckbox" name="myCheckbox" required>
-                <label for="myCheckbox" class="text-sm">I agree to the terms and conditions</label>
-            </div>
-            
-            <!-- Submit Button -->
-            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full">Submit</button>
-        </div>
-    </div>
-</form>
+                            @csrf
+                            <div id="detailsModal" class="fixed inset-0 bg-gray-500 flex bg-opacity-75 items-center justify-center hidden">
+                                <div class="bg-white p-5 rounded-lg shadow-lg max-w-sm w-full relative">
+                                    <!-- Close Button -->
+                                    <p class="text-center text-red-600">Click anywhere outside to close</p>
+                                    <h3 class="text-lg font-semibold mb-4">Send Details</h3>
+                                    
+                                    <!-- Form Fields -->
+                                    <div class="mb-4">
+                                        <label for="amountSent" class="block text-sm font-semibold">Amount Sent:</label>
+                                        <input type="text" id="amountSent" name="amountSent" class="form-input mt-1 block w-full" disabled>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="taxPayment" class="block text-sm font-semibold">Commission (10%):</label>
+                                        <input type="text" id="taxPayment" name="taxPayment" class="form-input mt-1 block w-full" disabled>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="total" class="block text-sm font-semibold">Total:</label>
+                                        <input type="text" id="total" name="total" class="form-input mt-1 block w-full" disabled>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="gcashNumber" class="block text-sm font-semibold">Gcash Number:</label>
+                                        <input type="text" id="gcashNumber" name="gcashNumber" class="form-input mt-1 block w-full" placeholder="0911-222-3333" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <h4 class="text-sm font-semibold">Terms and Conditions:</h4>
+                                        <p class="text-xs text-gray-600 mt-2">
+                                            The 10% deduction covers commission fees and associated costs, and the total amount is split into two payments: 50% is paid before the rental term starts as a partial payment, and the remaining 50% is paid after the rental term ends as the final payment.
+                                        </p>
+                                        <input type="checkbox" id="myCheckbox" name="myCheckbox" required>
+                                        <label for="myCheckbox" class="text-sm">I agree to the terms and conditions</label>
+                                    </div>
+                                    
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full">Submit</button>
+                                </div>
+                            </div>
+                        </form>
                         <!-- Modal Structure -->
                         <div id="proofModal" class="hidden flex fixed z-50 inset-0 items-center justify-center bg-gray-900 bg-opacity-75">
                             <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
