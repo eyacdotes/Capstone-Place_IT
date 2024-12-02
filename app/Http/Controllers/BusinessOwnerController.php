@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Listing;
 use App\Models\History;
 use App\Models\Negotiation;
@@ -200,5 +201,34 @@ class BusinessOwnerController extends Controller
                 'type' => 'payment_submitted',  // Notification type
                 ]);
         }   
+    }
+
+    public function reports(Request $request)
+    {
+        $ownerID = Auth::id(); // Get the currently authenticated Business Owner ID
+
+        // Fetch rental agreements where the business owner is the renter
+        $agreements = RentalAgreement::where('renterID', $ownerID)
+            ->with(['listing']) // Eager load listing relation
+            ->get();
+
+        // Process the agreements to add due date logic
+        foreach ($agreements as $agreement) {
+            $dueDate = Carbon::parse($agreement->dateStart);
+            $today = Carbon::now();
+
+            // Determine if the payment is due or beyond the due date
+            if ($today->isSameDay($dueDate)) {
+                $agreement->paymentStatus = 'Pay Now';
+            } elseif ($today->gt($dueDate)) {
+                $agreement->paymentStatus = 'Unpaid';
+            } else {
+                $agreement->paymentStatus = 'Upcoming'; // If not yet due
+            }
+        }
+
+        return view('business_owner.reports', [
+            'agreements' => $agreements,
+        ]);
     }
 }    

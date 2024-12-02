@@ -73,7 +73,7 @@
                                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                                         <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Proof of Payment</th>
                                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
-                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Download Receipt</th>
+                                        <th class="text-center px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Receipt</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-sm text-gray-700">
