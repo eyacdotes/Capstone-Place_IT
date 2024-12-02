@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Negotiation;
 use App\Models\Reply;
@@ -499,6 +500,8 @@ class NegotiationController extends Controller
             'status' => $payment->status,
             'negostatus' => $negotiation->negoStatus,
             'date' => $payment->date,
+            'dategen' => now()->format('Y-m-d H:i:s'),
+            'uniqueKey' => Str::uuid(),
         ];
 
         // Load view and generate PDF
