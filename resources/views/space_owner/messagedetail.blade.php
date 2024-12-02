@@ -134,18 +134,18 @@
                                             </form>
                                         @else
                                             <!-- Guide Message -->
-                                            <p class="text-green-600 font-light mb-2">Rental Agreement has been approved. You may now proceed with the next steps.</p>
-                                            @if(!$billing)  <!-- Check if GCash details have NOT been submitted -->
-                                                <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
-                                                    Click to send GCash details
+                                            <p class="text-green-600 font-semibold mt-2 mb-4">Your Rental Agreement has been approved. You may now proceed with the next steps.</p>
+                                            @if(!$billing) <!-- Check if GCash details have NOT been submitted -->
+                                                <button id="openModalButton" data-offer-amount="{{ $negotiation->offerAmount }}" class="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 w-full text-center transition duration-200 ease-in-out">
+                                                    Send GCash Details
                                                 </button>
-                                            @elseif($billing && !isset($negotiation->meetupProof))  <!-- Check if GCash details were submitted but proof of meetup NOT uploaded -->
-                                                <p class="text-blue-600 font-light mb-2">GCash details submitted. Please send proof of meetup.</p>
-                                                <button id="openProofButton" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full text-center">
-                                                    Click to send proof of meetup
+                                            @elseif($billing && !isset($negotiation->meetupProof)) <!-- Check if GCash details were submitted but proof of meetup NOT uploaded -->
+                                                <p class="text-blue-600 font-light mb-4">Your GCash details have been submitted. Please upload the proof of meetup to proceed.</p>
+                                                <button id="openProofButton" class="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 w-full text-center transition duration-200 ease-in-out">
+                                                    Upload Proof of Meetup
                                                 </button>
-                                            @elseif(isset($negotiation->meetupProof))  <!-- Check if proof of meetup has been uploaded -->
-                                                <p class="text-blue-600 font-light mb-2">Proof of meetup was sent/uploaded. Wait for confirmation of the admin.</p>
+                                            @elseif(isset($negotiation->meetupProof)) <!-- Check if proof of meetup has been uploaded -->
+                                                <p class="text-blue-600 font-semibold mb-4">Proof of meetup has been uploaded. Please wait for admin confirmation.</p>
                                             @endif
                                         @endif
                                     </div>
@@ -172,16 +172,17 @@
                                     </form>
                                 @else
                                     <!-- Placeholder message guiding the user -->
-                                    <p class="text-gray-600 text-sm mb-2">Complete the approval, GCash details, and meetup proof steps to enable negotiation status update.</p>
+                                    <p class="text-gray-600 text-sm mb-4">Complete the approval, GCash details submission, and meetup proof upload to proceed with the negotiation status update.</p>
                                 @endif
                             @elseif($negotiation->negoStatus === 'Declined')
-                                <p class="text-red-600 font-light mb-2">
-                                    Negotiation status declined. This space is not available for further transactions. Please contact support for more details.
+                                <p class="text-red-600 font-semibold mb-4">
+                                    The negotiation status has been declined. This space is no longer available for further transactions. 
+                                    <span class="font-light">For more information, please contact support.</span>
                                 </p>
                             @else
                                 <!-- Message displayed after the negotiation status is approved -->
-                                <p class="text-green-600 font-light mb-2 md:mb-9">
-                                    Negotiation status approved. The space is now occupied and cannot be rented by others.
+                                <p class="text-green-600 font-semibold mb-2 md:mb-9">
+                                    The negotiation has been approved. The space is now occupied and is no longer available for rent.
                                 </p>
                               
                             @endif
