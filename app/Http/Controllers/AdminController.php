@@ -9,6 +9,7 @@ use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Negotiation;
 use App\Models\SystemFeedback;
+use App\Models\RentalAgreement;
 use App\Models\Reviews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -136,6 +137,13 @@ class AdminController extends Controller
         // Handling payment status transitions
         if ($newStatus === 'confirmed' && $payment->status === 'pending') {
             $payment->status = 'confirmed';
+
+            // Update the isPaid field in the related rental agreement
+            $rentalAgreement = RentalAgreement::where('rentalAgreementID', $payment->rentalAgreementID)->first();
+            if ($rentalAgreement) {
+                $rentalAgreement->isPaid = true;
+                $rentalAgreement->save();
+            }
         } elseif ($newStatus === 'partial_payment' && $payment->status === 'confirmed') {
             $payment->status = 'partial_payment';
         } elseif ($newStatus === 'transferred' && $payment->status === 'partial_payment') {
@@ -148,6 +156,7 @@ class AdminController extends Controller
 
         return redirect()->route('admin.payment')->with('success', 'Payment status updated successfully!');
     }
+
     public function transfer(Request $request)
     {
         // Find the payment by ID
@@ -159,7 +168,7 @@ class AdminController extends Controller
             $payment->admin_proof = $filePath; // Save proof uploaded by admin
         }
 
-        $payment->status = 'partial_payment';  // Update status to transferred
+        $payment->status = 'Partial Payment';  // Update status to transferred
         $payment->save();
         $this->notifyOwnerSentPayment($payment);
         

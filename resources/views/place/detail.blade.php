@@ -131,9 +131,10 @@
                                             <label for="rentalTerm" class="block font-semibold text-gray-700">Rental Term:</label>
                                             <select class="p-2 border border-gray-300 rounded-lg" name="rentalTerm" id="rentalTerm" required>
                                                 <option value="">Choose...</option>
-                                                <option value="weekly">Weekly</option>
-                                                <option value="monthly">Monthly</option>
-                                                <option value="yearly">Yearly</option>
+                                                <option value="1 Week">1 Week</option>
+                                                <option value="2 Weeks">2 Weeks</option>
+                                                <option value="3 Weeks">3 Weeks</option>
+                                                <option value="monthly">Month</option>
                                             </select>
                                         </div>
 

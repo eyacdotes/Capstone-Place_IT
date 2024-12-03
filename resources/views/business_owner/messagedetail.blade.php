@@ -138,7 +138,7 @@
                                 </a>
                             @elseif($rentalAgreement->isPaid)
                                 <!-- Payment Confirmation Message -->
-                                <p class="text-green-600 mt-4 font-semibold text-normal">Your payment has been sent successfully. Please wait for confirmation and further instructions..</p>
+                                <p class="text-green-600 mt-4 font-semibold text-normal">Your payment has been sent successfully. Please wait for confirmation and further instructions.</p>
                                 <!-- Payment Status Display -->
                                 <div class="mt-6">
                                     @if($rentalAgreement->payments->isNotEmpty())

@@ -220,7 +220,7 @@ class NegotiationController extends Controller
             'listingID' => 'required|exists:listing,listingID',
             'receiverID' => 'required|exists:users,userID',
             'offerAmount' => 'required|numeric|min:1',
-            'rentalTerm' => 'required|string|in:weekly,monthly,yearly',
+            'rentalTerm' => 'required|string|in:1 Week,2 Weeks,3 Weeks,monthly',
             'startDate' => 'required|date|after_or_equal:today',
             'endDate' => 'required|date|after:startDate',
             'visit_date' => 'required|date|after_or_equal:today',
@@ -390,11 +390,14 @@ class NegotiationController extends Controller
             'spaceOwner' => $spaceOwner->firstName . ' ' . $spaceOwner->lastName,
             'listingName' => $listing->title,
             'rentalTerm' => $rentalAgreement->rentalTerm,
-            'startDate' => $rentalAgreement->dateStart,
-            'endDate' => $rentalAgreement->dateEnd,
+            'startDate' => $rentalAgreement->dateStart->format('F j, Y'),
+            'endDate' => $rentalAgreement->dateEnd->format('F j, Y'),
             'status' => $rentalAgreement->status,
             'offerAmount' => $rentalAgreement->offerAmount,
-            'dateCreated' => $rentalAgreement->created_at->format('Y-m-d'),
+            'dateCreated' => $rentalAgreement->created_at->format('F j, Y'),
+            'visit_date' => $negotiation->visit_date 
+                ? $negotiation->visit_date->format('F j, Y') 
+                : 'N/A',
         ];
 
         $pdf = Pdf::loadView('emails.rental_agreements', compact('agreementData'));
