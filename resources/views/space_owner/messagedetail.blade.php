@@ -177,7 +177,7 @@
                                     <p class="text-gray-600 text-sm mb-4">Complete the approval, GCash details submission, and meetup proof upload to proceed with the negotiation status update.</p>
                                 @endif
                             @elseif($negotiation->negoStatus === 'Declined')
-                                <p class="text-red-600 font-semibold mb-4">
+                                <p class="text-red-600 font-semibold mb-10">
                                     The negotiation status has been declined. This space is no longer available for further transactions. 
                                     <span class="font-light">For more information, please contact support.</span>
                                 </p>
@@ -218,7 +218,7 @@
                                     <div class="mb-4">
                                         <h4 class="text-sm font-semibold">Terms and Conditions:</h4>
                                         <p class="text-xs text-gray-600 mt-2">
-                                            The 10% deduction covers commission fees and associated costs, and the total amount is split into two payments: 50% is paid before the rental term starts as a partial payment, and the remaining 50% is paid after the rental term ends as the final payment.
+                                            The 10% deduction covers commission fees and associated costs, and the total amount receivable is split into two payments: 50% is paid during the rental term starts as a partial payment, and the remaining 50% is paid after the rental term ends as the final payment.
                                         </p>
                                         <input type="checkbox" id="myCheckbox" name="myCheckbox" required>
                                         <label for="myCheckbox" class="text-sm">I agree to the terms and conditions</label>

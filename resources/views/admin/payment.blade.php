@@ -86,7 +86,7 @@
                                         @else
                                             <span class="text-muted">No payment was made.</span>
                                         @endif
-                                    @elseif($payment->status === 'partial_payment')
+                                    @elseif($payment->status === 'Partial Payment')
                                         @if ($payment->billing)
                                             <button type="button" class="bg-blue-500 text-white rounded px-2 py-1 hover:bg-blue-600 transition" 
                                                 onclick="openFullModal({{ $payment->paymentID }}, {{ $payment->amount }}, '{{ $payment->billing->gcash_number ?? '' }}')">

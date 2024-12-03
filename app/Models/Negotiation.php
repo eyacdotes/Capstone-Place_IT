@@ -13,6 +13,9 @@ class Negotiation extends Model
     
     protected $fillable = ['listingID', 'senderID', 'receiverID', 'offerAmount', 'negoStatus','visit_date','visitStatus'];
     protected $primaryKey = 'negotiationID';
+    protected $casts = [
+        'visit_date' => 'datetime',
+    ];
 
     public function listing() {
         return $this->belongsTo(Listing::class, 'listingID');
